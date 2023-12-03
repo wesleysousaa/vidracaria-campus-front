@@ -9,7 +9,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   IconButton,
   FormControl,
 } from '@mui/material';
@@ -22,7 +21,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import useIcons from '../../hooks/useIcons';
 export default function Clients() {
   const {
-    handleSubmit,
     control,
     formState: { errors },
   } = useForm<SearchValidation>({
@@ -150,7 +148,6 @@ export default function Clients() {
       </Box>
 
       <TableContainer
-        component={Paper}
         sx={{
           marginTop: '2em',
         }}
