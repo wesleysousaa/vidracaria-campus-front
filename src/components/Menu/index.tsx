@@ -20,6 +20,30 @@ export default function Menu() {
     return location.pathname !== '/';
   };
 
+  // Ao criar um novo item no menu, adicionar aqui.
+  const menuItems = [
+    {
+      Icon: DashboardOutlinedIcon,
+      label: 'RELATÓRIOS',
+      path: '/relatorios',
+    },
+    {
+      Icon: AccountCircleOutlinedIcon,
+      label: 'CLIENTES',
+      path: '/clientes',
+    },
+    {
+      Icon: BuildOutlinedIcon,
+      label: 'SERVIÇOS',
+      path: '/servicos',
+    },
+    {
+      Icon: ShoppingCartOutlinedIcon,
+      label: 'PRODUTOS',
+      path: '/produtos',
+    },
+  ];
+
   return (
     <>
       {showMenu() && (
@@ -27,7 +51,7 @@ export default function Menu() {
           style={{
             width: '15%',
             height: '100vh',
-            boxShadow: '6px 0px 15px -3px rgba(0,0,0,0.1)',
+            boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
             overflow: 'auto',
           }}
         >
@@ -60,29 +84,14 @@ export default function Menu() {
               marginTop: '1em',
             }}
           >
-            <MenuItem
-              Icon={DashboardOutlinedIcon}
-              label="RELATORIOS"
-              path="/relatorios"
-            />
-
-            <MenuItem
-              Icon={AccountCircleOutlinedIcon}
-              label="CLIENTES"
-              path="/clientes"
-            />
-
-            <MenuItem
-              Icon={BuildOutlinedIcon}
-              label="SERVÇOS"
-              path="/servicos"
-            />
-
-            <MenuItem
-              Icon={ShoppingCartOutlinedIcon}
-              label="PRODUTOS"
-              path="/produtos"
-            />
+            {menuItems.map((item, index) => (
+              <MenuItem
+                key={index}
+                Icon={item.Icon}
+                label={item.label}
+                path={item.path}
+              />
+            ))}
           </List>
           <NavLink to={'/'}>
             <Grid
