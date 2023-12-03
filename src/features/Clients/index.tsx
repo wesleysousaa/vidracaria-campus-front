@@ -16,13 +16,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import { Controller, useForm } from 'react-hook-form';
-import { SearchSchema, SearchValidation } from '../../shemas/Clients/List';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useIcons from '../../hooks/useIcons';
+import { SearchSchema } from '../../shemas/SearchingInTable';
+import { SearchValidation } from '../../types';
 export default function Clients() {
   const {
     control,
-    formState: { errors },
+    formState: {},
   } = useForm<SearchValidation>({
     resolver: yupResolver(SearchSchema),
   });

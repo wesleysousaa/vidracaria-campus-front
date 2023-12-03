@@ -8,8 +8,9 @@ import {
 } from '@mui/material';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LoginSchema, UserValidation } from '../../shemas/Login';
 import { useNavigate } from 'react-router-dom';
+import { UserValidation } from '../../types';
+import { LoginSchema } from '../../shemas/Login';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,7 +20,11 @@ export default function Login() {
     control,
     formState: { errors },
   } = useForm<UserValidation>({
-    resolver: yupResolver(LoginSchema), // Use yupResolver diretamente
+    resolver: yupResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   const onSubmit: SubmitHandler<UserValidation> = (data) => {
