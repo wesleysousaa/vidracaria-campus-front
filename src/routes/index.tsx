@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import Menu from '../components/Menu/index';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from '../features/Login';
 
 // Rota
 export default function Router() {
@@ -13,7 +14,7 @@ export default function Router() {
           <Route path="clientes" element={<div>Clientes</div>} />
           <Route path="servicos" element={<div>Serviços</div>} />
           <Route path="produtos" element={<div>Produtos</div>} />
-          {/* <Route path="/" element={<Login />} /> */}
+          <Route path="/" element={<Login />} />
         </Routes>
       </Box>
     </BrowserRouter>
