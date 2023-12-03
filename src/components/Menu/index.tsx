@@ -3,6 +3,7 @@ import { Grid, List, Typography, Button } from '@mui/material/';
 import MenuItem from './MenuItem';
 
 import { NavLink, useLocation } from 'react-router-dom';
+import { navStyles, navListStyles } from './menuStyles';
 import useIcons from '../../hooks/useIcons';
 
 export default function Menu() {
@@ -47,14 +48,7 @@ export default function Menu() {
   return (
     <>
       {showMenu() && (
-        <nav
-          style={{
-            width: '15%',
-            height: '100vh',
-            boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
-            overflow: 'auto',
-          }}
-        >
+        <nav style={navStyles}>
           <Grid
             container
             spacing={2}
@@ -75,15 +69,7 @@ export default function Menu() {
             </Grid>
           </Grid>
 
-          <List
-            sx={{
-              width: '100%',
-              height: '75%',
-              boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
-              borderBottom: '1px solid #ccc',
-              marginTop: '1em',
-            }}
-          >
+          <List sx={navListStyles}>
             {menuItems.map((item, index) => (
               <MenuItem
                 key={index}
