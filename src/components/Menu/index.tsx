@@ -7,7 +7,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 export default function Menu() {
   const location = useLocation();
@@ -80,29 +80,31 @@ export default function Menu() {
               path="/produtos"
             />
           </List>
-          <Grid
-            container
-            spacing={2}
-            alignItems={'center'}
-            justifyContent={'center'}
-            justifySelf={'flex-end'}
-            alignSelf={'flex-end'}
-            padding={'1em'}
-          >
-            <Grid item>
-              <Typography variant="button" textAlign={'center'}>
-                <Button
-                  variant="text"
-                  startIcon={<LogoutOutlinedIcon />}
-                  sx={{
-                    fontSize: '1.2em',
-                  }}
-                >
-                  SAIR
-                </Button>
-              </Typography>
+          <NavLink to={'/'}>
+            <Grid
+              container
+              spacing={2}
+              alignItems={'center'}
+              justifyContent={'center'}
+              justifySelf={'flex-end'}
+              alignSelf={'flex-end'}
+              padding={'1em'}
+            >
+              <Grid item>
+                <Typography variant="button" textAlign={'center'}>
+                  <Button
+                    variant="text"
+                    startIcon={<LogoutOutlinedIcon />}
+                    sx={{
+                      fontSize: '1.2em',
+                    }}
+                  >
+                    SAIR
+                  </Button>
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
+          </NavLink>
         </nav>
       )}
     </>
