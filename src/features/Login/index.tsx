@@ -8,12 +8,12 @@ import {
 } from '@mui/material';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import LoginSchema from '../../shemas/Login/schema';
-import UserValidation from '../../shemas/Login/type';
-import { useState } from 'react';
+import { LoginSchema, UserValidation } from '../../shemas/Login';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const [isUser, setIsUser] = useState(true);
+  const navigate = useNavigate();
+
   const {
     handleSubmit,
     control,
@@ -24,9 +24,8 @@ export default function Login() {
 
   const onSubmit: SubmitHandler<UserValidation> = (data) => {
     // Lógica de autenticação aqui
-    setIsUser(true);
     alert('Formulário submetido: ' + data);
-    setIsUser(false);
+    navigate('/relatorios');
   };
 
   return (
@@ -94,11 +93,6 @@ export default function Login() {
         >
           Acessar
         </Button>
-        {!isUser && (
-          <Alert variant="filled" severity="error">
-            Usuário não encontrado
-          </Alert>
-        )}
       </FormControl>
     </Box>
   );
