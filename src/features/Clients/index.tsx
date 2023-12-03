@@ -86,7 +86,7 @@ export default function Clients() {
     <Box
       sx={{
         width: '80vw',
-        height: '80vh',
+        height: '90vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
