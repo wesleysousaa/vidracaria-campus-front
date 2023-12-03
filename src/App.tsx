@@ -1,9 +1,5 @@
-import Menu from 'components/Menu/index.tsx';
+import Router from './routes/index';
 
 export default function App() {
-  return (
-    <>
-      <Menu />
-    </>
-  );
+  return <Router />;
 }
