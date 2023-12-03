@@ -1,8 +1,12 @@
 import * as Yup from 'yup';
 
-const LoginSchema = Yup.object().shape({
+export interface UserValidation {
+    email: string;
+    password: string;
+}
+
+export const LoginSchema = Yup.object<UserValidation>().shape({
   email: Yup.string().required('O email é obrigatório'),
   password: Yup.string().required('A senha é obrigatória'),
 });
 
-export default LoginSchema;
