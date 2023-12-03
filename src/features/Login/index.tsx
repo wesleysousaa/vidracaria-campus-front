@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LoginSchema } from '../../shemas/Login/schema';
+import { LoginSchema, UserValidation } from '../../shemas/Login';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
