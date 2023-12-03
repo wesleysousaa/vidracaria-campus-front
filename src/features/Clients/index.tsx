@@ -150,7 +150,6 @@ export default function Clients() {
       </Box>
 
       <TableContainer
-        component={Paper}
         sx={{
           marginTop: '2em',
         }}
