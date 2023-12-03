@@ -3,14 +3,18 @@ import { Grid, List, Typography, Button } from '@mui/material/';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuItem from './MenuItem';
 
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import { NavLink, useLocation } from 'react-router-dom';
+import useIcons from '../../hooks/useIcons';
 
 export default function Menu() {
   const location = useLocation();
+  const { getIcons } = useIcons();
+  const {
+    AccountCircleOutlinedIcon,
+    BuildOutlinedIcon,
+    DashboardOutlinedIcon,
+    LogoutOutlinedIcon,
+  } = getIcons();
 
   const showMenu = () => {
     return location.pathname !== '/';
