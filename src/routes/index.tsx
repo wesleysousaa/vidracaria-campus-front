@@ -9,11 +9,13 @@ export default function Router() {
       <Box display={'flex'} flexDirection={'row'}>
         <Menu />
         <Routes>
-          <Route path="/" element={<>Login</>} />
-          <Route path="/relatorios" element={<>Relatorios</>} />
-          <Route path="/clientes" element={<>Clientes</>} />
-          <Route path="/servicos" element={<>Serviços</>} />
-          <Route path="/produtos" element={<>Produtos</>} />
+          <Route path="/" element={<Login />} />
+          <Route element={<Menu />}>
+            <Route path="relatorios" element={<div>Relatorios</div>} />
+            <Route path="clientes" element={<div>Clientes</div>} />
+            <Route path="servicos" element={<div>Serviços</div>} />
+            <Route path="produtos" element={<div>Produtos</div>} />
+          </Route>
         </Routes>
       </Box>
     </BrowserRouter>
