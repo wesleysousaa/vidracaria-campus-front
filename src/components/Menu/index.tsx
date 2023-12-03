@@ -1,6 +1,5 @@
 import { Grid, List, Typography, Button } from '@mui/material/';
 
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MenuItem from './MenuItem';
 
 import { NavLink, useLocation } from 'react-router-dom';
@@ -14,6 +13,7 @@ export default function Menu() {
     BuildOutlinedIcon,
     DashboardOutlinedIcon,
     LogoutOutlinedIcon,
+    ShoppingCartOutlinedIcon,
   } = getIcons();
 
   const showMenu = () => {
