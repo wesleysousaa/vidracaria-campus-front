@@ -1,40 +1,14 @@
-import { NavLink, useLocation } from 'react-router-dom';
-import {
-  Grid,
-  List,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  ListItemButton,
-} from '@mui/material/';
+import { Grid, List, Typography, Button } from '@mui/material/';
+
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import MenuItem from './MenuItem';
+
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import {
-  linkStyle,
-  linkStyleActives,
-  iconStyle,
-  iconStyleActives,
-  buttonStyle,
-  buttonStyleActive,
-} from './menuStyles';
-import Button from '@mui/material/Button';
 
 export default function Menu() {
-  const location = useLocation();
-
-  const verifyLinkActive = (link: string) => {
-    return location.pathname === link
-      ? {
-          linkStyle: linkStyleActives,
-          iconStyle: iconStyleActives,
-          buttonStyle: buttonStyleActive,
-        }
-      : { linkStyle, iconStyle, buttonStyle };
-  };
-
   return (
     <nav
       style={{
@@ -73,70 +47,25 @@ export default function Menu() {
           marginTop: '1em',
         }}
       >
-        <NavLink
-          to="/relatorios"
-          style={verifyLinkActive('/relatorios').linkStyle}
-        >
-          <ListItemButton
-            key="RELATÓRIOS"
-            LinkComponent={NavLink}
-            sx={verifyLinkActive('/relatorios').buttonStyle}
-          >
-            <ListItemIcon>
-              <DashboardOutlinedIcon
-                sx={verifyLinkActive('/relatorios').iconStyle}
-              />
-            </ListItemIcon>
-            <ListItemText
-              primary="
-                  RELATÓRIOS"
-            />
-          </ListItemButton>
-        </NavLink>
-        <NavLink to="/clientes" style={verifyLinkActive('/clientes').linkStyle}>
-          <ListItemButton
-            key="CLIENTES"
-            LinkComponent={NavLink}
-            sx={verifyLinkActive('/clientes').buttonStyle}
-          >
-            <ListItemIcon>
-              <AccountCircleOutlinedIcon
-                sx={verifyLinkActive('/clientes').iconStyle}
-              />
-            </ListItemIcon>
-            <ListItemText primary="CLIENTES" />
-          </ListItemButton>
-        </NavLink>
-        <NavLink to="/servicos" style={verifyLinkActive('/servicos').linkStyle}>
-          <ListItemButton
-            key="SERVIÇOS"
-            LinkComponent={NavLink}
-            sx={verifyLinkActive('/servicos').buttonStyle}
-          >
-            <ListItemIcon>
-              <BuildOutlinedIcon sx={verifyLinkActive('/servicos').iconStyle} />
-            </ListItemIcon>
-            <ListItemText
-              primary="
-                SERVIÇOS
-              "
-            />
-          </ListItemButton>
-        </NavLink>
-        <NavLink to="/produtos" style={verifyLinkActive('/produtos').linkStyle}>
-          <ListItemButton
-            key="PRODUTOS"
-            LinkComponent={NavLink}
-            sx={verifyLinkActive('/produtos').buttonStyle}
-          >
-            <ListItemIcon>
-              <ShoppingCartOutlinedIcon
-                sx={verifyLinkActive('/produtos').iconStyle}
-              />
-            </ListItemIcon>
-            <ListItemText primary="PRODUTOS" />
-          </ListItemButton>
-        </NavLink>
+        <MenuItem
+          Icon={DashboardOutlinedIcon}
+          label="RELATORIOS"
+          path="/relatorios"
+        />
+
+        <MenuItem
+          Icon={AccountCircleOutlinedIcon}
+          label="CLIENTES"
+          path="/clientes"
+        />
+
+        <MenuItem Icon={BuildOutlinedIcon} label="SERVÇOS" path="/servicos" />
+
+        <MenuItem
+          Icon={ShoppingCartOutlinedIcon}
+          label="PRODUTOS"
+          path="/produtos"
+        />
       </List>
       <Grid
         container
