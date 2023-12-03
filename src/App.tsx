@@ -1,7 +1,9 @@
+import Menu from 'components/Menu/index.tsx';
+
 export default function App() {
   return (
     <>
-      <h1></h1>
+      <Menu />
     </>
   );
 }
