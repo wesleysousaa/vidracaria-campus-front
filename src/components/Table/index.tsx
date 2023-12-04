@@ -1,14 +1,13 @@
 import {
-  TableContainer,
   Table as TabMUI,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
 } from '@mui/material';
-import useIcons from '../../hooks/useIcons';
 import { ReactNode } from 'react';
+import TableCellActions from './TableCellActions';
 
 export default function Table(props: {
   data: any[];
@@ -17,9 +16,6 @@ export default function Table(props: {
   deleteForm?: ReactNode;
   infoComponent?: ReactNode;
 }) {
-  const { getIcons } = useIcons();
-  const { EditIcon, InfoIcon, DeleteIcon } = getIcons();
-
   const columns = Object.keys(props.data[0]);
 
   return (
@@ -46,17 +42,7 @@ export default function Table(props: {
                   columns.map((col, key) => (
                     <TableCell key={key}>{item[col]}</TableCell>
                   ))}
-                <TableCell>
-                  <IconButton aria-label="Info" color="info">
-                    <InfoIcon />
-                  </IconButton>
-                  <IconButton aria-label="Editar" color="warning">
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton aria-label="Excluir" color="error">
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+                <TableCellActions />
               </TableRow>
             ))}
         </TableBody>
