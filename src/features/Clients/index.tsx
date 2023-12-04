@@ -1,8 +1,12 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  FormControl,
+  IconButton,
   TextField,
   Typography,
+<<<<<<< Updated upstream
   Table,
   TableBody,
   TableCell,
@@ -15,11 +19,15 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
+=======
+} from '@mui/material';
+>>>>>>> Stashed changes
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import Table from '../../components/Table';
 import useIcons from '../../hooks/useIcons';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
+
 export default function Clients() {
   const {
     control,

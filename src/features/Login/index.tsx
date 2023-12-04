@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
   Box,
@@ -6,11 +7,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { UserValidation } from '../../types';
 import { LoginSchema } from '../../shemas/Login';
+import { UserValidation } from '../../types';
 
 export default function Login() {
   const navigate = useNavigate();

@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from '../features/Login';
 import Layout from '../Template';
-import Clients from '../features/Clients';
+import { Clients, Login } from '../features';
 
 // Rota
 export default function Router() {
