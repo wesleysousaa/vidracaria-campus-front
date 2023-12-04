@@ -1,13 +1,18 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  IconButton,
+  FormControl,
+} from '@mui/material';
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import InfoIcon from '@mui/icons-material/Info';
-import { useForm } from 'react-hook-form';
+import Table from '../../components/Table';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import useIcons from '../../hooks/useIcons';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
-
 export default function Clients() {
   const {
     control,
@@ -66,7 +71,7 @@ export default function Clients() {
       nome: 'João da Silva',
       cpfCnpj: '000.000.000-00',
       telefone: '(00) 00000-0000',
-      rua: 'Rua 1',
+      rua: 'Rua 2',
     },
   ];
   return (
@@ -135,45 +140,7 @@ export default function Clients() {
           Novo Cliente
         </Button>
       </Box>
-
-      <TableContainer
-        sx={{
-          marginTop: '2em',
-        }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell>CPF/CNPJ</TableCell>
-              <TableCell>Telefone</TableCell>
-              <TableCell>Rua</TableCell>
-              <TableCell>Ações</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {mockData.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell>{item.nome}</TableCell>
-                <TableCell>{item.cpfCnpj}</TableCell>
-                <TableCell>{item.telefone}</TableCell>
-                <TableCell>{item.rua}</TableCell>
-                <TableCell>
-                  <IconButton aria-label="Info" color="info">
-                    <InfoIcon />
-                  </IconButton>
-                  <IconButton aria-label="Editar" color="warning">
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton aria-label="Excluir" color="error">
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table data={mockData} title="Clientes" />
     </Box>
   );
 }
