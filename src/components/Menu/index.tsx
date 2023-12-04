@@ -1,10 +1,8 @@
-import { Grid, List, Typography, Button } from '@mui/material/';
-
-import MenuItem from './MenuItem';
-
+import { Button, Grid, List, Typography } from '@mui/material/';
 import { NavLink, useLocation } from 'react-router-dom';
-import { navStyles, navListStyles } from './menuStyles';
 import useIcons from '../../hooks/useIcons';
+import MenuItem from './MenuItem';
+import { navListStyles, navStyles } from './menuStyles';
 
 export default function Menu() {
   const location = useLocation();

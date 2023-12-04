@@ -1,18 +1,18 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  FormControl,
+  IconButton,
   TextField,
   Typography,
-  IconButton,
-  FormControl,
 } from '@mui/material';
-
-import Table from '../../components/Table';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import Table from '../../components/Table';
 import useIcons from '../../hooks/useIcons';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
+
 export default function Clients() {
   const {
     control,

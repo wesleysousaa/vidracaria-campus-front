@@ -4,16 +4,16 @@ import {
   ListItemText,
   SvgIconTypeMap,
 } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
-  linkStyle,
-  linkStyleActives,
-  iconStyle,
-  iconStyleActives,
   buttonStyle,
   buttonStyleActive,
+  iconStyle,
+  iconStyleActives,
+  linkStyle,
+  linkStyleActives,
 } from '../menuStyles';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 export default function MenuItem(props: {
   label: string;
