@@ -9,13 +9,15 @@ import {
 import { ReactNode } from 'react';
 import TableCellActions from './TableCellActions';
 
-export default function Table(props: {
+interface TableProps {
   data: any[];
   title: string;
   editForm?: ReactNode;
   deleteForm?: ReactNode;
   infoComponent?: ReactNode;
-}) {
+}
+
+export default function Table(props: TableProps) {
   const columns = Object.keys(props.data[0]);
 
   return (

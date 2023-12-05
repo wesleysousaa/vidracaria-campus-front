@@ -11,6 +11,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { LoginSchema } from '../../shemas/Login';
 import { UserValidation } from '../../types';
+import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -34,21 +35,12 @@ export default function Login() {
   };
 
   return (
-    <Box
-      sx={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <Box sx={boxStyles}>
       <Typography variant="h1">Login</Typography>
       <FormControl
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        sx={{ width: '500px', mt: 3, gap: '10px' }}
+        sx={formControlStyles}
       >
         <Controller
           name="email"
@@ -87,16 +79,7 @@ export default function Login() {
           </Alert>
         )}
 
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{
-            mt: '10px',
-            padding: '10px',
-            fontSize: '1.2rem',
-            backgroundColor: '#2196F3',
-          }}
-        >
+        <Button type="submit" variant="contained" sx={loginButtonStyles}>
           Acessar
         </Button>
       </FormControl>
