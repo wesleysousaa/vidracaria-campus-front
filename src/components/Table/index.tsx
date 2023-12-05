@@ -13,14 +13,17 @@ import Modal from '../Modal';
 interface TableProps {
   data: any[];
   title: string;
-  editForm?: ReactNode;
-  createForm?: ReactNode;
-  infoComponent?: ReactNode;
 }
 
 export default function Table(props: TableProps) {
   const columns = Object.keys(props.data[0]);
   const [open, setOpen] = useState(false);
+  const [componentModal, setComponentModal] = useState<ReactNode>();
+
+  const handleOpen = (idItem: string, type: string) => {
+    setOpen(true);
+    const item = props.data.find((item) => item.id === idItem);
+  };
 
   return (
     <TableContainer
@@ -28,7 +31,12 @@ export default function Table(props: TableProps) {
         marginTop: '2em',
       }}
     >
-      <Modal open={open} onCloseDispach={setOpen} component={<></>} />;
+      <Modal
+        open={open}
+        onCloseDispach={() => setOpen(false)}
+        component={componentModal}
+      />
+
       <TabMUI>
         <TableHead>
           <TableRow>
@@ -47,7 +55,7 @@ export default function Table(props: TableProps) {
                   columns.map((col, key) => (
                     <TableCell key={key}>{item[col]}</TableCell>
                   ))}
-                <TableCellActions />
+                <TableCellActions dispach={handleOpen} idObject={item.id} />
               </TableRow>
             ))}
         </TableBody>

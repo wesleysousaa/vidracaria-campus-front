@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   FormControl,
@@ -14,37 +13,151 @@ import { boxStyles } from '../../../features/Clients/clientsStyles';
 
 import { ClientValidation } from '../../../types';
 import useIcons from '../../../hooks/useIcons';
-import { boxStylesForm, textFieldStyles } from './addFormStyles';
+import { boxStylesForm, textFieldStyles } from './formStyles';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ClientSchema } from '../../../shemas/Client';
+import { Link, useLocation } from 'react-router-dom';
 
-export default function AddClient() {
+export default function FormClient() {
   const { getIcons } = useIcons();
   const { ArrowBackIosIcon } = getIcons();
+  const location = useLocation();
+
+  // Simulação dos dados mockados
+  const mockData = [
+    {
+      id: '1',
+      cep: '12345-678',
+      city: 'Cidade Fictícia',
+      cpfCnpj: '000.000.000-00',
+      email: 'email@example.com',
+      name: 'Nome Fictício',
+      number: '123',
+      phone: '(00) 00000-0000',
+      state: 'PB',
+      people: 'Física',
+      street: 'Rua Fictícia',
+      pointReference: 'Referência Fictícia',
+    },
+    {
+      id: '2',
+      cep: '12345-679',
+      city: 'Cidade Fictícia 2',
+      cpfCnpj: '111.111.111-11',
+      email: 'email2@example.com',
+      name: 'Nome Fictício 2',
+      number: '456',
+      phone: '(11) 11111-1111',
+      state: 'PB',
+      people: 'Física',
+      street: 'Rua Fictícia 2',
+      pointReference: 'Referência Fictícia 2',
+    },
+    {
+      id: '3',
+      cep: '12345-680',
+      city: 'Cidade Fictícia 3',
+      cpfCnpj: '222.222.222-22',
+      email: 'email3@example.com',
+      name: 'Nome Fictício 3',
+      number: '789',
+      phone: '(22) 22222-2222',
+      state: 'PB',
+      people: 'Física',
+      street: 'Rua Fictícia 3',
+      pointReference: 'Referência Fictícia 3',
+    },
+    {
+      id: '4',
+      cep: '12345-681',
+      city: 'Cidade Fictícia 4',
+      cpfCnpj: '333.333.333-33',
+      email: 'email4@example.com',
+      name: 'Nome Fictício 4',
+      number: '987',
+      phone: '(33) 33333-3333',
+      state: 'PB',
+      people: 'Física',
+      street: 'Rua Fictícia 4',
+      pointReference: 'Referência Fictícia 4',
+    },
+    {
+      id: '5',
+      cep: '12345-682',
+      city: 'Cidade Fictícia 5',
+      cpfCnpj: '444.444.444-44',
+      email: 'email5@example.com',
+      name: 'Nome Fictício 5',
+      number: '654',
+      phone: '(44) 44444-4444',
+      state: 'PB',
+      people: 'Física',
+      street: 'Rua Fictícia 5',
+      pointReference: 'Referência Fictícia 5',
+    },
+    {
+      id: '6',
+      cep: '12345-683',
+      city: 'Cidade Fictícia 6',
+      cpfCnpj: '555.555.555-55',
+      email: 'email6@example.com',
+      name: 'Nome Fictício 6',
+      number: '321',
+      phone: '(55) 55555-5555',
+      state: 'PB',
+      people: 'Física',
+      street: 'Rua Fictícia 6',
+      pointReference: 'Referência Fictícia 6',
+    },
+  ];
+
+  const getItem = () => {
+    const id = location.pathname.split('/')[3];
+    const item = mockData.find((item) => item.id === id);
+    return item;
+  };
+
+  const prepareDefaultValues = (
+    defaultString: string,
+    atributte: keyof (typeof mockData)[0],
+  ) => {
+    const item = getItem();
+    if (item) {
+      return item[atributte] ? item[atributte] : defaultString;
+    } else {
+      return defaultString;
+    }
+  };
 
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<ClientValidation>({
+    resolver: yupResolver(ClientSchema),
     defaultValues: {
-      cep: '',
-      city: '',
-      cpfCnpj: '',
-      email: '',
-      name: '',
-      number: '',
-      phone: '',
-      state: 'PB',
-      people: 'Física',
-      street: '',
-      pointReference: '',
+      cep: prepareDefaultValues('', 'cep'),
+      city: prepareDefaultValues('', 'city'),
+      cpfCnpj: prepareDefaultValues('', 'cpfCnpj'),
+      email: prepareDefaultValues('', 'email'),
+      name: prepareDefaultValues('', 'name'),
+      number: prepareDefaultValues('', 'number'),
+      phone: prepareDefaultValues('', 'phone'),
+      state: prepareDefaultValues('PB', 'state'),
+      people: prepareDefaultValues('Física', 'people'),
+      street: prepareDefaultValues('', 'street'),
+      pointReference: prepareDefaultValues('', 'pointReference'),
     },
   });
+
   return (
     <Box sx={boxStyles}>
-      <IconButton aria-label="Voltar" color="inherit">
-        <ArrowBackIosIcon />
-        Voltar
-      </IconButton>
+      <Link to="/clientes" style={{ color: '#000' }}>
+        <IconButton aria-label="Voltar" color="inherit">
+          <ArrowBackIosIcon />
+          Fechar
+        </IconButton>
+      </Link>
       <FormControl
         component="form"
         onSubmit={handleSubmit(() => {})}
@@ -56,7 +169,9 @@ export default function AddClient() {
         }}
       >
         <Typography variant="h3" marginBottom="1em">
-          Cadastro de Cliente
+          {getItem()
+            ? `Edição do Cliente ${getItem()?.name}`
+            : 'Cadastrar Cliente'}
         </Typography>
         <Controller
           name="name"
