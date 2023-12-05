@@ -13,6 +13,7 @@ import useIcons from '../../hooks/useIcons';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
 import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
+import AddClient from '../../components/Client/Add';
 
 export default function Clients() {
   const {
@@ -106,7 +107,7 @@ export default function Clients() {
           Novo Cliente
         </Button>
       </Box>
-      <Table data={mockData} title="Clientes" />
+      <Table data={mockData} title="Clientes" createForm={<AddClient />} />
     </Box>
   );
 }

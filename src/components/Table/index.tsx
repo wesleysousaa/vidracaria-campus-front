@@ -6,19 +6,21 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import TableCellActions from './TableCellActions';
+import Modal from '../Modal';
 
 interface TableProps {
   data: any[];
   title: string;
   editForm?: ReactNode;
-  deleteForm?: ReactNode;
+  createForm?: ReactNode;
   infoComponent?: ReactNode;
 }
 
 export default function Table(props: TableProps) {
   const columns = Object.keys(props.data[0]);
+  const [open, setOpen] = useState(false);
 
   return (
     <TableContainer
@@ -26,6 +28,7 @@ export default function Table(props: TableProps) {
         marginTop: '2em',
       }}
     >
+      <Modal open={open} onCloseDispach={setOpen} component={<></>} />;
       <TabMUI>
         <TableHead>
           <TableRow>

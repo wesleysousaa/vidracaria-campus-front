@@ -7,6 +7,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 export default function useIcons() {
   const icons = {
@@ -19,6 +20,7 @@ export default function useIcons() {
     DeleteIcon,
     EditIcon,
     InfoIcon,
+    ArrowBackIosIcon,
   };
 
   const getIcon = (iconName: keyof typeof icons) => {
