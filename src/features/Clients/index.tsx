@@ -12,6 +12,7 @@ import Table from '../../components/Table';
 import useIcons from '../../hooks/useIcons';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
+import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
 
 export default function Clients() {
   const {
@@ -75,45 +76,12 @@ export default function Clients() {
     },
   ];
   return (
-    <Box
-      sx={{
-        width: '80vw',
-        height: '90vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        backgroundColor: '#fff',
-        boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
-        borderRadius: '0.4em',
-        alignSelf: 'center',
-        marginLeft: '2em',
-        padding: '1em',
-      }}
-    >
+    <Box sx={boxStyles}>
       <Typography variant="h4" fontWeight={'bold'}>
         Clientes
       </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: '3em',
-        }}
-      >
-        <FormControl
-          onSubmit={() => console.log('submit')}
-          sx={{
-            display: 'flex',
-            width: '25em',
-            height: '4em',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-          }}
-        >
+      <Box sx={boxStylesForm}>
+        <FormControl onSubmit={() => console.log('submit')} sx={formStyles}>
           <Controller
             name="value"
             control={control}
@@ -124,9 +92,7 @@ export default function Clients() {
                 variant="outlined"
                 placeholder="Nome, Rua, Email..."
                 type="search"
-                sx={{
-                  width: '100%',
-                }}
+                fullWidth
                 {...field}
               />
             )}

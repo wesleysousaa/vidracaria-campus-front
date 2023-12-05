@@ -15,13 +15,15 @@ import {
   linkStyleActives,
 } from '../menuStyles';
 
-export default function MenuItem(props: {
+export interface MenuItemProps {
   label: string;
   path: string;
   Icon: OverridableComponent<SvgIconTypeMap<object, 'svg'>> & {
     muiName: string;
   };
-}) {
+}
+
+export default function MenuItem(props: MenuItemProps) {
   const location = useLocation();
 
   const verifyLinkActive = (link: string) => {
