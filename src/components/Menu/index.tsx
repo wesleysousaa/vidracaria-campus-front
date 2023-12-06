@@ -57,7 +57,11 @@ export default function Menu() {
             padding={'2em'}
           >
             <Grid item>
-              <img src="logo-icon.png" alt="logo" style={{ maxWidth: '3em' }} />
+              <img
+                src="/images/logo-icon.png"
+                alt="logo"
+                style={{ maxWidth: '3em' }}
+              />
             </Grid>
 
             <Grid item>

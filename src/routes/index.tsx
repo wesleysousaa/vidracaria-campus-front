@@ -2,6 +2,7 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import Layout from '../Template';
 import { Clients, Login } from '../features';
 import FormClient from '../components/Client/FormClient';
+import InfoClient from '../components/Client/InfoClient';
 
 // Rota
 export default function Router() {
@@ -13,6 +14,7 @@ export default function Router() {
           <Route path="clientes" element={<Outlet />}>
             <Route index element={<Clients />} />
             <Route path="create" element={<FormClient />} />
+            <Route path="info/:id" element={<InfoClient />} />
             <Route path="edit/:id" element={<FormClient />} />
           </Route>
           <Route path="servicos" element={<div>Serviços</div>} />

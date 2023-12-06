@@ -8,6 +8,8 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 
 export default function useIcons() {
   const icons = {
@@ -21,6 +23,8 @@ export default function useIcons() {
     EditIcon,
     InfoIcon,
     ArrowBackIosIcon,
+    EmailOutlinedIcon,
+    LocalPhoneOutlinedIcon,
   };
 
   const getIcon = (iconName: keyof typeof icons) => {
