@@ -6,9 +6,10 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import TableCellActions from './TableCellActions';
 import Modal from '../Modal';
+import { ConfirmAction } from '../ConfirmAction';
 
 interface TableProps {
   data: any[];
@@ -18,11 +19,16 @@ interface TableProps {
 export default function Table(props: TableProps) {
   const columns = Object.keys(props.data[0]);
   const [open, setOpen] = useState(false);
-  const [componentModal, setComponentModal] = useState<ReactNode>();
+  const [idItem, setIdItem] = useState();
 
   const handleOpen = (idItem: string, type: string) => {
     setOpen(true);
     const item = props.data.find((item) => item.id === idItem);
+    setIdItem(item.id);
+  };
+
+  const handleDelete = () => {
+    console.log(idItem);
   };
 
   return (
@@ -34,7 +40,12 @@ export default function Table(props: TableProps) {
       <Modal
         open={open}
         onCloseDispach={() => setOpen(false)}
-        component={componentModal}
+        component={
+          <ConfirmAction
+            confirmDispach={handleDelete}
+            denyDispach={() => setOpen(false)}
+          />
+        }
       />
 
       <TabMUI>
