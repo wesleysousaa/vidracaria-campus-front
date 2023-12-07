@@ -10,7 +10,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
-
+import CloseIcon from '@mui/icons-material/Close';
 export default function useIcons() {
   const icons = {
     LogoutOutlinedIcon,
@@ -25,6 +25,7 @@ export default function useIcons() {
     ArrowBackIosIcon,
     EmailOutlinedIcon,
     LocalPhoneOutlinedIcon,
+    CloseIcon,
   };
 
   const getIcon = (iconName: keyof typeof icons) => {
