@@ -44,6 +44,7 @@ export default function Table(props: TableProps) {
           <ConfirmAction
             confirmDispach={handleDelete}
             denyDispach={() => setOpen(false)}
+            text="A ação de exclusão não poderá ser desfeita."
           />
         }
       />
