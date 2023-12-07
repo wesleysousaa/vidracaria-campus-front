@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RecoilRoot } from 'recoil';
-import Router from './routes/index';
+import Router from './routes';
 
 const queryClient = new QueryClient();
 

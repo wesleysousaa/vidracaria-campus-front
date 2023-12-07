@@ -7,15 +7,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { boxStyles } from '../../../features/Clients/clientsStyles';
+import { Controller, useForm } from 'react-hook-form';
+import { boxStyles } from '../clientsStyles';
 
-import { ClientValidation } from '../../../types';
-import useIcons from '../../../hooks/useIcons';
-import { boxStylesForm, textFieldStyles } from './formStyles';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ClientSchema } from '../../../shemas/Client';
 import { Link, useLocation } from 'react-router-dom';
+import useIcons from '../../../hooks/useIcons';
+import { ClientSchema } from '../../../shemas/Client';
+import { ClientValidation } from '../../../types';
+import { boxStylesForm, textFieldStyles } from './formStyles';
 
 export default function FormClient() {
   const { getIcons } = useIcons();
