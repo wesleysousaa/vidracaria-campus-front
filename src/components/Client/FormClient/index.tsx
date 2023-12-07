@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  FormControl,
   IconButton,
   MenuItem,
   Select,
@@ -158,10 +157,9 @@ export default function FormClient() {
           Fechar
         </IconButton>
       </Link>
-      <FormControl
-        component="form"
+      <form
         onSubmit={handleSubmit(() => {})}
-        sx={{
+        style={{
           display: 'flex',
           flexDirection: 'column',
           margin: '1em',
@@ -173,6 +171,7 @@ export default function FormClient() {
             ? `Edição do Cliente ${getItem()?.name}`
             : 'Cadastrar Cliente'}
         </Typography>
+
         <Controller
           name="name"
           control={control}
@@ -259,6 +258,7 @@ export default function FormClient() {
             )}
           />
         </Box>
+
         <Controller
           name="street"
           control={control}
@@ -272,6 +272,7 @@ export default function FormClient() {
             />
           )}
         />
+
         <Box sx={boxStylesForm}>
           <Controller
             name="cep"
@@ -291,6 +292,7 @@ export default function FormClient() {
           />
           <Controller
             name="state"
+            defaultValue="PB"
             control={control}
             render={({ field }) => (
               <Select
@@ -298,9 +300,10 @@ export default function FormClient() {
                   width: '30%',
                   ...textFieldStyles,
                 }}
+                defaultValue="PB"
                 labelId="select-state"
                 id="select-state"
-                label="Estado"
+                label="Teste"
                 {...field}
               >
                 <MenuItem value={'PB'}>PB</MenuItem>
@@ -308,6 +311,7 @@ export default function FormClient() {
             )}
           />
         </Box>
+
         <Controller
           name="pointReference"
           control={control}
@@ -321,6 +325,7 @@ export default function FormClient() {
             />
           )}
         />
+
         <Button
           type="submit"
           variant="contained"
@@ -332,7 +337,7 @@ export default function FormClient() {
         >
           Salvar
         </Button>
-      </FormControl>
+      </form>
     </Box>
   );
 }
