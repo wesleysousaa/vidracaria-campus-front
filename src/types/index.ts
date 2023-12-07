@@ -1,6 +1,8 @@
 export interface UserValidation {
   email: string;
   password: string;
+  name?: string;
+  role?: string;
 }
 
 export interface SearchValidation {

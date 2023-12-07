@@ -8,13 +8,14 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { LoginSchema } from '../../shemas/Login';
+import { LoginSchema } from '../../shemas/User';
+import { AuthContextActions } from '../../states/auth/AuthProvider';
 import { UserValidation } from '../../types';
 import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
 
 export default function Login() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const { login } = AuthContextActions();
 
   const {
     handleSubmit,
@@ -31,7 +32,7 @@ export default function Login() {
   const onSubmit: SubmitHandler<UserValidation> = (data) => {
     // Lógica de autenticação aqui
     alert('Formulário submetido: ' + data);
-    navigate('/relatorios');
+    login(data);
   };
 
   return (
