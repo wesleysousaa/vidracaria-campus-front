@@ -17,7 +17,7 @@ export function ConfirmAction(props: {
         backgroundColor: '#fff',
       }}
     >
-      <Typography variant="h3">Tem certeza que deseja prossegir?</Typography>
+      <Typography variant="h4">Tem certeza que deseja prossegir?</Typography>
       <Box
         display={'flex'}
         justifyContent={'center'}

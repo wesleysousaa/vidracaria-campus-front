@@ -21,6 +21,9 @@ export default function Clients() {
     formState: {},
   } = useForm<SearchValidation>({
     resolver: yupResolver(SearchSchema),
+    defaultValues: {
+      value: '',
+    },
   });
 
   const { getIcons } = useIcons();
@@ -140,7 +143,7 @@ export default function Clients() {
         </FormControl>
 
         <Link to={'create'}>
-          <Button variant="contained" sx={{ height: '4em' }} color="success">
+          <Button variant="contained" color="success">
             Novo Cliente
           </Button>
         </Link>
