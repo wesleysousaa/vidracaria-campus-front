@@ -1,11 +1,13 @@
 import { Button, Grid, List, Typography } from '@mui/material/';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import useIcons from '../../hooks/useIcons';
+import { AuthContextActions } from '../../states/auth/AuthContextActions';
 import MenuItem from './MenuItem';
 import { navListStyles, navStyles } from './menuStyles';
 
 export default function Menu() {
   const location = useLocation();
+  const { logout } = AuthContextActions();
   const { getIcons } = useIcons();
   const {
     AccountCircleOutlinedIcon,
@@ -81,31 +83,30 @@ export default function Menu() {
               />
             ))}
           </List>
-          <NavLink to={'/'}>
-            <Grid
-              container
-              spacing={2}
-              alignItems={'center'}
-              justifyContent={'center'}
-              justifySelf={'flex-end'}
-              alignSelf={'flex-end'}
-              padding={'1em'}
-            >
-              <Grid item>
-                <Typography variant="button" textAlign={'center'}>
-                  <Button
-                    variant="text"
-                    startIcon={<LogoutOutlinedIcon />}
-                    sx={{
-                      fontSize: '1.2em',
-                    }}
-                  >
-                    SAIR
-                  </Button>
-                </Typography>
-              </Grid>
+          <Grid
+            container
+            spacing={2}
+            alignItems={'center'}
+            justifyContent={'center'}
+            justifySelf={'flex-end'}
+            alignSelf={'flex-end'}
+            padding={'1em'}
+          >
+            <Grid item>
+              <Typography variant="button" textAlign={'center'}>
+                <Button
+                  variant="text"
+                  startIcon={<LogoutOutlinedIcon />}
+                  sx={{
+                    fontSize: '1.2em',
+                  }}
+                  onClick={() => logout()}
+                >
+                  SAIR
+                </Button>
+              </Typography>
             </Grid>
-          </NavLink>
+          </Grid>
         </nav>
       )}
     </>

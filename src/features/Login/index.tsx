@@ -9,18 +9,17 @@ import {
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { LoginSchema } from '../../shemas/User';
-import { AuthContextActions } from '../../states/auth/AuthProvider';
+import { AuthContextActions } from '../../states/auth/AuthContextActions';
 import { UserValidation } from '../../types';
 import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
 
 export default function Login() {
-  // const navigate = useNavigate();
-  const { login } = AuthContextActions();
+  const { login, isErrorMessage } = AuthContextActions();
 
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: {},
   } = useForm<UserValidation>({
     resolver: yupResolver(LoginSchema),
     defaultValues: {
@@ -30,8 +29,6 @@ export default function Login() {
   });
 
   const onSubmit: SubmitHandler<UserValidation> = (data) => {
-    // Lógica de autenticação aqui
-    alert('Formulário submetido: ' + data);
     login(data);
   };
 
@@ -56,11 +53,6 @@ export default function Login() {
           )}
         />
 
-        {errors.email && (
-          <Alert variant="filled" severity="error">
-            {errors.email.message}
-          </Alert>
-        )}
         <Controller
           name="password"
           control={control}
@@ -74,15 +66,14 @@ export default function Login() {
           )}
         />
 
-        {errors.password && (
-          <Alert variant="filled" severity="error">
-            {errors.password.message}
-          </Alert>
-        )}
-
         <Button type="submit" variant="contained" sx={loginButtonStyles}>
           Acessar
         </Button>
+        {isErrorMessage && (
+          <Alert variant="filled" severity="error">
+            Email ou senha inválidos!
+          </Alert>
+        )}
       </FormControl>
     </Box>
   );

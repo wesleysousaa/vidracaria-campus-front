@@ -7,15 +7,15 @@ enum Endpoints {
 }
 
 export const useAuthUser = () => {
-  return useMutation<string, Error, UserValidation>({
+  return useMutation({
     mutationFn: (user: UserValidation) => {
       return api
         .post(Endpoints.authUser, user)
         .then((res) => res.data);
     },
-    onSuccess: (token: string) => {
-      console.log('Token:', token);
-      localStorage.setItem('token: ', token);
+    onSuccess: (data) => {
+      localStorage.setItem('token', JSON.stringify(data.token));
+      
     },
   });
 };
