@@ -1,5 +1,5 @@
 export interface UserValidation {
-  id?: number
+  id?: number;
   email: string;
   password: string;
   name?: string;
@@ -11,15 +11,16 @@ export interface SearchValidation {
 }
 
 export interface ClientValidation {
+  id?: string;
   name: string;
-  people: string;
-  cpfCnpj: string;
-  email: string;
+  customerType: string;
+  cpf_cnpj?: string;
+  email?: string;
   phone: string;
-  street: string;
-  cep: string;
+  address: string;
+  zipCode: string;
   number: string;
   city: string;
   state: string;
-  pointReference: string;
+  landmark?: string;
 }

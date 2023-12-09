@@ -14,12 +14,14 @@ import { ConfirmAction } from '../ConfirmAction';
 interface TableProps {
   data: any[];
   title: string;
+  deleteButtonDispach: (id: string) => void;
 }
 
 export default function Table(props: TableProps) {
-  const columns = Object.keys(props.data[0]);
+  let columns = Object.keys(props.data[0] || {});
+  columns = columns.slice(0, 5);
   const [open, setOpen] = useState(false);
-  const [idItem, setIdItem] = useState();
+  const [idItem, setIdItem] = useState('');
 
   const handleOpen = (idItem: string, type: string) => {
     setOpen(true);
@@ -28,7 +30,8 @@ export default function Table(props: TableProps) {
   };
 
   const handleDelete = () => {
-    console.log(idItem);
+    props.deleteButtonDispach(idItem);
+    setOpen(false);
   };
 
   return (
