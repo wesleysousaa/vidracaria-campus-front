@@ -2,7 +2,7 @@ import { CSSProperties } from 'react';
 
 export const boxStyles: CSSProperties = {
   width: '80vw',
-  height: '90vh',
+  height: 'max-content',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
