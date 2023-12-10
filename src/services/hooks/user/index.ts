@@ -4,6 +4,7 @@ import { UserValidation } from '../../../types';
 
 enum Endpoints {
   authUser = '/auth',
+  validToken = '/auth/validToken/',
 }
 
 export const useAuthUser = () => {
@@ -17,5 +18,18 @@ export const useAuthUser = () => {
       localStorage.setItem('token', JSON.stringify(data.token));
       
     },
+  });
+};
+
+export const useValidatedToken = () => {
+  return useMutation({
+    mutationFn: (token: String) => {
+      return api
+        .post(Endpoints.validToken, {}, { params: { token }})
+        .then((res) => res.data);
+    },
+    onError: () => {
+      localStorage.removeItem('token');
+    }
   });
 };

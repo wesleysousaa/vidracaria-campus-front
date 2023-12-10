@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { useAuthUser } from '../../services/hooks/user';
+import { useAuthUser, useValidatedToken } from '../../services/hooks/user';
 import { UserValidation } from '../../types';
 import { isAuthenticatedState } from './authState';
 
@@ -11,6 +11,7 @@ export const AuthContextActions = () => {
   const [isAuthenticated, setIsAuthenticated] =
     useRecoilState(isAuthenticatedState);
   const authUser = useAuthUser();
+  const authToken = useValidatedToken();
   const [isErrorMessage, setIsErrorMessage] = useState(false);
 
   useEffect(() => {
@@ -37,7 +38,9 @@ export const AuthContextActions = () => {
 
   const isValidToken = () => {
     const token = localStorage.getItem('token');
-    return token != null;
+    if (token) {
+      authToken.mutate(JSON.parse(token));
+    }
   };
 
   return {
