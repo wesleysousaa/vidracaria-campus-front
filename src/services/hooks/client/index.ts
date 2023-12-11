@@ -13,7 +13,10 @@ const mutate = async (dispach: AxiosInstance, options: {}) => {
     mutationFn: async () => {
       return await dispach.request(options).then((res) => res.data);
     },
-  });
+    onSuccess: (data) => {
+      return data;
+    },
+  }).mutate();
 };
 
 export async function getAllClients() {
@@ -24,8 +27,6 @@ export async function getAllClients() {
       Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
     },
   };
-
-  api.request(options);
 
   return await api.request(options).then((res) => res.data);
 
@@ -40,8 +41,6 @@ export async function getOneClient(id: string) {
       Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
     },
   };
-
-  api.request(options);
 
   return await api.request(options).then((res) => res.data);
 
@@ -60,11 +59,10 @@ export async function updateClient(client: ClientValidation) {
       Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
     },
   };
-  api.request(options);
 
   return await api.request(options).then((res) => res.data);
 
-  // return mutate(api, options);
+  // return await mutate(api, options);
 }
 
 export async function createClient(client: ClientValidation) {
@@ -80,11 +78,9 @@ export async function createClient(client: ClientValidation) {
     },
   };
 
-  api.request(options);
-
   return await api.request(options).then((res) => res.data);
 
-  // return mutate(api, options);
+  // return await mutate(api, options);
 }
 
 export async function deleteClient(id: string) {
@@ -96,11 +92,8 @@ export async function deleteClient(id: string) {
       Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
     },
   };
-  console.log(options);
-
-  api.request(options);
 
   return await api.request(options).then((res) => res.data);
 
-  // return mutate(api, options);
+  // return await mutate(api, options);
 }
