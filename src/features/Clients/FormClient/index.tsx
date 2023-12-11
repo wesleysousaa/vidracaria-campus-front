@@ -117,6 +117,8 @@ export default function FormClient() {
     },
   });
 
+  console.log(errors);
+
   useEffect(() => {
     async function fetch() {
       if (!id) return;
@@ -308,6 +310,47 @@ export default function FormClient() {
                   </MenuItem>
                 ))}
               </Select>
+            )}
+          />
+        </Box>
+
+        <Box sx={boxStylesForm}>
+          <Controller
+            name="city"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  width: '68%',
+                  ...textFieldStyles,
+                }}
+                type="text"
+                id="city-textfiled"
+                label="Cidade"
+                error={!!errors.city}
+                helperText={errors.city?.message}
+                placeholder="Digite a cidade do cliente"
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="number"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  width: '30%',
+                  ...textFieldStyles,
+                }}
+                type="text"
+                id="number-address"
+                label="Número"
+                error={!!errors.number}
+                helperText={errors.number?.message}
+                placeholder="Digite o número da casa do cliente"
+                {...field}
+              />
             )}
           />
         </Box>
