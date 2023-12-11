@@ -1,6 +1,6 @@
 // AuthProvider.js
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { useAuthUser, useValidatedToken } from '../../services/hooks/user';
 import { UserValidation } from '../../types';
@@ -16,16 +16,22 @@ export const AuthContextActions = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
+    if (token || isAuthenticated) {
       setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
     }
+  }, [isAuthenticated, setIsAuthenticated]);
+
+  useEffect(() => {
     if (authUser.isSuccess) {
       navigate('/relatorios');
+      setIsAuthenticated(true);
     }
     if (authUser.isError) {
       setIsErrorMessage(true);
     }
-  }, [authUser]);
+  }, [authUser, setIsAuthenticated]);
 
   const login = useCallback((userData: UserValidation) => {
     authUser.mutate(userData);
