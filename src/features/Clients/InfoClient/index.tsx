@@ -1,102 +1,26 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import useIcons from '../../../hooks/useIcons';
+import { useClient } from '../../../hooks/useClient';
+import { useEffect, useState } from 'react';
+import { ClientValidation } from '../../../types';
 
 export default function InfoClient() {
   const location = useLocation();
+  const [item, setItem] = useState<ClientValidation>();
+  const id = location.pathname.split('/')[3];
+  const { getOne } = useClient();
   const { getIcons } = useIcons();
   const { EmailOutlinedIcon, LocalPhoneOutlinedIcon, ArrowBackIosIcon } =
     getIcons();
-  const mockData = [
-    {
-      id: '1',
-      cep: '12345-678',
-      city: 'Cidade Fictícia',
-      cpfCnpj: '000.000.000-00',
-      email: 'email@example.com',
-      name: 'Nome Fictício',
-      number: '123',
-      phone: '(00) 00000-0000',
-      state: 'PB',
-      people: 'FÍSICA',
-      street: 'Rua Fictícia',
-      pointReference: 'Referência Fictícia',
-    },
-    {
-      id: '2',
-      cep: '12345-679',
-      city: 'Cidade Fictícia 2',
-      cpfCnpj: '111.111.111-11',
-      email: 'email2@example.com',
-      name: 'Nome Fictício 2',
-      number: '456',
-      phone: '(11) 11111-1111',
-      state: 'PB',
-      people: 'FÍSICA',
-      street: 'Rua Fictícia 2',
-      pointReference: 'Referência Fictícia 2',
-    },
-    {
-      id: '3',
-      cep: '12345-680',
-      city: 'Cidade Fictícia 3',
-      cpfCnpj: '222.222.222-22',
-      email: 'email3@example.com',
-      name: 'Nome Fictício 3',
-      number: '789',
-      phone: '(22) 22222-2222',
-      state: 'PB',
-      people: 'FÍSICA',
-      street: 'Rua Fictícia 3',
-      pointReference: 'Referência Fictícia 3',
-    },
-    {
-      id: '4',
-      cep: '12345-681',
-      city: 'Cidade Fictícia 4',
-      cpfCnpj: '333.333.333-33',
-      email: 'email4@example.com',
-      name: 'Nome Fictício 4',
-      number: '987',
-      phone: '(33) 33333-3333',
-      state: 'PB',
-      people: 'FÍSICA',
-      street: 'Rua Fictícia 4',
-      pointReference: 'Referência Fictícia 4',
-    },
-    {
-      id: '5',
-      cep: '12345-682',
-      city: 'Cidade Fictícia 5',
-      cpfCnpj: '444.444.444-44',
-      email: 'email5@example.com',
-      name: 'Nome Fictício 5',
-      number: '654',
-      phone: '(44) 44444-4444',
-      state: 'PB',
-      people: 'FÍSICA',
-      street: 'Rua Fictícia 5',
-      pointReference: 'Referência Fictícia 5',
-    },
-    {
-      id: '6',
-      cep: '12345-683',
-      city: 'Cidade Fictícia 6',
-      cpfCnpj: '555.555.555-55',
-      email: 'email6@example.com',
-      name: 'Nome Fictício 6',
-      number: '321',
-      phone: '(55) 55555-5555',
-      state: 'PB',
-      people: 'FÍSICA',
-      street: 'Rua Fictícia 6',
-      pointReference: 'Referência Fictícia 6',
-    },
-  ];
 
-  const client = mockData.find(
-    (item) => item.id === location.pathname.split('/')[3],
-  );
+  useEffect(() => {
+    async function fetch() {
+      setItem(await getOne(id));
+    }
+
+    fetch();
+  }, []);
 
   return (
     <Box
@@ -131,13 +55,13 @@ export default function InfoClient() {
       >
         <img src="/images/user-icon.png" alt="user" style={{ width: '11em' }} />
         <Typography variant="h5" fontWeight={'bold'}>
-          {client?.name}
+          {item?.name}
         </Typography>
         <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          Pessoa {client?.people}
+          Pessoa {item?.customerType}
         </Typography>
         <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          {client?.cpfCnpj}
+          {item?.cpf_cnpj}
         </Typography>
       </Box>
 
@@ -163,7 +87,7 @@ export default function InfoClient() {
             alignItems={'center'}
             margin={'1em'}
           >
-            <LocalPhoneOutlinedIcon /> {client?.phone}{' '}
+            <LocalPhoneOutlinedIcon /> {item?.phone}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -173,7 +97,7 @@ export default function InfoClient() {
             alignItems={'center'}
             margin={'1em'}
           >
-            <EmailOutlinedIcon /> {client?.email}
+            <EmailOutlinedIcon /> {item?.email}
           </Typography>
         </Box>
       </Box>
@@ -203,7 +127,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Rua</span>
-            {client?.street}{' '}
+            {item?.address}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -216,7 +140,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>CEP</span>
-            {client?.cep}{' '}
+            {item?.zipCode}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -229,7 +153,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Estado</span>
-            {client?.state}{' '}
+            {item?.state}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -245,7 +169,7 @@ export default function InfoClient() {
             <span style={{ fontWeight: 'bold', color: '#000' }}>
               Referência
             </span>
-            {client?.pointReference}{' '}
+            {item?.landmark}{' '}
           </Typography>
         </Box>
       </Box>
