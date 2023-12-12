@@ -1,7 +1,7 @@
 import { Button, Grid, List, Typography } from '@mui/material/';
 import { useLocation } from 'react-router-dom';
 import useIcons from '../../hooks/useIcons';
-import { AuthContextActions } from '../../states/auth/AuthContextActions';
+import { AuthContextActions } from '../../states/auth';
 import MenuItem from './MenuItem';
 import { navListStyles, navStyles } from './menuStyles';
 

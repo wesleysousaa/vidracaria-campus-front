@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { LoginSchema } from '../../shemas/User';
-import { AuthContextActions } from '../../states/auth/AuthContextActions';
+import { AuthContextActions } from '../../states/auth';
 import { UserValidation } from '../../types';
 import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
 
 export default function Login() {
-  const { login, isErrorMessage } = AuthContextActions();
+  const { login, error } = AuthContextActions();
 
   const {
     handleSubmit,
@@ -69,7 +69,7 @@ export default function Login() {
         <Button type="submit" variant="contained" sx={loginButtonStyles}>
           Acessar
         </Button>
-        {isErrorMessage && (
+        {error && (
           <Alert variant="filled" severity="error">
             Email ou senha inválidos!
           </Alert>

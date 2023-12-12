@@ -7,9 +7,10 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:react/recommended',
     'standard-with-typescript',
+    'prettier', // Adiciona as regras do Prettier
   ],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', '@typescript-eslint', 'react'],
+  plugins: ['react-refresh', '@typescript-eslint', 'react', 'prettier'], // Adiciona o plugin do Prettier
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -25,8 +26,20 @@ module.exports = {
       { 'newlines-between': 'always', alphabetize: { order: 'asc' } },
     ],
     'unused-imports/no-unused-imports-ts': 'error',
+    'prettier/prettier': 'error', // Ativa as regras do Prettier
   },
   overrides: [
     // Adicione configurações específicas para sobreposições (overrides) se necessário
+    {
+      files: ['*.css'], // Aplica as regras para arquivos CSS
+      processor: 'stylelint-processor-styled-components', // Pode variar dependendo do seu setup
+    },
+    {
+      files: ['*.ts', '*.tsx'], // Aplica as regras para arquivos TypeScript
+      extends: [
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'prettier/@typescript-eslint', // Ativa as regras do Prettier para TypeScript
+      ],
+    },
   ],
 };
