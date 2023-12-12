@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../Template';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -14,12 +14,12 @@ export default function Router() {
     <BrowserRouter>
       <Suspense fallback={<>Carregando...</>}>
         <Routes>
-          <Route element={<PrivateRoute />}>
-            <Route element={<Layout />}>
+          <Route element={<Layout />}>
+            <Route element={<PrivateRoute />}>
               <Route path="relatorios" element={<div>Relatorios</div>} />
-              <Route path="clientes" element={<Outlet />}>
+              <Route path="clientes">
                 <Route index element={<Clients />} />
-                <Route path="create" element={<FormClient />} />
+                <Route path="add" element={<FormClient />} />
                 <Route path="info/:id" element={<InfoClient />} />
                 <Route path="edit/:id" element={<FormClient />} />
               </Route>

@@ -8,12 +8,12 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
 import useIcons from '../../hooks/useIcons';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
 import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
-import { Link } from 'react-router-dom';
 
 export default function Clients() {
   const {
@@ -142,7 +142,7 @@ export default function Clients() {
           </IconButton>
         </FormControl>
 
-        <Link to={'create'}>
+        <Link to="add">
           <Button variant="contained" color="success">
             Novo Cliente
           </Button>

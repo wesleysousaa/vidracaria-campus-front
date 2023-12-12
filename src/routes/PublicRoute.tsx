@@ -1,8 +1,15 @@
+import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContextActions } from '../states/auth/AuthContextActions';
+import { AuthContextActions } from '../states/auth';
 
 export default function PublicRoute() {
-  const { isAuthenticated } = AuthContextActions();
+  const { isAuthenticated, isValidToken } = AuthContextActions();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      isValidToken();
+    }
+  }, [isAuthenticated]);
 
   return isAuthenticated ? <Navigate to="/relatorios" replace /> : <Outlet />;
 }
