@@ -5,6 +5,7 @@ import {
   SvgIconTypeMap,
 } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { memo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   buttonStyle,
@@ -13,7 +14,7 @@ import {
   iconStyleActives,
   linkStyle,
   linkStyleActives,
-} from '../menuStyles';
+} from '../../menuStyles';
 
 export interface MenuItemProps {
   label: string;
@@ -23,7 +24,7 @@ export interface MenuItemProps {
   };
 }
 
-export default function MenuItem(props: MenuItemProps) {
+function MenuItem(props: MenuItemProps) {
   const location = useLocation();
 
   const verifyLinkActive = (link: string) => {
@@ -35,6 +36,7 @@ export default function MenuItem(props: MenuItemProps) {
         }
       : { linkStyle, iconStyle, buttonStyle };
   };
+
   return (
     <NavLink to={props.path} style={verifyLinkActive(props.path).linkStyle}>
       <ListItemButton
@@ -50,3 +52,5 @@ export default function MenuItem(props: MenuItemProps) {
     </NavLink>
   );
 }
+
+export default memo(MenuItem);

@@ -1,8 +1,8 @@
 import { Box, IconButton, Typography } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
-import useIcons from '../../../hooks/useIcons';
-import { useClient } from '../../../hooks/useClient';
 import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useClient } from '../../../hooks/useClient';
+import useIcons from '../../../hooks/useIcons';
 import { ClientValidation } from '../../../types';
 
 export default function InfoClient() {
@@ -53,7 +53,12 @@ export default function InfoClient() {
         width={'50%'}
         marginTop={'3em'}
       >
-        <img src="/images/user-icon.png" alt="user" style={{ width: '11em' }} />
+        <img
+          src="/images/user-icon.png"
+          alt="user"
+          style={{ width: '11em' }}
+          loading="lazy"
+        />
         <Typography variant="h5" fontWeight={'bold'}>
           {item?.name}
         </Typography>

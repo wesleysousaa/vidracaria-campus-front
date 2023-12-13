@@ -20,6 +20,7 @@ const useAuthUser = (setIsAuthenticated: SetterOrUpdater<boolean>) => {
       navigate('/relatórios');
       setIsAuthenticated(true);
     },
+    
   });
 };
 
