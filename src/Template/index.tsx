@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
+import { lazy } from 'react';
 import { Outlet } from 'react-router-dom';
-import Menu from '../components/Menu';
+
+const Menu = lazy(() => import('../components/Menu'));
 
 export default function Layout() {
   return (
