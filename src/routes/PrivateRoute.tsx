@@ -1,15 +1,6 @@
-import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContextActions } from '../states/auth';
+import isAuthenticated from '../hooks/useIsAuthenticated';
 
 export default function PrivateRoute() {
-  const { isAuthenticated, isValidToken } = AuthContextActions();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      isValidToken();
-    }
-  }, [isAuthenticated]);
-
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+  return isAuthenticated() ? <Outlet /> : <Navigate to="/" replace />;
 }

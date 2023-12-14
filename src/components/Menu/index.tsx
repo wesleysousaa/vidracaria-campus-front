@@ -1,17 +1,19 @@
 import { Button, Grid, Typography } from '@mui/material/';
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useIcons from '../../hooks/useIcons';
-import { AuthContextActions } from '../../states/auth';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
 import { navStyles } from './menuStyles';
 
 export default function Menu() {
-  const { logout } = AuthContextActions();
   const { getIcons } = useIcons();
+  const navigate = useNavigate();
   const { LogoutOutlinedIcon } = getIcons();
 
-  useEffect(() => console.log('OI'), []);
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
 
   return (
     <nav style={navStyles}>

@@ -8,13 +8,17 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useAuthUser } from '../../services/hooks/user';
 import { LoginSchema } from '../../shemas/User';
-import { AuthContextActions } from '../../states/auth';
 import { UserValidation } from '../../types';
 import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
 
 export default function Login() {
-  const { login, error } = AuthContextActions();
+  const authUser = useAuthUser();
+
+  const login = (userData: UserValidation) => {
+    authUser.mutate(userData);
+  };
 
   const {
     handleSubmit,
@@ -69,7 +73,7 @@ export default function Login() {
         <Button type="submit" variant="contained" sx={loginButtonStyles}>
           Acessar
         </Button>
-        {error && (
+        {authUser.error && (
           <Alert variant="filled" severity="error">
             Email ou senha inválidos!
           </Alert>
