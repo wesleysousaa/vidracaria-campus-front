@@ -33,7 +33,6 @@ export const buttonStyleActive: CSSPropertiesMui = {
 
 export const navStyles: CSSProperties = {
   width: '15%',
-  height: '100vh',
   boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
   overflow: 'auto',
 };
