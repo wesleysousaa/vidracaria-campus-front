@@ -66,7 +66,7 @@ export default function InfoClient() {
           Pessoa {item?.customerType}
         </Typography>
         <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          {item?.cpf_cnpj}
+          {item?.cpfcnpj}
         </Typography>
       </Box>
 
@@ -132,7 +132,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Rua</span>
-            {item?.address}{' '}
+            {item?.address.address}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -145,7 +145,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>CEP</span>
-            {item?.zipCode}{' '}
+            {item?.address.zipCode}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -158,7 +158,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Estado</span>
-            {item?.state}{' '}
+            {item?.address.state}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -174,7 +174,7 @@ export default function InfoClient() {
             <span style={{ fontWeight: 'bold', color: '#000' }}>
               Referência
             </span>
-            {item?.landmark}{' '}
+            {item?.address.landmark}{' '}
           </Typography>
         </Box>
       </Box>

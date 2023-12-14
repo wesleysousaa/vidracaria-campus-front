@@ -59,19 +59,6 @@ export default function FormClient() {
     'TO',
   ];
 
-  const prepareDefaultValues = (
-    defaultString: string,
-    atributte: keyof ClientValidation,
-  ) => {
-    if (item) {
-      return item && typeof item[atributte] !== 'undefined'
-        ? item[atributte]
-        : defaultString;
-    } else {
-      return defaultString;
-    }
-  };
-
   const showSnackBar = (response: ClientValidation) => {
     if (response.id) {
       enqueueSnackbar('Cliente salvo com sucesso!', {
@@ -94,30 +81,40 @@ export default function FormClient() {
     showSnackBar(await create(data));
   };
 
+  const defaultValues = () => {
+    if (!item) {
+      return {
+        customerType: 'FISICA',
+        name: '',
+        phone: '',
+        cpfcnpj: '',
+        email: '',
+        id: '',
+        address: {
+          address: '',
+          city: '',
+          landmark: '',
+          number: '',
+          state: 'PB',
+          zipCode: '',
+        },
+      } as ClientValidation;
+    }
+    return item;
+  };
+
   const {
     handleSubmit,
     control,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<ClientValidation>({
     resolver: yupResolver(ClientSchema),
     defaultValues: {
-      id: prepareDefaultValues('', 'id'),
-      zipCode: prepareDefaultValues('', 'zipCode'),
-      city: prepareDefaultValues('', 'city'),
-      cpf_cnpj: prepareDefaultValues('', 'cpf_cnpj'),
-      email: prepareDefaultValues('', 'email'),
-      name: prepareDefaultValues('', 'name'),
-      number: prepareDefaultValues('', 'number'),
-      phone: prepareDefaultValues('', 'phone'),
-      state: prepareDefaultValues('PB', 'state'),
-      customerType: prepareDefaultValues('Física', 'customerType'),
-      address: prepareDefaultValues('', 'address'),
-      landmark: prepareDefaultValues('', 'landmark'),
+      ...defaultValues(),
     },
   });
-
-  console.log(errors);
 
   useEffect(() => {
     async function fetch() {
@@ -188,13 +185,13 @@ export default function FormClient() {
                 label="Pessoa"
                 {...field}
               >
-                <MenuItem value={'Física'}>Física</MenuItem>
-                <MenuItem value={'Jurídica'}>Jurídica</MenuItem>
+                <MenuItem value={'FISICA'}>Física</MenuItem>
+                <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
               </Select>
             )}
           />
           <Controller
-            name="cpf_cnpj"
+            name="cpfcnpj"
             control={control}
             render={({ field }) => (
               <TextField
@@ -252,15 +249,15 @@ export default function FormClient() {
         </Box>
 
         <Controller
-          name="address"
+          name="address.address"
           control={control}
           render={({ field }) => (
             <TextField
               id="address"
               type="text"
               label="Rua"
-              error={!!errors.address}
-              helperText={errors.address?.message}
+              error={!!errors.address?.address}
+              helperText={errors.address?.address?.message}
               sx={textFieldStyles}
               placeholder="Digite o nome da rua"
               {...field}
@@ -270,7 +267,7 @@ export default function FormClient() {
 
         <Box sx={boxStylesForm}>
           <Controller
-            name="zipCode"
+            name="address.zipCode"
             control={control}
             render={({ field }) => (
               <TextField
@@ -281,15 +278,15 @@ export default function FormClient() {
                 type="text"
                 id="zipCode"
                 label="CEP"
-                error={!!errors.zipCode}
-                helperText={errors.zipCode?.message}
+                error={!!errors.address?.zipCode}
+                helperText={errors.address?.zipCode?.message}
                 placeholder="Digite o CEP do cliente"
                 {...field}
               />
             )}
           />
           <Controller
-            name="state"
+            name="address.state"
             defaultValue="PB"
             control={control}
             render={({ field }) => (
@@ -316,7 +313,7 @@ export default function FormClient() {
 
         <Box sx={boxStylesForm}>
           <Controller
-            name="city"
+            name="address.city"
             control={control}
             render={({ field }) => (
               <TextField
@@ -327,15 +324,15 @@ export default function FormClient() {
                 type="text"
                 id="city-textfiled"
                 label="Cidade"
-                error={!!errors.city}
-                helperText={errors.city?.message}
+                error={!!errors.address?.city}
+                helperText={errors.address?.city?.message}
                 placeholder="Digite a cidade do cliente"
                 {...field}
               />
             )}
           />
           <Controller
-            name="number"
+            name="address.number"
             control={control}
             render={({ field }) => (
               <TextField
@@ -346,8 +343,8 @@ export default function FormClient() {
                 type="text"
                 id="number-address"
                 label="Número"
-                error={!!errors.number}
-                helperText={errors.number?.message}
+                error={!!errors.address?.number}
+                helperText={errors.address?.number?.message}
                 placeholder="Digite o número da casa do cliente"
                 {...field}
               />
@@ -356,7 +353,7 @@ export default function FormClient() {
         </Box>
 
         <Controller
-          name="landmark"
+          name="address.landmark"
           control={control}
           render={({ field }) => (
             <TextField

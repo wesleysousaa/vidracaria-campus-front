@@ -7,16 +7,20 @@ export interface UserValidation {
 }
 
 export interface SearchValidation {
-  value: string;
+  value?: string;
 }
 
 export interface ClientValidation {
   id?: string;
   name: string;
   customerType: string;
-  cpf_cnpj?: string;
+  cpfcnpj?: string;
   email?: string;
   phone: string;
+  address: AddressValidation;
+}
+
+export interface AddressValidation {
   address: string;
   zipCode: string;
   number: string;

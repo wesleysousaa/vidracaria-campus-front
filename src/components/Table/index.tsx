@@ -12,20 +12,20 @@ import Modal from '../Modal';
 import { ConfirmAction } from '../ConfirmAction';
 
 interface TableProps {
-  data: any[];
+  data?: any[] | undefined;
   title: string;
   deleteButtonDispach: (id: string) => void;
 }
 
 export default function Table(props: TableProps) {
-  let columns = Object.keys(props.data[0] || {});
+  let columns = Object.keys((props.data && props.data[0]) || {});
   columns = columns.slice(0, 5);
   const [open, setOpen] = useState(false);
   const [idItem, setIdItem] = useState('');
 
   const handleOpen = (idItem: string, type: string) => {
     setOpen(true);
-    const item = props.data.find((item) => item.id === idItem);
+    const item = props.data?.find((item) => item.id === idItem);
     setIdItem(item.id);
   };
 
