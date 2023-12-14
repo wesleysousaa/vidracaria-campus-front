@@ -97,3 +97,21 @@ export async function deleteClient(id: string) {
 
   // return await mutate(api, options);
 }
+
+export async function searchClients(search: string) {
+  const options = {
+    method: 'GET',
+    url: `${Endpoints.get}/search`,
+    params: {
+      search,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
+    },
+  };
+
+  return await api.request(options).then((res) => res.data);
+
+  // return await mutate(api, options);
+}

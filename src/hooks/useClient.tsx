@@ -6,6 +6,7 @@ import {
   getAllClients,
   updateClient,
   deleteClient,
+  searchClients,
 } from '../services/hooks/client';
 import { ClientValidation } from '../types';
 
@@ -35,11 +36,17 @@ export const useClient = () => {
     return response;
   }, []);
 
+  const search = useCallback(async (search: string) => {
+    const response = await searchClients(search);
+    return response;
+  }, []);
+
   return {
     getAll,
     getOne,
     update,
     create,
     deleteOne,
+    search,
   };
 };
