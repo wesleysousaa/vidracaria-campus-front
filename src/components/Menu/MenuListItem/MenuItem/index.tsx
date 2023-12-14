@@ -4,24 +4,27 @@ import {
   ListItemText,
   SvgIconTypeMap,
 } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { memo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
-  linkStyle,
-  linkStyleActives,
-  iconStyle,
-  iconStyleActives,
   buttonStyle,
   buttonStyleActive,
-} from '../menuStyles';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
+  iconStyle,
+  iconStyleActives,
+  linkStyle,
+  linkStyleActives,
+} from '../../menuStyles';
 
-export default function MenuItem(props: {
+export interface MenuItemProps {
   label: string;
   path: string;
   Icon: OverridableComponent<SvgIconTypeMap<object, 'svg'>> & {
     muiName: string;
   };
-}) {
+}
+
+function MenuItem(props: MenuItemProps) {
   const location = useLocation();
 
   const verifyLinkActive = (link: string) => {
@@ -33,6 +36,7 @@ export default function MenuItem(props: {
         }
       : { linkStyle, iconStyle, buttonStyle };
   };
+
   return (
     <NavLink to={props.path} style={verifyLinkActive(props.path).linkStyle}>
       <ListItemButton
@@ -48,3 +52,5 @@ export default function MenuItem(props: {
     </NavLink>
   );
 }
+
+export default memo(MenuItem);

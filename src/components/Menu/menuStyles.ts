@@ -30,3 +30,17 @@ export const buttonStyle: CSSPropertiesMui = {
 export const buttonStyleActive: CSSPropertiesMui = {
   borderLeft: 'solid 5px #2196F3',
 };
+
+export const navStyles: CSSProperties = {
+  width: '15%',
+  boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
+  overflow: 'auto',
+};
+
+export const navListStyles: CSSPropertiesMui = {
+  width: '100%',
+  height: '75%',
+  boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
+  borderBottom: '1px solid #ccc',
+  marginTop: '1em',
+};

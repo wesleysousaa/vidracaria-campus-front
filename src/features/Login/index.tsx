@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
   Box,
@@ -6,45 +7,42 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import LoginSchema from '../../shemas/Login/schema';
-import UserValidation from '../../shemas/Login/type';
-import { useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useAuthUser } from '../../services/hooks/user';
+import { LoginSchema } from '../../shemas/User';
+import { UserValidation } from '../../types';
+import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
 
 export default function Login() {
-  const [isUser, setIsUser] = useState(true);
+  const authUser = useAuthUser();
+
+  const login = (userData: UserValidation) => {
+    authUser.mutate(userData);
+  };
+
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: {},
   } = useForm<UserValidation>({
-    resolver: yupResolver(LoginSchema), // Use yupResolver diretamente
+    resolver: yupResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   const onSubmit: SubmitHandler<UserValidation> = (data) => {
-    // Lógica de autenticação aqui
-    setIsUser(true);
-    alert('Formulário submetido: ' + data);
-    setIsUser(false);
+    login(data);
   };
 
   return (
-    <Box
-      sx={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <Box sx={boxStyles}>
       <Typography variant="h1">Login</Typography>
       <FormControl
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        sx={{ width: '500px', mt: 3, gap: '10px' }}
+        sx={formControlStyles}
       >
         <Controller
           name="email"
@@ -58,11 +56,7 @@ export default function Login() {
             />
           )}
         />
-        {errors.email && (
-          <Alert variant="filled" severity="error">
-            {errors.email.message}
-          </Alert>
-        )}
+
         <Controller
           name="password"
           control={control}
@@ -76,27 +70,12 @@ export default function Login() {
           )}
         />
 
-        {errors.password && (
-          <Alert variant="filled" severity="error">
-            {errors.password.message}
-          </Alert>
-        )}
-
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{
-            mt: '10px',
-            padding: '10px',
-            fontSize: '1.2rem',
-            backgroundColor: '#2196F3',
-          }}
-        >
+        <Button type="submit" variant="contained" sx={loginButtonStyles}>
           Acessar
         </Button>
-        {!isUser && (
+        {authUser.error && (
           <Alert variant="filled" severity="error">
-            Usuário não encontrado
+            Email ou senha inválidos!
           </Alert>
         )}
       </FormControl>
