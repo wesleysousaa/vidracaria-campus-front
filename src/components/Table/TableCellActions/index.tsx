@@ -1,6 +1,6 @@
 import { IconButton, TableCell } from '@mui/material';
-import useIcons from '../../../hooks/useIcons';
 import { Link } from 'react-router-dom';
+import useGetIcons from '../../../hooks/useGetIcons';
 
 interface TableCellActionsProps {
   dispach: (idObject: string, typeAction: string) => void;
@@ -8,8 +8,7 @@ interface TableCellActionsProps {
 }
 
 export default function TableCellActions(props: TableCellActionsProps) {
-  const { getIcons } = useIcons();
-  const { EditIcon, InfoIcon, DeleteIcon } = getIcons();
+  const { EditIcon, InfoIcon, DeleteIcon } = useGetIcons();
 
   return (
     <TableCell>

@@ -4,7 +4,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
 import { useClient } from '../../hooks/useClient';
-import useIcons from '../../hooks/useIcons';
+import useGetIcons from '../../hooks/useGetIcons.tsx';
 import { useGetAllCustomers } from '../../services/hooks/Customer/clientv2.ts';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
@@ -12,8 +12,7 @@ import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
 
 export default function Customers() {
   const allCustomers = useGetAllCustomers();
-  const { getIcons } = useIcons();
-  const { SearchIcon } = getIcons();
+  const { SearchIcon } = useGetIcons();
   const { deleteOne, search } = useClient();
 
   const handleDelete = (id: string) => {

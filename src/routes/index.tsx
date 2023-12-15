@@ -1,16 +1,18 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../Template';
-import Dashboard from '../features/Dashboard';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
 const Login = lazy(() => import('../features/Login'));
 const Customers = lazy(() => import('../features/Customers'));
-const CustomerForm = lazy(() => import('../features/Customers/CustomerForm'));
+const CustomerCreateForm = lazy(
+  () => import('../features/Customers/CustomerCreateForm'),
+);
 const CustomerInfoForm = lazy(
   () => import('../features/Customers/CustomerInfoForm'),
 );
+const Dashboard = lazy(() => import('../features/Dashboard'));
 
 export default function Router() {
   return (
@@ -22,9 +24,9 @@ export default function Router() {
               <Route path="relatorios" element={<Dashboard />} />
               <Route path="customers">
                 <Route index element={<Customers />} />
-                <Route path="add" element={<CustomerForm />} />
+                <Route path="add" element={<CustomerCreateForm />} />
                 <Route path="info/:id" element={<CustomerInfoForm />} />
-                <Route path="edit/:id" element={<CustomerForm />} />
+                <Route path="edit/:id" element={<CustomerCreateForm />} />
               </Route>
               <Route path="servicos" element={<div>Serviços</div>} />
               <Route path="produtos" element={<div>Produtos</div>} />

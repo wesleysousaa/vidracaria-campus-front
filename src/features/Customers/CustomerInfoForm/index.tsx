@@ -2,7 +2,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useClient } from '../../../hooks/useClient';
-import useIcons from '../../../hooks/useIcons';
+import useGetIcons from '../../../hooks/useGetIcons';
 import { CustomerValidation } from '../../../types';
 
 export default function CustomerInfoForm() {
@@ -10,9 +10,8 @@ export default function CustomerInfoForm() {
   const [item, setItem] = useState<CustomerValidation>();
   const id = location.pathname.split('/')[3];
   const { getOne } = useClient();
-  const { getIcons } = useIcons();
   const { EmailOutlinedIcon, LocalPhoneOutlinedIcon, ArrowBackIosIcon } =
-    getIcons();
+    useGetIcons();
 
   useEffect(() => {
     async function fetch() {

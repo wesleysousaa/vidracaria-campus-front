@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
@@ -8,119 +9,47 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { boxStyles } from '../clientsStyles';
+import { Link } from 'react-router-dom';
+import useGetIcons from '../../../hooks/useGetIcons.tsx';
+import useGetState from '../../../hooks/useGetState.tsx';
+import { useCreateCustomer } from '../../../services/hooks/Customer/clientv2.ts';
+import { ClientSchema } from '../../../shemas/Customer/index.ts';
+import { CustomerValidation } from '../../../types/index.ts';
+import { boxStyles } from '../clientsStyles.ts';
+import { boxStylesForm, textFieldStyles } from './formStyles.ts';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useClient } from '../../../hooks/useClient';
-import useIcons from '../../../hooks/useIcons';
-import {
-  useCreateCustomer,
-  useUpdateCustomer,
-} from '../../../services/hooks/Customer/clientv2.ts';
-import { ClientSchema } from '../../../shemas/Client';
-import { CustomerValidation } from '../../../types';
-import { boxStylesForm, textFieldStyles } from './formStyles';
-
-export default function CustomerForm() {
+export default function CustomerCreateForm() {
+  const { ArrowBackIosIcon } = useGetIcons();
+  const states = useGetState();
   const createCustomer = useCreateCustomer();
-  const updateCustomer = useUpdateCustomer();
-
-  const { getIcons } = useIcons();
-  const { getOne } = useClient();
-  const [item, setItem] = useState<CustomerValidation | null>(null);
-  const { ArrowBackIosIcon } = getIcons();
-  const location = useLocation();
-  const id = location.pathname.split('/')[3];
-  const states = [
-    'AC',
-    'AL',
-    'AP',
-    'AM',
-    'BA',
-    'CE',
-    'DF',
-    'ES',
-    'GO',
-    'MA',
-    'MT',
-    'MS',
-    'MG',
-    'PA',
-    'PB',
-    'PR',
-    'PE',
-    'PI',
-    'RJ',
-    'RN',
-    'RS',
-    'RO',
-    'RR',
-    'SC',
-    'SP',
-    'SE',
-    'TO',
-  ];
 
   const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
-    if (id) {
-      updateCustomer.mutate(data);
-      return;
-    }
     createCustomer.mutate(data);
-  };
-
-  const defaultValues = () => {
-    if (!item) {
-      return {
-        customerType: 'FISICA',
-        name: '',
-        phone: '',
-        cpfcnpj: '',
-        email: '',
-        id: '',
-        address: {
-          address: '',
-          city: '',
-          landmark: '',
-          number: '',
-          state: 'PB',
-          zipCode: '',
-        },
-      } as CustomerValidation;
-    }
-    return item;
   };
 
   const {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
-    getValues,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
     defaultValues: {
-      ...defaultValues(),
+      customerType: 'FISICA',
+      name: '',
+      phone: '',
+      cpfcnpj: '',
+      email: '',
+      id: '',
+      address: {
+        address: '',
+        city: '',
+        landmark: '',
+        number: '',
+        state: 'PB',
+        zipCode: '',
+      },
     },
   });
-
-  useEffect(() => {
-    async function fetch() {
-      if (!id) return;
-      const data: CustomerValidation = await getOne(id);
-
-      Object.keys(data).map((atributte: string) =>
-        setValue(
-          atributte as keyof CustomerValidation,
-          data[atributte as keyof CustomerValidation],
-        ),
-      );
-      setItem(data);
-    }
-    fetch();
-  }, []);
 
   return (
     <Box sx={boxStyles}>
@@ -140,7 +69,7 @@ export default function CustomerForm() {
         }}
       >
         <Typography variant="h3" marginBottom="1em">
-          {item ? `Edição do Cliente ${item?.name}` : 'Cadastrar Cliente'}
+          Cadastrar Cliente
         </Typography>
 
         <Controller

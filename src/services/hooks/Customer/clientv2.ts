@@ -60,5 +60,15 @@ const useGetAllCustomers = () => {
   });
 };
 
-export { useCreateCustomer, useGetAllCustomers, useUpdateCustomer };
+const useGetCustomerById = (id: number) => {
+  return useQuery<CustomerValidation[]>({
+    queryKey: [Endpoints.getCustomerById, id],
+    queryFn: () => {
+      return api.get(`${Endpoints.getCustomerById}/${id}`, config).then((res) => res.data);
+    },
+    staleTime: Infinity, 
+  });
+};
+
+export { useCreateCustomer, useGetAllCustomers, useGetCustomerById, useUpdateCustomer };
 
