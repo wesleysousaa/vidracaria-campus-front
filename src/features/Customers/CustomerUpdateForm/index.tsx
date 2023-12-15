@@ -12,7 +12,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import useGetIcons from '../../../hooks/useGetIcons.tsx';
 import useGetState from '../../../hooks/useGetState.tsx';
-import { useUpdateCustomer } from '../../../services/hooks/Customer/clientv2.ts';
+import { useUpdateCustomer } from '../../../services/hooks/Customer/customersv2.ts';
 import { ClientSchema } from '../../../shemas/Customer/index.ts';
 import { CustomerValidation } from '../../../types/index.ts';
 import { boxStyles } from '../clientsStyles.ts';

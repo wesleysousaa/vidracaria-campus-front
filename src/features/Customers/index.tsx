@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
 import { useClient } from '../../hooks/useClient';
 import useGetIcons from '../../hooks/useGetIcons.tsx';
-import { useGetAllCustomers } from '../../services/hooks/Customer/clientv2.ts';
+import { useGetAllCustomers } from '../../services/hooks/Customer/customersv2.ts';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
 import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
