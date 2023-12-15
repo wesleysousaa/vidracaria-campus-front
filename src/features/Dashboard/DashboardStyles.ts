@@ -18,7 +18,7 @@ export const boxCards: CSSProperties = {
 
 export const secondBox: CSSProperties = {
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
   flexDirection: 'row',
   width: '100%',
   marginTop: '2em',

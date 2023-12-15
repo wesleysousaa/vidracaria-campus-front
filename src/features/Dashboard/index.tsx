@@ -1,59 +1,28 @@
 import { Box, Typography } from '@mui/material';
 import { mainStyles, boxCards, secondBox } from './DashboardStyles';
 import CardChart from '../../components/CardChart';
-import { Bar } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+import BarChart from '../../components/BarChart';
+import LineChart from '../../components/LineChart';
+
 export default function Dashboard() {
-  const data = {
-    labels: ['Produto A', 'Produto B', 'Produto C', 'Produto D'],
-    datasets: [
-      {
-        label: 'Vendas',
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderWidth: 1,
-        hoverBackgroundColor: 'rgba(75,192,192,0.6)',
-        hoverBorderColor: 'rgba(75,192,192,1)',
-        data: [50, 30, 25, 20],
-      },
-    ],
-  };
+  const dataBar = [
+    { item: 'Vidro Temperado 300cm x 300cm', value: 30 },
+    { item: 'Vidro 400cm x 800cm', value: 25 },
+    { item: 'Kit para banheiro', value: 20 },
+    { item: 'Box de banheiro', value: 40 },
+  ];
 
-  const options = {
-    indexAxis: 'y' as const,
-    elements: {
-      bar: {
-        borderWidth: 2,
-      },
-    },
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'right' as const,
-      },
-      title: {
-        display: true,
-        text: 'Produtos mais vendidos',
-      },
-    },
-  };
+  const lineChartData = [
+    { date: '2023-01-01', month: 'Janeiro', value: 1500 },
+    { date: '2023-02-01', month: 'Fevereiro', value: 1200 },
+    { date: '2023-03-01', month: 'Março', value: 2100 },
+    { date: '2023-04-01', month: 'Maio', value: 2100 },
+    { date: '2023-05-01', month: 'Abril', value: 1100 },
+    { date: '2023-06-01', month: 'Junho', value: 1600 },
+    { date: '2023-07-01', month: 'Julho', value: 2000 },
+  ];
+
   return (
     <Box sx={mainStyles} component={'main'}>
       <Typography variant="h4" fontWeight={'bold'}>
@@ -89,7 +58,7 @@ export default function Dashboard() {
           bgColor="#EA5E0B"
         />
       </Box>
-      <Box
+      {/* <Box
         sx={{
           display: 'flex',
           height: '400px',
@@ -97,10 +66,25 @@ export default function Dashboard() {
         }}
       >
         <Bar data={data} options={options} />
+      </Box> */}
+      <Box>
+        <LineChart data={lineChartData} title="Faturamento (durante messes)" />
       </Box>
       <Box sx={secondBox}>
-        <Bar data={data} options={options} style={{ height: '20em' }} />
-        <Bar data={data} options={options} style={{ height: '20em' }} />
+        <Box
+          sx={{
+            width: '47%',
+          }}
+        >
+          <BarChart data={dataBar} title="Produtos mais vendidos" />
+        </Box>
+        <Box
+          sx={{
+            width: '47%',
+          }}
+        >
+          <BarChart data={dataBar} title="Produtos com baixa no estoque" />
+        </Box>
       </Box>
     </Box>
   );
