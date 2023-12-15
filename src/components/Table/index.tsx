@@ -24,7 +24,7 @@ export default function Table(props: TableProps) {
   const [open, setOpen] = useState(false);
   const [idItem, setIdItem] = useState('');
 
-  const handleOpen = (idItem: string, type: string) => {
+  const handleOpen = (idItem: string) => {
     setOpen(true);
     const item = props.data?.find((item) => item.id === idItem);
     setIdItem(item.id);
