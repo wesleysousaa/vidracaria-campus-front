@@ -30,6 +30,11 @@ const useCreateCustomer = () => {
         variant: 'success',
       });
     },
+    onError: () => {
+      enqueueSnackbar('Erro ao salvar o cliente!', {
+        variant: 'error',
+      });
+    },
   });
 };
 
@@ -47,6 +52,11 @@ const useUpdateCustomer = () => {
       navigate('/customers');
       enqueueSnackbar('Cliente atualizado com sucesso!', {
         variant: 'success',
+      });
+    },
+    onError: () => {
+      enqueueSnackbar('Erro ao salvar o cliente!', {
+        variant: 'error',
       });
     },
   });

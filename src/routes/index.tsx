@@ -20,7 +20,7 @@ const Dashboard = lazy(() => import('../features/Dashboard'));
 export default function Router() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<>Carregando...</>}>
+      <Suspense fallback={<h1>Carregando...</h1>}>
         <Routes>
           <Route element={<Layout />}>
             <Route element={<PrivateRoute />}>
