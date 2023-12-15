@@ -38,6 +38,8 @@ export default function Table(props: TableProps) {
     <TableContainer
       sx={{
         marginTop: '2em',
+        overflowY: 'scroll',
+        height: '70vh',
       }}
     >
       <Modal
