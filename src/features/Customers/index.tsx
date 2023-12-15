@@ -8,7 +8,7 @@ import {
   useDeleteCustomerById,
   useGetAllCustomers,
   useSearchCustomers,
-} from '../../services/hooks/Customer/customersv2.ts';
+} from '../../services/hooks/Customer/index.ts';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
 import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';

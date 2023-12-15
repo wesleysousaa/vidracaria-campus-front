@@ -17,7 +17,7 @@ import useGetState from '../../../hooks/useGetState.tsx';
 import {
   useGetCustomerById,
   useUpdateCustomer,
-} from '../../../services/hooks/Customer/customersv2.ts';
+} from '../../../services/hooks/Customer/index.ts';
 import { ClientSchema } from '../../../shemas/Customer/index.ts';
 import { CustomerValidation } from '../../../types/index.ts';
 import {
@@ -43,7 +43,7 @@ export default function CustomerUpdateForm() {
     formState: { errors },
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
-    defaultValues: customer.data,
+    defaultValues: customer.data || {},
   });
 
   return (

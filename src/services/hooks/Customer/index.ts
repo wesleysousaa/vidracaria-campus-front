@@ -1,117 +1,110 @@
-import { useMutation } from '@tanstack/react-query';
-import { AxiosInstance } from 'axios';
-import api from '../..';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { enqueueSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
+import api, { config } from '../..';
 import { CustomerValidation } from '../../../types';
 
-enum Endpoints {
-  get = '/customers',
+const enum Endpoints {
+  createCustomer = '/customers/createCustomer',
+  updateCustomer = '/customers/updateCustomer',
+  getAllCustomers = '/customers/getAllCustomers',
+  getCustomerById = '/customers/getCustomerById',
+  deleteCustomerById = '/customers/deleteCustomerById',
+  searchCustomers = '/customers/searchCustomers',
 }
 
-const mutate = async (dispach: AxiosInstance, options: {}) => {
-  // Não funciona de jeito maneira
+const useCreateCustomer = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   return useMutation({
-    mutationFn: async () => {
-      return await dispach.request(options).then((res) => res.data);
+    mutationFn: (customer: CustomerValidation) => {
+      return api
+        .post(Endpoints.createCustomer, customer, config)
+        .then((res) => res.data);
     },
-    onSuccess: (data) => {
-      return data;
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Endpoints.getAllCustomers] });
+      navigate('/customers');
+      enqueueSnackbar('Cliente salvo com sucesso!', {
+        variant: 'success',
+      });
     },
-  }).mutate();
+  });
 };
 
-export async function getAllClients() {
-  const options = {
-    method: 'GET',
-    url: Endpoints.get,
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
+const useUpdateCustomer = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: (customer: CustomerValidation) => {
+      return api
+        .put(`${Endpoints.updateCustomer}/${customer.id}`, customer, config)
+        .then((res) => res.data);
     },
-  };
-
-  return await api.request(options).then((res) => res.data);
-
-  // return mutate(api, options);
-}
-
-export async function getOneClient(id: string) {
-  const options = {
-    method: 'GET',
-    url: `${Endpoints.get}/${id}`,
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Endpoints.getAllCustomers] });
+      navigate('/customers');
+      enqueueSnackbar('Cliente atualizado com sucesso!', {
+        variant: 'success',
+      });
     },
-  };
+  });
+};
 
-  return await api.request(options).then((res) => res.data);
-
-  // return mutate(api, options);
-}
-
-export async function updateClient(client: CustomerValidation) {
-  const options = {
-    method: 'PUT',
-    url: `${Endpoints.get}/${client.id}`,
-    data: {
-      ...client,
+const useGetAllCustomers = () => {
+  return useQuery<CustomerValidation[]>({
+    queryKey: [Endpoints.getAllCustomers],
+    queryFn: () => {
+      return api.get(Endpoints.getAllCustomers, config).then((res) => res.data);
     },
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
+    staleTime: Infinity,
+  });
+};
+
+const useGetCustomerById = (id?: string) => {
+  return useQuery<CustomerValidation>({
+    queryKey: [Endpoints.getCustomerById, id],
+    queryFn: () => {
+      return api
+        .get(`${Endpoints.getCustomerById}/${id}`, config)
+        .then((res) => res.data);
     },
-  };
+    enabled: id !== undefined,
+    staleTime: 600000,
+  });
+};
 
-  return await api.request(options).then((res) => res.data);
+const useDeleteCustomerById = () => {
+  const queryClient = useQueryClient();
 
-  // return await mutate(api, options);
-}
-
-export async function createClient(client: CustomerValidation) {
-  const options = {
-    method: 'POST',
-    url: `${Endpoints.get}`,
-    data: {
-      ...client,
+  return useMutation({
+    mutationFn: (id: string) => {
+      return api
+        .delete(`${Endpoints.deleteCustomerById}/${id}`, config)
+        .then((res) => res.data);
     },
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Endpoints.getAllCustomers] });
     },
-  };
+  });
+};
 
-  return await api.request(options).then((res) => res.data);
-
-  // return await mutate(api, options);
-}
-
-export async function deleteClient(id: string) {
-  const options = {
-    method: 'DELETE',
-    url: `${Endpoints.get}/${id}`,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
+const useSearchCustomers = () => {
+  return useMutation({
+    mutationFn: (search?: string) => {
+      return api
+        .post(`${Endpoints.searchCustomers}/${search}`, {}, config)
+        .then((res) => res.data);
     },
-  };
+  });
+};
 
-  return await api.request(options).then((res) => res.data);
-
-  // return await mutate(api, options);
-}
-
-export async function searchClients(search: string) {
-  const options = {
-    method: 'GET',
-    url: `${Endpoints.get}/search`,
-    params: {
-      search,
-    },
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
-    },
-  };
-
-  return await api.request(options).then((res) => res.data);
-
-  // return await mutate(api, options);
-}
+export {
+  useCreateCustomer,
+  useDeleteCustomerById,
+  useGetAllCustomers,
+  useGetCustomerById,
+  useSearchCustomers,
+  useUpdateCustomer,
+};
