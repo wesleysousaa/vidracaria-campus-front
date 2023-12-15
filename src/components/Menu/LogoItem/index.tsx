@@ -14,7 +14,7 @@ function LogoItem() {
     >
       <Grid item>
         <img
-          src="/images/logo-icon.png"
+          src="/images/logo-icon.webp"
           alt="logo"
           style={{ maxWidth: '3em' }}
           loading="lazy"

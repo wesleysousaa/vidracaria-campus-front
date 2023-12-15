@@ -1,54 +1,40 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Box,
-  Button,
-  FormControl,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
-import useIcons from '../../hooks/useIcons';
-import { SearchSchema } from '../../shemas/SearchingInTable';
-import { ClientValidation, SearchValidation } from '../../types';
-import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
-import { useEffect, useState } from 'react';
 import { useClient } from '../../hooks/useClient';
+import useIcons from '../../hooks/useIcons';
+import { useGetAllCustomers } from '../../services/hooks/Customer/clientv2.ts';
+import { SearchSchema } from '../../shemas/SearchingInTable';
+import { SearchValidation } from '../../types';
+import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
 
-export default function Clients() {
+export default function Customers() {
+  const allCustomers = useGetAllCustomers();
+  const { getIcons } = useIcons();
+  const { SearchIcon } = getIcons();
+  const { deleteOne, search } = useClient();
+
+  const handleDelete = (id: string) => {
+    deleteOne(id);
+    // window.location.reload();
+  };
+
+  const handleSearch: SubmitHandler<SearchValidation> = async (data) => {
+    // setData(await search(data.value ? data.value : ''));
+  };
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: {},
   } = useForm<SearchValidation>({
     resolver: yupResolver(SearchSchema),
     defaultValues: {
       value: '',
     },
   });
-
-  const { getIcons } = useIcons();
-  const { SearchIcon } = getIcons();
-  const { getAll, deleteOne, search } = useClient();
-  const [data, setData] = useState<ClientValidation[]>();
-
-  const handleDelete = (id: string) => {
-    deleteOne(id);
-    window.location.reload();
-  };
-
-  const handleSearch: SubmitHandler<SearchValidation> = async (data) => {
-    setData(await search(data.value ? data.value : ''));
-  };
-
-  useEffect(() => {
-    async function getData() {
-      setData(await getAll());
-    }
-    getData();
-  }, []);
 
   return (
     <Box sx={boxStyles} component={'main'}>
@@ -84,7 +70,12 @@ export default function Clients() {
         </Link>
       </Box>
 
-      <Table deleteButtonDispach={handleDelete} data={data} title="Clientes" />
+      <Table
+        loading={allCustomers.isLoading}
+        deleteButtonDispach={handleDelete}
+        data={allCustomers.data ?? []}
+        title="Clientes"
+      />
     </Box>
   );
 }

@@ -22,7 +22,7 @@ export default function MenuListItem() {
     {
       Icon: AccountCircleOutlinedIcon,
       label: 'CLIENTES',
-      path: '/clientes',
+      path: '/customers',
     },
     {
       Icon: BuildOutlinedIcon,

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '../..';
-import { ClientValidation } from '../../../types';
 import { AxiosInstance } from 'axios';
+import api from '../..';
+import { CustomerValidation } from '../../../types';
 
 enum Endpoints {
   get = '/customers',
@@ -47,7 +47,7 @@ export async function getOneClient(id: string) {
   // return mutate(api, options);
 }
 
-export async function updateClient(client: ClientValidation) {
+export async function updateClient(client: CustomerValidation) {
   const options = {
     method: 'PUT',
     url: `${Endpoints.get}/${client.id}`,
@@ -65,7 +65,7 @@ export async function updateClient(client: ClientValidation) {
   // return await mutate(api, options);
 }
 
-export async function createClient(client: ClientValidation) {
+export async function createClient(client: CustomerValidation) {
   const options = {
     method: 'POST',
     url: `${Endpoints.get}`,

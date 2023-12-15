@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useClient } from '../../../hooks/useClient';
 import useIcons from '../../../hooks/useIcons';
-import { ClientValidation } from '../../../types';
+import { CustomerValidation } from '../../../types';
 
-export default function InfoClient() {
+export default function CustomerInfoForm() {
   const location = useLocation();
-  const [item, setItem] = useState<ClientValidation>();
+  const [item, setItem] = useState<CustomerValidation>();
   const id = location.pathname.split('/')[3];
   const { getOne } = useClient();
   const { getIcons } = useIcons();
@@ -54,7 +54,7 @@ export default function InfoClient() {
         marginTop={'3em'}
       >
         <img
-          src="/images/user-icon.png"
+          src="/images/user-icon.webp"
           alt="user"
           style={{ width: '11em' }}
           loading="lazy"

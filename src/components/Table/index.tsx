@@ -7,13 +7,14 @@ import {
   TableRow,
 } from '@mui/material';
 import { useState } from 'react';
-import TableCellActions from './TableCellActions';
-import Modal from '../Modal';
 import { ConfirmAction } from '../ConfirmAction';
+import Modal from '../Modal';
+import TableCellActions from './TableCellActions';
 
 interface TableProps {
   data?: any[] | undefined;
   title: string;
+  loading: boolean;
   deleteButtonDispach: (id: string) => void;
 }
 
@@ -33,6 +34,8 @@ export default function Table(props: TableProps) {
     props.deleteButtonDispach(idItem);
     setOpen(false);
   };
+
+  if (props.loading) return <div>Carregando...</div>;
 
   return (
     <TableContainer

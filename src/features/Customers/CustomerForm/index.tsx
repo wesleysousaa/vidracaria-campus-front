@@ -11,23 +11,27 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { boxStyles } from '../clientsStyles';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, useLocation } from 'react-router-dom';
-import useIcons from '../../../hooks/useIcons';
-import { ClientSchema } from '../../../shemas/Client';
-import { ClientValidation } from '../../../types';
-import { boxStylesForm, textFieldStyles } from './formStyles';
-import { useClient } from '../../../hooks/useClient';
 import { useEffect, useState } from 'react';
-import { enqueueSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useClient } from '../../../hooks/useClient';
+import useIcons from '../../../hooks/useIcons';
+import {
+  useCreateCustomer,
+  useUpdateCustomer,
+} from '../../../services/hooks/Customer/clientv2.ts';
+import { ClientSchema } from '../../../shemas/Client';
+import { CustomerValidation } from '../../../types';
+import { boxStylesForm, textFieldStyles } from './formStyles';
 
-export default function FormClient() {
+export default function CustomerForm() {
+  const createCustomer = useCreateCustomer();
+  const updateCustomer = useUpdateCustomer();
+
   const { getIcons } = useIcons();
-  const { getOne, update, create } = useClient();
-  const [item, setItem] = useState<ClientValidation | null>(null);
+  const { getOne } = useClient();
+  const [item, setItem] = useState<CustomerValidation | null>(null);
   const { ArrowBackIosIcon } = getIcons();
   const location = useLocation();
-  const navigate = useNavigate();
   const id = location.pathname.split('/')[3];
   const states = [
     'AC',
@@ -59,26 +63,12 @@ export default function FormClient() {
     'TO',
   ];
 
-  const showSnackBar = (response: ClientValidation) => {
-    if (response.id) {
-      enqueueSnackbar('Cliente salvo com sucesso!', {
-        variant: 'success',
-      });
-    } else {
-      enqueueSnackbar('Erro ao salvar cliente!', {
-        variant: 'error',
-      });
-    }
-    navigate('/clientes');
-  };
-
-  const onSubmit: SubmitHandler<ClientValidation> = async (data) => {
+  const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
     if (id) {
-      showSnackBar(await update(data));
+      updateCustomer.mutate(data);
       return;
     }
-
-    showSnackBar(await create(data));
+    createCustomer.mutate(data);
   };
 
   const defaultValues = () => {
@@ -98,7 +88,7 @@ export default function FormClient() {
           state: 'PB',
           zipCode: '',
         },
-      } as ClientValidation;
+      } as CustomerValidation;
     }
     return item;
   };
@@ -109,7 +99,7 @@ export default function FormClient() {
     formState: { errors },
     setValue,
     getValues,
-  } = useForm<ClientValidation>({
+  } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
     defaultValues: {
       ...defaultValues(),
@@ -119,12 +109,12 @@ export default function FormClient() {
   useEffect(() => {
     async function fetch() {
       if (!id) return;
-      const data: ClientValidation = await getOne(id);
+      const data: CustomerValidation = await getOne(id);
 
       Object.keys(data).map((atributte: string) =>
         setValue(
-          atributte as keyof ClientValidation,
-          data[atributte as keyof ClientValidation],
+          atributte as keyof CustomerValidation,
+          data[atributte as keyof CustomerValidation],
         ),
       );
       setItem(data);
@@ -134,7 +124,7 @@ export default function FormClient() {
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/clientes" style={{ color: '#000' }}>
+      <Link to="/customers" style={{ color: '#000' }}>
         <IconButton aria-label="Voltar" color="inherit">
           <ArrowBackIosIcon />
           Fechar

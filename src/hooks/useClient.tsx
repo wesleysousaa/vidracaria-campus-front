@@ -1,14 +1,14 @@
 // AuthProvider.js
 import { useCallback } from 'react';
 import {
-  getOneClient,
   createClient,
-  getAllClients,
-  updateClient,
   deleteClient,
+  getAllClients,
+  getOneClient,
   searchClients,
-} from '../services/hooks/client';
-import { ClientValidation } from '../types';
+  updateClient,
+} from '../services/hooks/Customer';
+import { CustomerValidation } from '../types';
 
 export const useClient = () => {
   const getAll = useCallback(async () => {
@@ -21,12 +21,12 @@ export const useClient = () => {
     return data;
   }, []);
 
-  const update = useCallback(async (client: ClientValidation) => {
+  const update = useCallback(async (client: CustomerValidation) => {
     const response = await updateClient(client);
     return response;
   }, []);
 
-  const create = useCallback(async (client: ClientValidation) => {
+  const create = useCallback(async (client: CustomerValidation) => {
     const response = await createClient(client);
     return response;
   }, []);

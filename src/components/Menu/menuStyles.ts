@@ -35,7 +35,7 @@ export const navStyles: CSSProperties = {
   width: '15%',
   boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
   overflow: 'auto',
-  height: '100vh',
+  minHeight: '100vh',
 };
 
 export const navListStyles: CSSPropertiesMui = {
