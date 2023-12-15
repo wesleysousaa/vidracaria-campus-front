@@ -2,7 +2,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  FormControl,
   IconButton,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -94,19 +96,20 @@ export default function CustomerCreateForm() {
             name="customerType"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
-                labelId="select-people"
-                id="select-people"
-                label="Pessoa"
-                {...field}
-              >
-                <MenuItem value={'FISICA'}>Física</MenuItem>
-                <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
-              </Select>
+              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+                <InputLabel id="select-people-label">Pessoa</InputLabel>
+                <Select
+                  labelId="select-people-label"
+                  id="select-people"
+                  label="Pessoa"
+                  {...field}
+                >
+                  <MenuItem value={'FISICA'} defaultChecked>
+                    Física
+                  </MenuItem>
+                  <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
+                </Select>
+              </FormControl>
             )}
           />
           <Controller
@@ -209,23 +212,21 @@ export default function CustomerCreateForm() {
             defaultValue="PB"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
-                defaultValue="PB"
-                labelId="select-state"
-                id="select-state"
-                label="Teste"
-                {...field}
-              >
-                {states.map((state) => (
-                  <MenuItem key={state} value={state}>
-                    {state}
-                  </MenuItem>
-                ))}
-              </Select>
+              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+                <InputLabel id="select-state-label">Estado</InputLabel>
+                <Select
+                  labelId="select-state-label"
+                  id="select-state"
+                  label="Estado"
+                  {...field}
+                >
+                  {states.map((state) => (
+                    <MenuItem key={state} value={state}>
+                      {state}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
           />
         </Box>

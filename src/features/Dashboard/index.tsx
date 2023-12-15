@@ -68,7 +68,7 @@ export default function Dashboard() {
         <Bar data={data} options={options} />
       </Box> */}
       <Box>
-        <LineChart data={lineChartData} title="Faturamento (durante messes)" />
+        <LineChart data={lineChartData} title="Faturamento (durante meses)" />
       </Box>
       <Box sx={secondBox}>
         <Box
