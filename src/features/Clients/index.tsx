@@ -51,7 +51,7 @@ export default function Clients() {
   }, []);
 
   return (
-    <Box sx={boxStyles}>
+    <Box sx={boxStyles} component={'main'}>
       <Typography variant="h4" fontWeight={'bold'}>
         Clientes
       </Typography>

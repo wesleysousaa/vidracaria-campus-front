@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../Template';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import Dashboard from '../features/Dashboard';
 
 const Login = lazy(() => import('../features/Login'));
 const Clients = lazy(() => import('../features/Clients'));
@@ -16,7 +17,7 @@ export default function Router() {
         <Routes>
           <Route element={<Layout />}>
             <Route element={<PrivateRoute />}>
-              <Route path="relatorios" element={<div>Relatorios</div>} />
+              <Route path="relatorios" element={<Dashboard />} />
               <Route path="clientes">
                 <Route index element={<Clients />} />
                 <Route path="add" element={<FormClient />} />
