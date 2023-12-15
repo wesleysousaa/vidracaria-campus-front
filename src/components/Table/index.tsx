@@ -7,23 +7,24 @@ import {
   TableRow,
 } from '@mui/material';
 import { useState } from 'react';
-import TableCellActions from './TableCellActions';
-import Modal from '../Modal';
 import { ConfirmAction } from '../ConfirmAction';
+import Modal from '../Modal';
+import TableCellActions from './TableCellActions';
 
 interface TableProps {
   data?: any[] | undefined;
   title: string;
+  loading: boolean;
   deleteButtonDispach: (id: string) => void;
 }
 
 export default function Table(props: TableProps) {
-  let columns = Object.keys((props.data && props.data[0]) || {});
-  columns = columns.slice(0, 5);
+  let rows = Object.keys((props.data && props.data[0]) || {});
+  rows = rows.slice(0, 5);
   const [open, setOpen] = useState(false);
   const [idItem, setIdItem] = useState('');
 
-  const handleOpen = (idItem: string, type: string) => {
+  const handleOpen = (idItem: string) => {
     setOpen(true);
     const item = props.data?.find((item) => item.id === idItem);
     setIdItem(item.id);
@@ -33,6 +34,8 @@ export default function Table(props: TableProps) {
     props.deleteButtonDispach(idItem);
     setOpen(false);
   };
+
+  if (props.loading) return <div>Carregando...</div>;
 
   return (
     <TableContainer
@@ -57,10 +60,11 @@ export default function Table(props: TableProps) {
       <TabMUI>
         <TableHead>
           <TableRow>
-            {columns &&
-              columns.map((item, index) => (
-                <TableCell key={index + item}>{item}</TableCell>
-              ))}
+            <TableCell>Id</TableCell>
+            <TableCell>Nome</TableCell>
+            <TableCell>Tipo de Pessoa</TableCell>
+            <TableCell>CPF/CNPJ</TableCell>
+            <TableCell>Email</TableCell>
             <TableCell>Ações</TableCell>
           </TableRow>
         </TableHead>
@@ -68,8 +72,8 @@ export default function Table(props: TableProps) {
           {props.data &&
             props.data.map((item, index) => (
               <TableRow key={index + 'row'}>
-                {columns &&
-                  columns.map((col, key) => (
+                {rows &&
+                  rows.map((col, key) => (
                     <TableCell key={key}>{item[col]}</TableCell>
                   ))}
                 <TableCellActions dispach={handleOpen} idObject={item.id} />

@@ -10,7 +10,7 @@ export interface SearchValidation {
   value?: string;
 }
 
-export interface ClientValidation {
+export interface CustomerValidation {
   id?: string;
   name: string;
   customerType: string;

@@ -1,26 +1,13 @@
 import { Box, IconButton, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useClient } from '../../../hooks/useClient';
-import useIcons from '../../../hooks/useIcons';
-import { ClientValidation } from '../../../types';
+import { Link, useParams } from 'react-router-dom';
+import useGetIcons from '../../../hooks/useGetIcons';
+import { useGetCustomerById } from '../../../services/hooks/Customer';
 
-export default function InfoClient() {
-  const location = useLocation();
-  const [item, setItem] = useState<ClientValidation>();
-  const id = location.pathname.split('/')[3];
-  const { getOne } = useClient();
-  const { getIcons } = useIcons();
+export default function CustomerInfoForm() {
+  const { id } = useParams();
+  const customer = useGetCustomerById(id);
   const { EmailOutlinedIcon, LocalPhoneOutlinedIcon, ArrowBackIosIcon } =
-    getIcons();
-
-  useEffect(() => {
-    async function fetch() {
-      setItem(await getOne(id));
-    }
-
-    fetch();
-  }, []);
+    useGetIcons();
 
   return (
     <Box
@@ -31,7 +18,7 @@ export default function InfoClient() {
       sx={{ width: '70%', marginLeft: '2em', backgroundColor: '#fff' }}
     >
       <Link
-        to="/clientes"
+        to="/customers"
         style={{
           color: '#000',
           justifySelf: 'flex-start',
@@ -54,19 +41,19 @@ export default function InfoClient() {
         marginTop={'3em'}
       >
         <img
-          src="/images/user-icon.png"
+          src="/images/user-icon.webp"
           alt="user"
           style={{ width: '11em' }}
           loading="lazy"
         />
         <Typography variant="h5" fontWeight={'bold'}>
-          {item?.name}
+          {customer.data?.name}
         </Typography>
         <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          Pessoa {item?.customerType}
+          Pessoa {customer.data?.customerType}
         </Typography>
         <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          {item?.cpfcnpj}
+          {customer.data?.cpfcnpj}
         </Typography>
       </Box>
 
@@ -92,7 +79,7 @@ export default function InfoClient() {
             alignItems={'center'}
             margin={'1em'}
           >
-            <LocalPhoneOutlinedIcon /> {item?.phone}{' '}
+            <LocalPhoneOutlinedIcon /> {customer.data?.phone}
           </Typography>
           <Typography
             variant="body2"
@@ -102,7 +89,7 @@ export default function InfoClient() {
             alignItems={'center'}
             margin={'1em'}
           >
-            <EmailOutlinedIcon /> {item?.email}
+            <EmailOutlinedIcon /> {customer.data?.email}
           </Typography>
         </Box>
       </Box>
@@ -132,7 +119,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Rua</span>
-            {item?.address.address}{' '}
+            {customer.data?.address.address}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -145,7 +132,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>CEP</span>
-            {item?.address.zipCode}{' '}
+            {customer.data?.address.zipCode}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -158,7 +145,7 @@ export default function InfoClient() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Estado</span>
-            {item?.address.state}{' '}
+            {customer.data?.address.state}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -174,7 +161,7 @@ export default function InfoClient() {
             <span style={{ fontWeight: 'bold', color: '#000' }}>
               Referência
             </span>
-            {item?.address.landmark}{' '}
+            {customer.data?.address.landmark}{' '}
           </Typography>
         </Box>
       </Box>

@@ -1,13 +1,12 @@
 import { Box, Button, IconButton, Typography } from '@mui/material';
-import useIcons from '../../hooks/useIcons';
+import useGetIcons from '../../hooks/useGetIcons';
 
 export function ConfirmAction(props: {
   confirmDispach: () => void;
   denyDispach: () => void;
   text: string;
 }) {
-  const { getIcons } = useIcons();
-  const { CloseIcon } = getIcons();
+  const { CloseIcon } = useGetIcons();
   return (
     <Box
       display={'flex'}

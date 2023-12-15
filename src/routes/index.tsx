@@ -3,12 +3,19 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../Template';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
-import Dashboard from '../features/Dashboard';
 
 const Login = lazy(() => import('../features/Login'));
-const Clients = lazy(() => import('../features/Clients'));
-const FormClient = lazy(() => import('../features/Clients/FormClient'));
-const InfoClient = lazy(() => import('../features/Clients/InfoClient'));
+const Customers = lazy(() => import('../features/Customers'));
+const CustomerCreateForm = lazy(
+  () => import('../features/Customers/CustomerCreateForm'),
+);
+const CustomerUpdateForm = lazy(
+  () => import('../features/Customers/CustomerUpdateForm'),
+);
+const CustomerInfoForm = lazy(
+  () => import('../features/Customers/CustomerInfoForm'),
+);
+const Dashboard = lazy(() => import('../features/Dashboard'));
 
 export default function Router() {
   return (
@@ -18,11 +25,11 @@ export default function Router() {
           <Route element={<Layout />}>
             <Route element={<PrivateRoute />}>
               <Route path="relatorios" element={<Dashboard />} />
-              <Route path="clientes">
-                <Route index element={<Clients />} />
-                <Route path="add" element={<FormClient />} />
-                <Route path="info/:id" element={<InfoClient />} />
-                <Route path="edit/:id" element={<FormClient />} />
+              <Route path="customers">
+                <Route index element={<Customers />} />
+                <Route path="add" element={<CustomerCreateForm />} />
+                <Route path="info/:id" element={<CustomerInfoForm />} />
+                <Route path="edit/:id" element={<CustomerUpdateForm />} />
               </Route>
               <Route path="servicos" element={<div>Serviços</div>} />
               <Route path="produtos" element={<div>Produtos</div>} />

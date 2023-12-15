@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import api from '../..';
 import { UserValidation } from '../../../types';
 
-enum Endpoints {
+const enum Endpoints {
   authUser = '/auth/login',
 }
 
@@ -17,10 +17,8 @@ const useAuthUser = () => {
       localStorage.setItem('token', JSON.stringify(data.token));
       navigate('/relatorios');
     },
-    
   });
 };
-
 
 export { useAuthUser };
 
