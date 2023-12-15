@@ -25,7 +25,7 @@ export default function CustomerCreateForm() {
   const states = useGetState();
   const createCustomer = useCreateCustomer();
 
-  const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
+  const onSubmit: SubmitHandler<CustomerValidation> = (data) => {
     createCustomer.mutate(data);
   };
 

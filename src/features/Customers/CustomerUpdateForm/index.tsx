@@ -2,25 +2,35 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  FormControl,
   IconButton,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useGetIcons from '../../../hooks/useGetIcons.tsx';
 import useGetState from '../../../hooks/useGetState.tsx';
-import { useUpdateCustomer } from '../../../services/hooks/Customer/customersv2.ts';
+import {
+  useGetCustomerById,
+  useUpdateCustomer,
+} from '../../../services/hooks/Customer/customersv2.ts';
 import { ClientSchema } from '../../../shemas/Customer/index.ts';
 import { CustomerValidation } from '../../../types/index.ts';
+import {
+  boxStylesForm,
+  textFieldStyles,
+} from '../CustomerCreateForm/formStyles.ts';
 import { boxStyles } from '../clientsStyles.ts';
-import { boxStylesForm, textFieldStyles } from './formStyles.ts';
 
 export default function CustomerUpdateForm() {
+  const { id } = useParams();
   const { ArrowBackIosIcon } = useGetIcons();
   const states = useGetState();
+  const customer = useGetCustomerById(id);
   const updateCustomer = useUpdateCustomer();
 
   const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
@@ -33,22 +43,7 @@ export default function CustomerUpdateForm() {
     formState: { errors },
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
-    defaultValues: {
-      customerType: 'FISICA',
-      name: '',
-      phone: '',
-      cpfcnpj: '',
-      email: '',
-      id: '',
-      address: {
-        address: '',
-        city: '',
-        landmark: '',
-        number: '',
-        state: 'PB',
-        zipCode: '',
-      },
-    },
+    defaultValues: customer.data,
   });
 
   return (
@@ -69,7 +64,7 @@ export default function CustomerUpdateForm() {
         }}
       >
         <Typography variant="h3" marginBottom="1em">
-          Cadastrar Cliente
+          Editar Cliente
         </Typography>
 
         <Controller
@@ -94,19 +89,20 @@ export default function CustomerUpdateForm() {
             name="customerType"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
-                labelId="select-people"
-                id="select-people"
-                label="Pessoa"
-                {...field}
-              >
-                <MenuItem value={'FISICA'}>Física</MenuItem>
-                <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
-              </Select>
+              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+                <InputLabel id="select-people-label">Pessoa</InputLabel>
+                <Select
+                  labelId="select-people-label"
+                  id="select-people"
+                  label="Pessoa"
+                  {...field}
+                >
+                  <MenuItem value={'FISICA'} defaultChecked>
+                    Física
+                  </MenuItem>
+                  <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
+                </Select>
+              </FormControl>
             )}
           />
           <Controller
@@ -209,23 +205,21 @@ export default function CustomerUpdateForm() {
             defaultValue="PB"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
-                defaultValue="PB"
-                labelId="select-state"
-                id="select-state"
-                label="Teste"
-                {...field}
-              >
-                {states.map((state) => (
-                  <MenuItem key={state} value={state}>
-                    {state}
-                  </MenuItem>
-                ))}
-              </Select>
+              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+                <InputLabel id="select-state-label">Estado</InputLabel>
+                <Select
+                  labelId="select-state-label"
+                  id="select-state"
+                  label="Estado"
+                  {...field}
+                >
+                  {states.map((state) => (
+                    <MenuItem key={state} value={state}>
+                      {state}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
           />
         </Box>

@@ -1,25 +1,13 @@
 import { Box, IconButton, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useClient } from '../../../hooks/useClient';
+import { Link, useParams } from 'react-router-dom';
 import useGetIcons from '../../../hooks/useGetIcons';
-import { CustomerValidation } from '../../../types';
+import { useGetCustomerById } from '../../../services/hooks/Customer/customersv2';
 
 export default function CustomerInfoForm() {
-  const location = useLocation();
-  const [item, setItem] = useState<CustomerValidation>();
-  const id = location.pathname.split('/')[3];
-  const { getOne } = useClient();
+  const { id } = useParams();
+  const customer = useGetCustomerById(id);
   const { EmailOutlinedIcon, LocalPhoneOutlinedIcon, ArrowBackIosIcon } =
     useGetIcons();
-
-  useEffect(() => {
-    async function fetch() {
-      setItem(await getOne(id));
-    }
-
-    fetch();
-  }, []);
 
   return (
     <Box
@@ -30,7 +18,7 @@ export default function CustomerInfoForm() {
       sx={{ width: '70%', marginLeft: '2em', backgroundColor: '#fff' }}
     >
       <Link
-        to="/clientes"
+        to="/customers"
         style={{
           color: '#000',
           justifySelf: 'flex-start',
@@ -59,13 +47,13 @@ export default function CustomerInfoForm() {
           loading="lazy"
         />
         <Typography variant="h5" fontWeight={'bold'}>
-          {item?.name}
+          {customer.data?.name}
         </Typography>
         <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          Pessoa {item?.customerType}
+          Pessoa {customer.data?.customerType}
         </Typography>
         <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          {item?.cpfcnpj}
+          {customer.data?.cpfcnpj}
         </Typography>
       </Box>
 
@@ -91,7 +79,7 @@ export default function CustomerInfoForm() {
             alignItems={'center'}
             margin={'1em'}
           >
-            <LocalPhoneOutlinedIcon /> {item?.phone}{' '}
+            <LocalPhoneOutlinedIcon /> {customer.data?.phone}
           </Typography>
           <Typography
             variant="body2"
@@ -101,7 +89,7 @@ export default function CustomerInfoForm() {
             alignItems={'center'}
             margin={'1em'}
           >
-            <EmailOutlinedIcon /> {item?.email}
+            <EmailOutlinedIcon /> {customer.data?.email}
           </Typography>
         </Box>
       </Box>
@@ -131,7 +119,7 @@ export default function CustomerInfoForm() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Rua</span>
-            {item?.address.address}{' '}
+            {customer.data?.address.address}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -144,7 +132,7 @@ export default function CustomerInfoForm() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>CEP</span>
-            {item?.address.zipCode}{' '}
+            {customer.data?.address.zipCode}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -157,7 +145,7 @@ export default function CustomerInfoForm() {
             margin={'1em'}
           >
             <span style={{ fontWeight: 'bold', color: '#000' }}>Estado</span>
-            {item?.address.state}{' '}
+            {customer.data?.address.state}{' '}
           </Typography>
           <Typography
             variant="body2"
@@ -173,7 +161,7 @@ export default function CustomerInfoForm() {
             <span style={{ fontWeight: 'bold', color: '#000' }}>
               Referência
             </span>
-            {item?.address.landmark}{' '}
+            {customer.data?.address.landmark}{' '}
           </Typography>
         </Box>
       </Box>

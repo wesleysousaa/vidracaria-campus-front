@@ -38,7 +38,7 @@ const useUpdateCustomer = () => {
   return useMutation({
     mutationFn: (customer: CustomerValidation) => {
       return api
-        .post(Endpoints.updateCustomer, customer, config)
+        .post(`${Endpoints.getCustomerById}/${customer.id}`, customer, config)
         .then((res) => res.data);
     },
     onSuccess: () => {
@@ -56,19 +56,53 @@ const useGetAllCustomers = () => {
     queryFn: () => {
       return api.get(Endpoints.getAllCustomers, config).then((res) => res.data);
     },
-    staleTime: Infinity, 
+    staleTime: Infinity,
   });
 };
 
-const useGetCustomerById = (id: number) => {
-  return useQuery<CustomerValidation[]>({
+const useGetCustomerById = (id?: string) => {
+  return useQuery<CustomerValidation>({
     queryKey: [Endpoints.getCustomerById, id],
     queryFn: () => {
-      return api.get(`${Endpoints.getCustomerById}/${id}`, config).then((res) => res.data);
+      return api
+        .get(`${Endpoints.getCustomerById}/${id}`, config)
+        .then((res) => res.data);
     },
-    staleTime: Infinity, 
+    enabled: id !== undefined,
+    staleTime: 600000,
   });
 };
 
-export { useCreateCustomer, useGetAllCustomers, useGetCustomerById, useUpdateCustomer };
+const useDeleteCustomerById = () => {
+  const queryClient = useQueryClient();
 
+  return useMutation({
+    mutationFn: (id: string) => {
+      return api
+        .delete(`${Endpoints.deleteCustomerById}/${id}`, config)
+        .then((res) => res.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Endpoints.getAllCustomers] });
+    },
+  });
+};
+
+const useSearchCustomers = () => {
+  return useMutation({
+    mutationFn: (search?: string) => {
+      return api
+        .post(`${Endpoints.searchCustomers}/${search}`, {}, config)
+        .then((res) => res.data);
+    },
+  });
+};
+
+export {
+  useCreateCustomer,
+  useDeleteCustomerById,
+  useGetAllCustomers,
+  useGetCustomerById,
+  useSearchCustomers,
+  useUpdateCustomer,
+};

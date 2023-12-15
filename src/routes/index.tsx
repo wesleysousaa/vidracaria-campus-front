@@ -9,6 +9,9 @@ const Customers = lazy(() => import('../features/Customers'));
 const CustomerCreateForm = lazy(
   () => import('../features/Customers/CustomerCreateForm'),
 );
+const CustomerUpdateForm = lazy(
+  () => import('../features/Customers/CustomerUpdateForm'),
+);
 const CustomerInfoForm = lazy(
   () => import('../features/Customers/CustomerInfoForm'),
 );
@@ -26,7 +29,7 @@ export default function Router() {
                 <Route index element={<Customers />} />
                 <Route path="add" element={<CustomerCreateForm />} />
                 <Route path="info/:id" element={<CustomerInfoForm />} />
-                <Route path="edit/:id" element={<CustomerCreateForm />} />
+                <Route path="edit/:id" element={<CustomerUpdateForm />} />
               </Route>
               <Route path="servicos" element={<div>Serviços</div>} />
               <Route path="produtos" element={<div>Produtos</div>} />

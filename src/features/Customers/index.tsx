@@ -3,25 +3,28 @@ import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
-import { useClient } from '../../hooks/useClient';
 import useGetIcons from '../../hooks/useGetIcons.tsx';
-import { useGetAllCustomers } from '../../services/hooks/Customer/customersv2.ts';
+import {
+  useDeleteCustomerById,
+  useGetAllCustomers,
+  useSearchCustomers,
+} from '../../services/hooks/Customer/customersv2.ts';
 import { SearchSchema } from '../../shemas/SearchingInTable';
 import { SearchValidation } from '../../types';
 import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
 
 export default function Customers() {
   const allCustomers = useGetAllCustomers();
+  const searchCustomers = useSearchCustomers();
+  const deleteCustomer = useDeleteCustomerById();
   const { SearchIcon } = useGetIcons();
-  const { deleteOne, search } = useClient();
 
   const handleDelete = (id: string) => {
-    deleteOne(id);
-    // window.location.reload();
+    deleteCustomer.mutate(id);
   };
 
-  const handleSearch: SubmitHandler<SearchValidation> = async (data) => {
-    // setData(await search(data.value ? data.value : ''));
+  const handleSearch: SubmitHandler<SearchValidation> = (data) => {
+    searchCustomers.mutate(data.value);
   };
 
   const {
@@ -72,7 +75,7 @@ export default function Customers() {
       <Table
         loading={allCustomers.isLoading}
         deleteButtonDispach={handleDelete}
-        data={allCustomers.data ?? []}
+        data={searchCustomers.data ?? allCustomers.data ?? []}
         title="Clientes"
       />
     </Box>

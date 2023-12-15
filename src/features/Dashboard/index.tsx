@@ -58,15 +58,6 @@ export default function Dashboard() {
           bgColor="#EA5E0B"
         />
       </Box>
-      {/* <Box
-        sx={{
-          display: 'flex',
-          height: '400px',
-          justifyContent: 'center',
-        }}
-      >
-        <Bar data={data} options={options} />
-      </Box> */}
       <Box>
         <LineChart data={lineChartData} title="Faturamento (durante meses)" />
       </Box>
