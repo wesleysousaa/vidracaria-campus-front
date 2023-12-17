@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
 import { Line } from '@antv/g2plot';
 import { Box, Typography } from '@mui/material';
+import { useEffect, useRef } from 'react';
 
 interface propsLineChart {
   data: any[];

@@ -1,16 +1,15 @@
 import { List } from '@mui/material';
-import useIcons from '../../../hooks/useIcons';
+import useGetIcons from '../../../hooks/useGetIcons';
 import { navListStyles } from '../menuStyles';
 import MenuItem from './MenuItem';
 
 export default function MenuListItem() {
-  const { getIcons } = useIcons();
   const {
     AccountCircleOutlinedIcon,
     BuildOutlinedIcon,
     DashboardOutlinedIcon,
     ShoppingCartOutlinedIcon,
-  } = getIcons();
+  } = useGetIcons();
 
   // Ao criar um novo item no menu, adicionar aqui.
   const menuItems = [
@@ -22,7 +21,7 @@ export default function MenuListItem() {
     {
       Icon: AccountCircleOutlinedIcon,
       label: 'CLIENTES',
-      path: '/clientes',
+      path: '/customers',
     },
     {
       Icon: BuildOutlinedIcon,

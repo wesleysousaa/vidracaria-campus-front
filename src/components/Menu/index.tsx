@@ -1,14 +1,13 @@
 import { Button, Grid, Typography } from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
-import useIcons from '../../hooks/useIcons';
+import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
 import { navStyles } from './menuStyles';
 
 export default function Menu() {
-  const { getIcons } = useIcons();
   const navigate = useNavigate();
-  const { LogoutOutlinedIcon } = getIcons();
+  const { LogoutOutlinedIcon } = useGetIcons();
 
   const logout = () => {
     localStorage.removeItem('token');

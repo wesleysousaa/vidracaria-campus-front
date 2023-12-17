@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
-import { mainStyles, boxCards, secondBox } from './DashboardStyles';
 import CardChart from '../../components/CardChart';
+import { boxCards, mainStyles, secondBox } from './DashboardStyles';
 
 import BarChart from '../../components/BarChart';
 import LineChart from '../../components/LineChart';
@@ -33,42 +33,33 @@ export default function Dashboard() {
           fontColor="#fff"
           title="R$ 2.300,25"
           subtitle="Faturamento Mês Atual"
-          imgPath="/images/money_icon.png"
+          imgPath="/images/money_icon.webp"
           bgColor="#9650B9"
         />
         <CardChart
           fontColor="#fff"
           title="+ 4.5%"
           subtitle="Comparação com mês passado"
-          imgPath="/images/chart_up.png"
+          imgPath="/images/chart_up.webp"
           bgColor="#53AA6E"
         />
         <CardChart
           fontColor="#fff"
           title="38"
           subtitle="Serviços contratados (esse mês)"
-          imgPath="/images/cart.png"
+          imgPath="/images/cart.webp"
           bgColor="#2196F3"
         />
         <CardChart
           fontColor="#fff"
           title="R$ 1.800,00"
           subtitle="Ganhos Líquidos"
-          imgPath="/images/coin.png"
+          imgPath="/images/coin.webp"
           bgColor="#EA5E0B"
         />
       </Box>
-      {/* <Box
-        sx={{
-          display: 'flex',
-          height: '400px',
-          justifyContent: 'center',
-        }}
-      >
-        <Bar data={data} options={options} />
-      </Box> */}
       <Box>
-        <LineChart data={lineChartData} title="Faturamento (durante messes)" />
+        <LineChart data={lineChartData} title="Faturamento (durante meses)" />
       </Box>
       <Box sx={secondBox}>
         <Box

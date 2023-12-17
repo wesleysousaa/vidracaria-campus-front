@@ -1,140 +1,55 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  FormControl,
   IconButton,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { boxStyles } from '../clientsStyles';
+import { Link, useParams } from 'react-router-dom';
+import useGetIcons from '../../../hooks/useGetIcons.tsx';
+import useGetState from '../../../hooks/useGetState.tsx';
+import {
+  useGetCustomerById,
+  useUpdateCustomer,
+} from '../../../services/hooks/Customer/index.ts';
+import { ClientSchema } from '../../../shemas/Customer/index.ts';
+import { CustomerValidation } from '../../../types/index.ts';
+import {
+  boxStylesForm,
+  textFieldStyles,
+} from '../CustomerCreateForm/formStyles.ts';
+import { boxStyles } from '../clientsStyles.ts';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, useLocation } from 'react-router-dom';
-import useIcons from '../../../hooks/useIcons';
-import { ClientSchema } from '../../../shemas/Client';
-import { ClientValidation } from '../../../types';
-import { boxStylesForm, textFieldStyles } from './formStyles';
-import { useClient } from '../../../hooks/useClient';
-import { useEffect, useState } from 'react';
-import { enqueueSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
+export default function CustomerUpdateForm() {
+  const { id } = useParams();
+  const { ArrowBackIosIcon } = useGetIcons();
+  const states = useGetState();
+  const customer = useGetCustomerById(id);
+  const updateCustomer = useUpdateCustomer();
 
-export default function FormClient() {
-  const { getIcons } = useIcons();
-  const { getOne, update, create } = useClient();
-  const [item, setItem] = useState<ClientValidation | null>(null);
-  const { ArrowBackIosIcon } = getIcons();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const id = location.pathname.split('/')[3];
-  const states = [
-    'AC',
-    'AL',
-    'AP',
-    'AM',
-    'BA',
-    'CE',
-    'DF',
-    'ES',
-    'GO',
-    'MA',
-    'MT',
-    'MS',
-    'MG',
-    'PA',
-    'PB',
-    'PR',
-    'PE',
-    'PI',
-    'RJ',
-    'RN',
-    'RS',
-    'RO',
-    'RR',
-    'SC',
-    'SP',
-    'SE',
-    'TO',
-  ];
-
-  const showSnackBar = (response: ClientValidation) => {
-    if (response.id) {
-      enqueueSnackbar('Cliente salvo com sucesso!', {
-        variant: 'success',
-      });
-    } else {
-      enqueueSnackbar('Erro ao salvar cliente!', {
-        variant: 'error',
-      });
-    }
-    navigate('/clientes');
-  };
-
-  const onSubmit: SubmitHandler<ClientValidation> = async (data) => {
-    if (id) {
-      showSnackBar(await update(data));
-      return;
-    }
-
-    showSnackBar(await create(data));
-  };
-
-  const defaultValues = () => {
-    if (!item) {
-      return {
-        customerType: 'FISICA',
-        name: '',
-        phone: '',
-        cpfcnpj: '',
-        email: '',
-        id: '',
-        address: {
-          address: '',
-          city: '',
-          landmark: '',
-          number: '',
-          state: 'PB',
-          zipCode: '',
-        },
-      } as ClientValidation;
-    }
-    return item;
+  const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
+    updateCustomer.mutate(data);
   };
 
   const {
     handleSubmit,
     control,
-    formState: { errors },
     setValue,
-    getValues,
-  } = useForm<ClientValidation>({
+    formState: { errors },
+  } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
-    defaultValues: {
-      ...defaultValues(),
-    },
+    defaultValues: customer.data || {},
   });
-
-  useEffect(() => {
-    async function fetch() {
-      if (!id) return;
-      const data: ClientValidation = await getOne(id);
-
-      Object.keys(data).map((atributte: string) =>
-        setValue(
-          atributte as keyof ClientValidation,
-          data[atributte as keyof ClientValidation],
-        ),
-      );
-      setItem(data);
-    }
-    fetch();
-  }, []);
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/clientes" style={{ color: '#000' }}>
+      <Link to="/customers" style={{ color: '#000' }}>
         <IconButton aria-label="Voltar" color="inherit">
           <ArrowBackIosIcon />
           Fechar
@@ -150,7 +65,7 @@ export default function FormClient() {
         }}
       >
         <Typography variant="h3" marginBottom="1em">
-          {item ? `Edição do Cliente ${item?.name}` : 'Cadastrar Cliente'}
+          Editar Cliente
         </Typography>
 
         <Controller
@@ -175,19 +90,20 @@ export default function FormClient() {
             name="customerType"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
-                labelId="select-people"
-                id="select-people"
-                label="Pessoa"
-                {...field}
-              >
-                <MenuItem value={'FISICA'}>Física</MenuItem>
-                <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
-              </Select>
+              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+                <InputLabel id="select-people-label">Pessoa</InputLabel>
+                <Select
+                  labelId="select-people-label"
+                  id="select-people"
+                  label="Pessoa"
+                  {...field}
+                >
+                  <MenuItem value={'FISICA'} defaultChecked>
+                    Física
+                  </MenuItem>
+                  <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
+                </Select>
+              </FormControl>
             )}
           />
           <Controller
@@ -290,23 +206,21 @@ export default function FormClient() {
             defaultValue="PB"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
-                defaultValue="PB"
-                labelId="select-state"
-                id="select-state"
-                label="Teste"
-                {...field}
-              >
-                {states.map((state) => (
-                  <MenuItem key={state} value={state}>
-                    {state}
-                  </MenuItem>
-                ))}
-              </Select>
+              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+                <InputLabel id="select-state-label">Estado</InputLabel>
+                <Select
+                  labelId="select-state-label"
+                  id="select-state"
+                  label="Estado"
+                  {...field}
+                >
+                  {states.map((state) => (
+                    <MenuItem key={state} value={state}>
+                      {state}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
           />
         </Box>
