@@ -5,12 +5,12 @@ import api, { config } from '../..';
 import { CustomerValidation } from '../../../types';
 
 const enum Endpoints {
-  createCustomer = '/customers/createCustomer',
-  updateCustomer = '/customers/updateCustomer',
-  getAllCustomers = '/customers/getAllCustomers',
-  getCustomerById = '/customers/getCustomerById',
-  deleteCustomerById = '/customers/deleteCustomerById',
-  searchCustomers = '/customers/searchCustomers',
+  createCustomer = '/customers',
+  updateCustomer = '/customers',
+  getAllCustomers = '/customers',
+  getCustomerById = '/customers',
+  deleteCustomerById = '/customers',
+  searchCustomers = '/customers/search',
 }
 
 const useCreateCustomer = () => {
