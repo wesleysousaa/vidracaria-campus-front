@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import api, { config } from '../..';
-import { CustomerValidation } from '../../../types';
+import api, { config } from '../../../services';
+import { CustomerValidation } from '../types';
 
 const enum Endpoints {
   createCustomer = '/customers/createCustomer',

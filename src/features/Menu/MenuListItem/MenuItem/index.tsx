@@ -14,7 +14,7 @@ import {
   iconStyleActives,
   linkStyle,
   linkStyleActives,
-} from '../../menuStyles';
+} from '../../styles';
 
 export interface MenuItemProps {
   label: string;

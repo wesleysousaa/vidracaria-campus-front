@@ -7,8 +7,8 @@ import {
   TableRow,
 } from '@mui/material';
 import { useState } from 'react';
-import { ConfirmAction } from '../ConfirmAction';
-import Modal from '../Modal';
+import ConfirmAction from './ConfirmAction';
+import Modal from './Modal';
 import TableCellActions from './TableCellActions';
 
 interface TableProps {

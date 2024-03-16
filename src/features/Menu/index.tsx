@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
-import { navStyles } from './menuStyles';
+import { navStyles } from './styles';
 
 export default function Menu() {
   const navigate = useNavigate();

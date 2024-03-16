@@ -1,6 +1,6 @@
 import { List } from '@mui/material';
 import useGetIcons from '../../../hooks/useGetIcons';
-import { navListStyles } from '../menuStyles';
+import { navListStyles } from '../styles';
 import MenuItem from './MenuItem';
 
 export default function MenuListItem() {

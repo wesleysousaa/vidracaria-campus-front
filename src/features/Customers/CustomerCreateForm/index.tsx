@@ -13,12 +13,12 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import useGetIcons from '../../../hooks/useGetIcons.tsx';
-import useGetState from '../../../hooks/useGetState.tsx';
-import { useCreateCustomer } from '../../../services/hooks/Customer/index.ts';
-import { ClientSchema } from '../../../shemas/Customer/index.ts';
-import { CustomerValidation } from '../../../types/index.ts';
-import { boxStyles } from '../clientsStyles.ts';
-import { boxStylesForm, textFieldStyles } from './formStyles.ts';
+import useGetState from '../hooks/useGetState.tsx';
+import { ClientSchema } from '../schemas/index.ts';
+import { useCreateCustomer } from '../services/index.tsx';
+import { boxStyles } from '../styles/index.ts';
+import { CustomerValidation } from '../types/index.ts';
+import { boxStylesForm, textFieldStyles } from './styles/index.ts';
 
 export default function CustomerCreateForm() {
   const { ArrowBackIosIcon } = useGetIcons();

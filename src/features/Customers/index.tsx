@@ -2,16 +2,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import Table from '../../components/Table';
 import useGetIcons from '../../hooks/useGetIcons.tsx';
+import Table from './Table/index.tsx';
+import { SearchSchema } from './schemas/index.ts';
 import {
   useDeleteCustomerById,
   useGetAllCustomers,
   useSearchCustomers,
-} from '../../services/hooks/Customer/index.ts';
-import { SearchSchema } from '../../shemas/SearchingInTable';
-import { SearchValidation } from '../../types';
-import { boxStyles, boxStylesForm, formStyles } from './clientsStyles';
+} from './services/index.tsx';
+import { boxStyles, boxStylesForm, formStyles } from './styles/index.ts';
+import { SearchValidation } from './types/index.ts';
 
 export default function Customers() {
   const allCustomers = useGetAllCustomers();

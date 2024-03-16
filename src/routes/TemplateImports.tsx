@@ -1,6 +1,5 @@
 import { lazy } from 'react';
-import PrivateRoute from './PrivateRoute';
-import PublicRoute from './PublicRoute';
+import { PrivateRoute, PublicRoute } from './AuthRoutes';
 
 const Login = lazy(() => import('../features/Login'));
 const Customers = lazy(() => import('../features/Customers'));

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Loader from '../components/Loader';
+import Loader from '../features/Loader';
 import TemplateImports from './TemplateImports';
 
 export default function Router() {

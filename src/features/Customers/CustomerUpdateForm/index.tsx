@@ -13,18 +13,15 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
 import useGetIcons from '../../../hooks/useGetIcons.tsx';
-import useGetState from '../../../hooks/useGetState.tsx';
-import {
-  useGetCustomerById,
-  useUpdateCustomer,
-} from '../../../services/hooks/Customer/index.ts';
-import { ClientSchema } from '../../../shemas/Customer/index.ts';
-import { CustomerValidation } from '../../../types/index.ts';
 import {
   boxStylesForm,
   textFieldStyles,
-} from '../CustomerCreateForm/formStyles.ts';
-import { boxStyles } from '../clientsStyles.ts';
+} from '../CustomerCreateForm/styles/index.ts';
+import useGetState from '../hooks/useGetState.tsx';
+import { ClientSchema } from '../schemas/index.ts';
+import { useGetCustomerById, useUpdateCustomer } from '../services/index.tsx';
+import { boxStyles } from '../styles/index.ts';
+import { CustomerValidation } from '../types/index.ts';
 
 export default function CustomerUpdateForm() {
   const { id } = useParams();

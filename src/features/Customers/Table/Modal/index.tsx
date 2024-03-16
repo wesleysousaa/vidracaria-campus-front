@@ -4,8 +4,8 @@ interface ModalProps {
   component: React.ReactNode;
 }
 import { Modal as ModalMui } from '@mui/material/';
-import { modalStyles } from './modalStyles';
 import { Dispatch, SetStateAction } from 'react';
+import { modalStyles } from './styles';
 
 export default function Modal(props: ModalProps) {
   return (
