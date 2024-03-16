@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
 import { Bar } from '@antv/g2plot';
 import { Box, Typography } from '@mui/material';
+import { useEffect, useRef } from 'react';
+
 interface propsBarChart {
   data: any[];
   title: string;
@@ -16,8 +17,6 @@ export default function BarChart(props: propsBarChart) {
         yField: 'item',
         xField: 'value',
         autoFit: true,
-        // legend: false,
-        // height: 400,
       };
 
       const chart = new Bar(chartRef.current, config);

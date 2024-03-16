@@ -11,7 +11,6 @@ export default function MenuListItem() {
     ShoppingCartOutlinedIcon,
   } = useGetIcons();
 
-  // Ao criar um novo item no menu, adicionar aqui.
   const menuItems = [
     {
       Icon: DashboardOutlinedIcon,

@@ -8,9 +8,9 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
+import { LoginSchema } from './schemas';
 import { useAuthUser } from './services';
-import { LoginSchema } from './services/schemas';
+import { boxStyles, formControlStyles, loginButtonStyles } from './styles';
 import { UserValidation } from './types';
 
 export default function Login() {

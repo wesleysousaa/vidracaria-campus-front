@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
-import { cardStyles } from './cardStyles';
+import { cardStyles } from './styles';
+
 interface cardChartProps {
   title: string;
   subtitle: string;

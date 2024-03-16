@@ -4,7 +4,7 @@ import api from '../../../services';
 import { UserValidation } from '../types';
 
 const enum Endpoints {
-  authUser = '/auth/',
+  authUser = '/auth',
 }
 
 const useAuthUser = () => {

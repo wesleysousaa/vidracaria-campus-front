@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { UserValidation } from '../../types';
+import { UserValidation } from '../types';
 
 export const LoginSchema = Yup.object<UserValidation>().shape({
   email: Yup.string().required('O email é obrigatório'),

@@ -1,6 +1,15 @@
+import { Box } from '@mui/material';
 import { Navigate, Outlet } from 'react-router-dom';
-import isAuthenticated from '../hooks/useIsAuthenticated';
+import Menu from '../components/Menu';
+import isAuthenticated from './hooks/useIsAuthenticated';
 
 export default function PrivateRoute() {
-  return isAuthenticated() ? <Outlet /> : <Navigate to="/" replace />;
+  return isAuthenticated() ? (
+    <Box display={'flex'} flexDirection={'row'}>
+      <Menu />
+      <Outlet />
+    </Box>
+  ) : (
+    <Navigate to="/" replace />
+  );
 }
