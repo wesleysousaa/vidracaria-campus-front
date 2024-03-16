@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { CustomerValidation, SearchValidation } from '../types';
+import { CustomerValidation } from '../types';
 
 export const ClientSchema = Yup.object<CustomerValidation>().shape({
   id: Yup.string().optional(),
@@ -16,8 +16,4 @@ export const ClientSchema = Yup.object<CustomerValidation>().shape({
     state: Yup.string().required('O estado é obrigatório'),
     landmark: Yup.string().optional(),
   }),
-});
-
-export const SearchSchema = Yup.object<SearchValidation>().shape({
-  value: Yup.string().optional(),
 });
