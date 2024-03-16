@@ -8,10 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useAuthUser } from '../../services/hooks/user';
-import { LoginSchema } from '../../shemas/User';
-import { UserValidation } from '../../types';
 import { boxStyles, formControlStyles, loginButtonStyles } from './loginStyles';
+import { useAuthUser } from './services';
+import { LoginSchema } from './services/schemas';
+import { UserValidation } from './types';
 
 export default function Login() {
   const authUser = useAuthUser();

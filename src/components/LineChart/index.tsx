@@ -11,9 +11,6 @@ export default function LineChart(props: propsLineChart) {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    // const sortedData = [...props.data].sort(
-    //   (a, b) => new Date(a.date) - new Date(b.date),
-    // );
     if (chartRef.current) {
       const config = {
         data: props.data.sort((a, b) => a.date - b.date),

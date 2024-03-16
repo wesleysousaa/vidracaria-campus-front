@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../Template';
+import Loader from '../components/Loader';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
@@ -20,7 +21,7 @@ const Dashboard = lazy(() => import('../features/Dashboard'));
 export default function Router() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<h1>Carregando...</h1>}>
+      <Suspense fallback={<Loader open={true} />}>
         <Routes>
           <Route element={<Layout />}>
             <Route element={<PrivateRoute />}>

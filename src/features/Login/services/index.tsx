@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import api from '../..';
-import { UserValidation } from '../../../types';
+import api from '../../../services';
+import { UserValidation } from '../types';
 
 const enum Endpoints {
-  authUser = '/auth/login',
+  authUser = '/auth/',
 }
 
 const useAuthUser = () => {
@@ -21,4 +21,3 @@ const useAuthUser = () => {
 };
 
 export { useAuthUser };
-
