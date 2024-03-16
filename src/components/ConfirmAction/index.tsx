@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Typography } from '@mui/material';
-import useGetIcons from '../../../../hooks/useGetIcons';
+import useGetIcons from '../../hooks/useGetIcons';
 
 export default function ConfirmAction(props: {
   confirmDispach: () => void;

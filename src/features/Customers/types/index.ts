@@ -1,7 +1,3 @@
-export interface SearchValidation {
-  value?: string;
-}
-
 export interface CustomerValidation {
   id?: string;
   name: string;

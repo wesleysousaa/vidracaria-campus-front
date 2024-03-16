@@ -18,17 +18,9 @@ export const boxStyles: CSSProperties = {
 export const boxStylesForm: CSSProperties = {
   display: 'flex',
   width: '100%',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
+  gap: '1em',
   alignItems: 'center',
   marginTop: '3em',
-};
-
-export const formStyles: CSSProperties = {
-  display: 'flex',
-  width: '25em',
-  height: '4em',
-  flexDirection: 'row',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
+  padding: '10px',
+  marginBottom: '1em',
 };

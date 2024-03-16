@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
+import queryClient from '../../config/queryClient';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
@@ -11,6 +12,7 @@ export default function Menu() {
 
   const logout = () => {
     localStorage.removeItem('token');
+    queryClient.clear();
     navigate('/');
   };
 

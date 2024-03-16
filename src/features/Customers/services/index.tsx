@@ -4,27 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import api, { config } from '../../../services';
 import { CustomerValidation } from '../types';
 
-const enum Endpoints {
-  createCustomer = '/customers/createCustomer',
-  updateCustomer = '/customers/updateCustomer',
-  getAllCustomers = '/customers/getAllCustomers',
-  getCustomerById = '/customers/getCustomerById',
-  deleteCustomerById = '/customers/deleteCustomerById',
-  searchCustomers = '/customers/searchCustomers',
-}
-
 const useCreateCustomer = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: (customer: CustomerValidation) => {
-      return api
-        .post(Endpoints.createCustomer, customer, config)
-        .then((res) => res.data);
+      return api.post('/customers', customer, config).then((res) => res.data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [Endpoints.getAllCustomers] });
+      queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
       navigate('/customers');
       enqueueSnackbar('Cliente salvo com sucesso!', {
         variant: 'success',
@@ -44,11 +33,11 @@ const useUpdateCustomer = () => {
   return useMutation({
     mutationFn: (customer: CustomerValidation) => {
       return api
-        .put(`${Endpoints.updateCustomer}/${customer.id}`, customer, config)
+        .put(`/customers/${customer.id}`, customer, config)
         .then((res) => res.data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [Endpoints.getAllCustomers] });
+      queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
       navigate('/customers');
       enqueueSnackbar('Cliente atualizado com sucesso!', {
         variant: 'success',
@@ -64,9 +53,9 @@ const useUpdateCustomer = () => {
 
 const useGetAllCustomers = () => {
   return useQuery<CustomerValidation[]>({
-    queryKey: [Endpoints.getAllCustomers],
+    queryKey: ['/all-customers'],
     queryFn: () => {
-      return api.get(Endpoints.getAllCustomers, config).then((res) => res.data);
+      return api.get('/customers', config).then((res) => res.data);
     },
     staleTime: Infinity,
   });
@@ -74,11 +63,9 @@ const useGetAllCustomers = () => {
 
 const useGetCustomerById = (id?: string) => {
   return useQuery<CustomerValidation>({
-    queryKey: [Endpoints.getCustomerById, id],
+    queryKey: ['/customers', id],
     queryFn: () => {
-      return api
-        .get(`${Endpoints.getCustomerById}/${id}`, config)
-        .then((res) => res.data);
+      return api.get(`/customers/${id}`, config).then((res) => res.data);
     },
     enabled: id !== undefined,
     staleTime: 600000,
@@ -90,22 +77,10 @@ const useDeleteCustomerById = () => {
 
   return useMutation({
     mutationFn: (id: string) => {
-      return api
-        .delete(`${Endpoints.deleteCustomerById}/${id}`, config)
-        .then((res) => res.data);
+      return api.delete(`/customers/${id}`, config).then((res) => res.data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [Endpoints.getAllCustomers] });
-    },
-  });
-};
-
-const useSearchCustomers = () => {
-  return useMutation({
-    mutationFn: (search?: string) => {
-      return api
-        .post(`${Endpoints.searchCustomers}/${search}`, {}, config)
-        .then((res) => res.data);
+      queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
     },
   });
 };
@@ -115,6 +90,5 @@ export {
   useDeleteCustomerById,
   useGetAllCustomers,
   useGetCustomerById,
-  useSearchCustomers,
   useUpdateCustomer,
 };
