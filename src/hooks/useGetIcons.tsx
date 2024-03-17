@@ -11,10 +11,13 @@ import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 export default function useGetIcons() {
   return {
     LogoutOutlinedIcon,
+    ArrowBackIosRoundedIcon,
+    ArrowForwardIosRoundedIcon,
     DashboardOutlinedIcon,
     AccountCircleOutlinedIcon,
     BuildOutlinedIcon,

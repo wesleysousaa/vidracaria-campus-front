@@ -5,7 +5,7 @@ import isAuthenticated from './utils/isAuthenticated';
 
 export function PrivateRoute() {
   return isAuthenticated() ? (
-    <Box display={'flex'} flexDirection={'row'}>
+    <Box display={'flex'} flexDirection={'row'} overflow={'hidden'}>
       <Menu />
       <Outlet />
     </Box>

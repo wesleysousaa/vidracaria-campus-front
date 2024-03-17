@@ -3,23 +3,23 @@ import { CSSProperties } from 'react';
 
 export const linkStyle: CSSProperties = {
   textDecoration: 'none',
-  color: '#000',
+  color: 'var(--color-text)',
 };
 
 export const linkStyleActives: CSSProperties = {
   textDecoration: 'none',
-  color: '#2196F3',
+  color: 'var(--primary)',
   fontWeight: 'bold',
 };
 
 export const iconStyle: CSSPropertiesMui = {
   textDecoration: 'none',
-  color: '#000',
+  color: 'var(--color-text)',
 };
 
 export const iconStyleActives: CSSPropertiesMui = {
   textDecoration: 'none',
-  color: '#2196F3',
+  color: 'var(--primary)',
   fontWeight: 'bold',
 };
 
@@ -29,19 +29,34 @@ export const buttonStyle: CSSPropertiesMui = {
 
 export const buttonStyleActive: CSSPropertiesMui = {
   borderLeft: 'solid 5px #2196F3',
+  backgroundColor: '#f5f5f5',
+};
+
+export const exitStyles: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  minWidth: '100%',
+  marginBottom: '20px',
 };
 
 export const navStyles: CSSProperties = {
-  width: '15%',
-  boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
   overflow: 'auto',
   minHeight: '100vh',
+  position: 'fixed',
+  boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
+  width: '250px',
+};
+
+export const headerStyles: CSSProperties = {
+  minWidth: '250px',
+  overflow: 'auto',
+  minHeight: '100vh',
+  position: 'relative',
 };
 
 export const navListStyles: CSSPropertiesMui = {
   width: '100%',
-  height: '75%',
-  boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
-  borderBottom: '1px solid #ccc',
-  marginTop: '1em',
 };

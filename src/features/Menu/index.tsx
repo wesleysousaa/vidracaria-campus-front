@@ -1,12 +1,20 @@
-import { Button, Grid, Typography } from '@mui/material/';
+import {
+  Box,
+  Button,
+  Drawer,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
 import queryClient from '../../config/queryClient';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
-import { navStyles } from './styles';
+import { exitStyles, headerStyles, navStyles } from './styles';
+import { useState } from 'react';
 
-export default function Menu() {
+function MenuDesktop() {
   const navigate = useNavigate();
   const { LogoutOutlinedIcon } = useGetIcons();
 
@@ -17,33 +25,57 @@ export default function Menu() {
   };
 
   return (
-    <nav style={navStyles}>
-      <LogoItem />
-      <MenuListItem />
-      <Grid
-        container
-        spacing={2}
-        alignItems={'center'}
-        justifyContent={'center'}
-        justifySelf={'flex-end'}
-        alignSelf={'flex-end'}
-        padding={'1em'}
-      >
-        <Grid item>
-          <Typography variant="button" textAlign={'center'}>
-            <Button
-              variant="text"
-              startIcon={<LogoutOutlinedIcon />}
-              sx={{
-                fontSize: '1.2em',
-              }}
-              onClick={() => logout()}
-            >
-              SAIR
-            </Button>
-          </Typography>
-        </Grid>
-      </Grid>
-    </nav>
+    <Box component={'header'} style={headerStyles}>
+      <nav style={navStyles}>
+        <section>
+          <LogoItem />
+          <MenuListItem />
+        </section>
+        <Box sx={exitStyles}>
+          <Button
+            variant="text"
+            startIcon={<LogoutOutlinedIcon />}
+            sx={{
+              fontSize: '1.2em',
+              textTransform: 'capitalize',
+            }}
+            onClick={() => logout()}
+          >
+            Sair
+          </Button>
+        </Box>
+      </nav>
+    </Box>
+  );
+}
+
+function MenuMobile() {
+  const { ArrowBackIosRoundedIcon, ArrowForwardIosRoundedIcon } = useGetIcons();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Drawer open={open} onClose={() => setOpen(!open)}>
+        <MenuDesktop />
+      </Drawer>
+      <IconButton>
+        <IconButton onClick={() => setOpen(!open)}>
+          {open ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}
+        </IconButton>
+      </IconButton>
+    </>
+  );
+}
+
+export default function Menu() {
+  return (
+    <>
+      <Box className="desktop">
+        <MenuDesktop />
+      </Box>
+      <Box className="mobile">
+        <MenuMobile />
+      </Box>
+    </>
   );
 }
