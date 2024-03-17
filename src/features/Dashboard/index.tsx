@@ -1,9 +1,6 @@
 import { Box, Typography } from '@mui/material';
-import CardChart from '../../components/CardChart';
-import { boxCards, mainStyles, secondBox } from './DashboardStyles';
-
-import BarChart from '../../components/BarChart';
-import LineChart from '../../components/LineChart';
+import { BarChart, CardChart, LineChart } from './Charts';
+import { boxCards, mainStyles, secondBox } from './styles';
 
 export default function Dashboard() {
   const dataBar = [
