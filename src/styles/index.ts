@@ -7,12 +7,11 @@ export const boxStyles: CSSProperties = {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
-  backgroundColor: '#fff',
-  boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
   borderRadius: '0.4em',
   alignSelf: 'center',
   marginLeft: '2em',
   padding: '1em',
+  overflow: 'auto',
 };
 
 export const boxStylesForm: CSSProperties = {

@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import Table from './Table/index.tsx';
 import { boxStyles, boxStylesForm } from '../../styles/index.ts';
 
-export default function Customers() {
+export default function Products() {
   return (
     <Box sx={boxStyles} component={'main'}>
       <Box sx={boxStylesForm}>
         <Typography variant="h4" fontWeight={'bold'}>
-          Clientes
+          Produtos
         </Typography>
 
         <Link to="add">
           <Button variant="contained" color="success">
-            Novo Cliente
+            Novo Produto
           </Button>
         </Link>
       </Box>
