@@ -25,8 +25,22 @@ export default function Router() {
                 element={<TemplateImports.Customers.CustomerUpdateForm />}
               />
             </Route>
+            <Route path="produtos">
+              <Route index element={<TemplateImports.Products.index />} />
+              <Route
+                path="add"
+                element={<TemplateImports.Products.ProductsCreateForm />}
+              />
+              <Route
+                path="info/:id"
+                element={<TemplateImports.Products.ProductsInfoForm />}
+              />
+              <Route
+                path="edit/:id"
+                element={<TemplateImports.Products.ProductsUpdateForm />}
+              />
+            </Route>
             <Route path="servicos" element={<div>Serviços</div>} />
-            <Route path="produtos" element={<div>Produtos</div>} />
           </Route>
           <Route element={<TemplateImports.PublicRoute />}>
             <Route path="/" element={<TemplateImports.Login />} />
