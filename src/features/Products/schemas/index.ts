@@ -9,6 +9,7 @@ export const ProductSchema = Yup.object<ProductValidation>().shape({
   width: Yup.number(),
   depth: Yup.number(),
   price: Yup.number(),
+  id: Yup.string(),
 });
 
 export const CreateProductSchema = Yup.object<CreateProductValidation>().shape({

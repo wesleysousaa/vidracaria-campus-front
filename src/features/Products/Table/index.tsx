@@ -54,6 +54,18 @@ export default function Table() {
         accessorKey: 'price',
         header: 'Preço',
         enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.price
+                ? options.row.original.price?.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })
+                : 'Não informado'}
+            </strong>
+          );
+        },
       },
       {
         accessorKey: 'actions',

@@ -20,8 +20,8 @@ import {
 import useGetState from '../hooks/useGetState.tsx';
 import { ClientSchema } from '../schemas/index.ts';
 import { useGetCustomerById, useUpdateCustomer } from '../services/index.tsx';
-import { boxStyles } from '../styles/index.ts';
 import { CustomerValidation } from '../types/index.ts';
+import { boxStyles } from '../../../styles/index.ts';
 
 export default function CustomerUpdateForm() {
   const { id } = useParams();

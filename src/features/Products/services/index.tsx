@@ -38,7 +38,7 @@ const useUpdateProduct = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
-      navigate('/products');
+      navigate('/produtos');
       enqueueSnackbar('Produto atualizado com sucesso!', {
         variant: 'success',
       });

@@ -41,12 +41,17 @@ export default function ProducstUpdateForm() {
       category: 'REGULAR',
       name: '',
       unitOfMeasure: 'CENTIMETER',
+      depth: 0,
+      height: 0,
+      width: 0,
+      price: 0,
+      id: '',
     },
   });
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/customers" style={{ color: '#000' }}>
+      <Link to="/produtos" style={{ color: '#000' }}>
         <IconButton aria-label="Voltar" color="inherit">
           <ArrowBackIosIcon />
           Fechar
@@ -62,7 +67,7 @@ export default function ProducstUpdateForm() {
         }}
       >
         <Typography variant="h3" marginBottom="1em">
-          Cadastrar Produto
+          Editar Produto
         </Typography>
 
         <Controller
@@ -84,73 +89,119 @@ export default function ProducstUpdateForm() {
 
         <Box sx={boxStylesForm}>
           <Controller
-            name="name"
+            name="category"
             control={control}
             render={({ field }) => (
-              <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
-                type="text"
-                id="name"
-                label="Nome"
-                placeholder="Digite o nome do produto"
-                error={!!errors.name}
-                helperText={errors.name?.message}
-                {...field}
-              />
+              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
+                <InputLabel htmlFor="category">Categoria</InputLabel>
+                <Select
+                  type="text"
+                  id="category"
+                  label="Categoria"
+                  error={!!errors.category}
+                  placeholder="Digite a categoria do produto"
+                  {...field}
+                >
+                  {categrories.map((state) => (
+                    <MenuItem key={state} value={state}>
+                      {state}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+
+          <Controller
+            name="unitOfMeasure"
+            control={control}
+            render={({ field }) => (
+              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
+                <InputLabel htmlFor="unitOfMeasure">
+                  Unidade de Medida
+                </InputLabel>
+                <Select
+                  type="text"
+                  id="unitOfMeasure"
+                  label="Unidade de Medida"
+                  error={!!errors.category}
+                  placeholder="Digite a unidade de medida do produto"
+                  {...field}
+                >
+                  {unitOfMeasure.map((state) => (
+                    <MenuItem key={state} value={state}>
+                      {state}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
           />
         </Box>
 
         <Box sx={boxStylesForm}>
           <Controller
-            name="category"
+            name="depth"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+              <TextField
                 type="text"
-                id="category"
-                label="Categoria"
-                error={!!errors.category}
-                placeholder="Digite a categoria do produto"
+                id="depth"
+                label="Profundidade"
+                placeholder="Digite a profundidade do produto"
+                error={!!errors.depth}
+                helperText={errors.depth?.message}
+                sx={textFieldStyles}
                 {...field}
-              >
-                {categrories.map((state) => (
-                  <MenuItem key={state} value={state}>
-                    {state}
-                  </MenuItem>
-                ))}
-              </Select>
+              />
             )}
           />
           <Controller
-            name="unitOfMeasure"
+            name="height"
             control={control}
             render={({ field }) => (
-              <Select
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+              <TextField
                 type="text"
-                id="unitOfMeasure"
-                label="Unidade de Medida"
-                error={!!errors.category}
-                placeholder="Digite a unidade de medida do produto"
+                id="height"
+                label="Altura"
+                placeholder="Digite a altura do produto"
+                error={!!errors.height}
+                helperText={errors.height?.message}
+                sx={textFieldStyles}
                 {...field}
-              >
-                {unitOfMeasure.map((state) => (
-                  <MenuItem key={state} value={state}>
-                    {state}
-                  </MenuItem>
-                ))}
-              </Select>
+              />
+            )}
+          />
+          <Controller
+            name="width"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                type="text"
+                id="width"
+                label="Largura"
+                placeholder="Digite a largura do produto"
+                error={!!errors.width}
+                helperText={errors.width?.message}
+                sx={textFieldStyles}
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="price"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                type="text"
+                id="price"
+                label="Preço"
+                placeholder="Digite o preço do produto"
+                error={!!errors.price}
+                helperText={errors.price?.message}
+                sx={textFieldStyles}
+                {...field}
+              />
             )}
           />
         </Box>

@@ -1,8 +1,8 @@
 export interface ProductValidation {
-  id: number;
+  id?: string;
   name: string;
-  unitOfMeasure: unitOfMeasure;
-  category: category;
+  unitOfMeasure: string;
+  category: string;
   height?: number;
   width?: number;
   depth?: number;
