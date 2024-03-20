@@ -10,6 +10,7 @@ import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
+import { Box } from '@mui/material';
 
 export default function Table() {
   const allCustomers = useGetAllCustomers();
@@ -98,7 +99,13 @@ export default function Table() {
         }
       />
 
-      <MaterialReactTable table={table} />
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Box>
     </>
   );
 }

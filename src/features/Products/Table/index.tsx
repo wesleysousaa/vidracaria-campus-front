@@ -8,10 +8,14 @@ import ConfirmAction from '../../../components/ConfirmAction';
 import Modal from '../../../components/Modal';
 import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
+import { useGetAllProducts, useDeleteProductById } from '../services';
+import { Box } from '@mui/material';
+import { boxStyles } from '../../../styles';
 
 export default function Table() {
-  // const allCustomers = useGetAllCustomers();
-  // const deleteCustomer = useDeleteCustomerById();
+  const allProducts = useGetAllProducts();
+  const deleteProducts = useDeleteProductById();
+
   const [open, setOpen] = useState(false);
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
@@ -22,13 +26,33 @@ export default function Table() {
         enableHiding: true,
       },
       {
-        accessorKey: 'value',
-        header: 'Preço',
+        accessorKey: 'unitOfMeasure',
+        header: 'Unidade de Medida',
         enableHiding: true,
       },
       {
-        accessorKey: 'qtd',
-        header: 'Quantidade',
+        accessorKey: 'category',
+        header: 'Categoria',
+        enableHiding: true,
+      },
+      {
+        accessorKey: 'height',
+        header: 'Altura',
+        enableHiding: true,
+      },
+      {
+        accessorKey: 'width',
+        header: 'Largura',
+        enableHiding: true,
+      },
+      {
+        accessorKey: 'depth',
+        header: 'Profundidade',
+        enableHiding: true,
+      },
+      {
+        accessorKey: 'price',
+        header: 'Preço',
         enableHiding: true,
       },
       {
@@ -48,41 +72,25 @@ export default function Table() {
     [],
   );
 
-  const handleOpen = (idItem: string) => {
+  const handleOpen = () => {
     setOpen(true);
     // deleteCustomer.mutate(idItem);
   };
 
   const handleDelete = () => {
-    // deleteCustomer.mutate(deleteCustomer.data);
+    deleteProducts.mutate(deleteProducts.data);
     setOpen(false);
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: [
-      {
-        name: 'Produto 1',
-        value: 'R$ 10,00',
-        qtd: '10',
-      },
-      {
-        name: 'Produto 2',
-        value: 'R$ 20,00',
-        qtd: '20',
-      },
-      {
-        name: 'Produto 3',
-        value: 'R$ 30,00',
-        qtd: '30',
-      },
-    ],
+    data: allProducts.data ?? [],
     enableColumnOrdering: true,
     enableGlobalFilter: false,
     enableDensityToggle: false,
   });
 
-  // if (allCustomers.isLoading) return <Loader open={true} />;
+  if (allProducts.isLoading) return <Loader open={true} />;
   return (
     <>
       <Modal
@@ -96,8 +104,13 @@ export default function Table() {
           />
         }
       />
-
-      <MaterialReactTable table={table} />
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Box>
     </>
   );
 }

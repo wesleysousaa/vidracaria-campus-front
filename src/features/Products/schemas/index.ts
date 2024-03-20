@@ -1,19 +1,18 @@
 import * as Yup from 'yup';
-import { CustomerValidation } from '../types';
+import { ProductValidation, CreateProductValidation } from '../types';
 
-export const ClientSchema = Yup.object<CustomerValidation>().shape({
-  id: Yup.string().optional(),
-  name: Yup.string().required('O nome é obrigatório'),
-  cpf_cnpj: Yup.string().optional(),
-  email: Yup.string().email('Digite o email no formato correto').optional(),
-  customerType: Yup.string().required('O campo pessoa é obrigatório'),
-  phone: Yup.string().required('O telefone é obrigatório'),
-  address: Yup.object().shape({
-    address: Yup.string().required('a rua é obrigatório'),
-    zipCode: Yup.string().required('O cep é obrigatório'),
-    number: Yup.string().required('O numero é obrigatório'),
-    city: Yup.string().required('a cidade é obrigatório'),
-    state: Yup.string().required('O estado é obrigatório'),
-    landmark: Yup.string().optional(),
-  }),
+export const ProductSchema = Yup.object<ProductValidation>().shape({
+  name: Yup.string().required('Campo obrigatório'),
+  unitOfMeasure: Yup.string().required('Campo obrigatório'),
+  category: Yup.string().required('Campo obrigatório'),
+  height: Yup.number(),
+  width: Yup.number(),
+  depth: Yup.number(),
+  price: Yup.number(),
+});
+
+export const CreateProductSchema = Yup.object<CreateProductValidation>().shape({
+  name: Yup.string().required('Campo obrigatório'),
+  unitOfMeasure: Yup.string().required('Campo obrigatório'),
+  category: Yup.string().required('Campo obrigatório'),
 });

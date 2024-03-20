@@ -1,7 +1,7 @@
 import { CSSProperties } from 'react';
 
 export const boxStyles: CSSProperties = {
-  width: '80vw',
+  width: '80%',
   height: 'max-content',
   display: 'flex',
   flexDirection: 'column',
@@ -11,7 +11,6 @@ export const boxStyles: CSSProperties = {
   alignSelf: 'center',
   marginLeft: '2em',
   padding: '1em',
-  overflow: 'auto',
 };
 
 export const boxStylesForm: CSSProperties = {

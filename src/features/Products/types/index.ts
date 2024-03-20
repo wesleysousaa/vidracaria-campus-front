@@ -1,18 +1,19 @@
-export interface CustomerValidation {
-  id?: string;
+export interface ProductValidation {
+  id: number;
   name: string;
-  customerType: string;
-  cpfcnpj?: string;
-  email?: string;
-  phone: string;
-  address: AddressValidation;
+  unitOfMeasure: unitOfMeasure;
+  category: category;
+  height?: number;
+  width?: number;
+  depth?: number;
+  price?: number;
 }
 
-export interface AddressValidation {
-  address: string;
-  zipCode: string;
-  number: string;
-  city: string;
-  state: string;
-  landmark?: string;
+export interface CreateProductValidation {
+  name: string;
+  unitOfMeasure: string;
+  category: string;
 }
+
+export type category = 'REGULAR' | 'TEMPERED';
+export type unitOfMeasure = 'CENTIMETER' | 'METER' | 'MILIMETER';

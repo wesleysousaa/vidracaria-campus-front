@@ -16,9 +16,9 @@ import useGetIcons from '../../../hooks/useGetIcons.tsx';
 import useGetState from '../hooks/useGetState.tsx';
 import { ClientSchema } from '../schemas/index.ts';
 import { useCreateCustomer } from '../services/index.tsx';
-import { boxStyles } from '../styles/index.ts';
 import { CustomerValidation } from '../types/index.ts';
 import { boxStylesForm, textFieldStyles } from './styles/index.ts';
+import { boxStyles } from '../../../styles/index.ts';
 
 export default function CustomerCreateForm() {
   const { ArrowBackIosIcon } = useGetIcons();
