@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 import useGetIcons from '../../../hooks/useGetIcons';
-import { useGetCustomerById } from '../../../services/hooks/Customer';
+import { useGetCustomerById } from '../services';
 
 export default function CustomerInfoForm() {
   const { id } = useParams();
