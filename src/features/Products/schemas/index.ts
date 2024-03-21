@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { ProductValidation, CreateProductValidation } from '../types';
+import { CreateProductValidation, ProductValidation } from '../types';
 
 export const ProductSchema = Yup.object<ProductValidation>().shape({
   name: Yup.string().required('Campo obrigatório'),

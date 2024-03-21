@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -6,8 +7,7 @@ import {
 import { useMemo } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
-import { useGetAllProducts, useDeleteProductById } from '../services';
-import { Box } from '@mui/material';
+import { useDeleteProductById, useGetAllProducts } from '../services';
 
 export default function Table() {
   const allProducts = useGetAllProducts();

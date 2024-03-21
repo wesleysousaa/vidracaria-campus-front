@@ -13,12 +13,12 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
 import useGetIcons from '../../../hooks/useGetIcons.tsx';
-import { ProductSchema } from '../schemas/index.ts';
-import { useGetProductById, useUpdateProduct } from '../services/index.tsx';
 import { boxStyles, boxStylesForm } from '../../../styles/index.ts';
-import { ProductValidation } from '../types/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
 import useProductSelectState from '../hooks/useProductSelectStates.ts';
+import { ProductSchema } from '../schemas/index.ts';
+import { useGetProductById, useUpdateProduct } from '../services/index.tsx';
+import { ProductValidation } from '../types/index.ts';
 
 export default function ProducstUpdateForm() {
   const { id } = useParams();

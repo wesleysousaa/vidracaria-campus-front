@@ -87,8 +87,8 @@ const useDeleteProductById = () => {
 
 export {
   useCreateProduct,
-  useUpdateProduct,
+  useDeleteProductById,
   useGetAllProducts,
   useGetProductById,
-  useDeleteProductById,
+  useUpdateProduct,
 };

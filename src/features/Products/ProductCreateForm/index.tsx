@@ -11,14 +11,14 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { CreateProductSchema } from '../schemas/index.ts';
+import { Link } from 'react-router-dom';
+import useGetIcons from '../../../hooks/useGetIcons.tsx';
 import { boxStyles, boxStylesForm } from '../../../styles/index.ts';
-import { CreateProductValidation } from '../types/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
 import useProductSelectState from '../hooks/useProductSelectStates.ts';
+import { CreateProductSchema } from '../schemas/index.ts';
 import { useCreateProduct } from '../services/index.tsx';
-import useGetIcons from '../../../hooks/useGetIcons.tsx';
-import { Link } from 'react-router-dom';
+import { CreateProductValidation } from '../types/index.ts';
 
 export default function ProductsCreateForm() {
   const { categrories, unitOfMeasure } = useProductSelectState();

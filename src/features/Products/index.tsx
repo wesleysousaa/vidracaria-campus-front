@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import Table from './Table/index.tsx';
 import { boxStyles, boxStylesForm } from '../../styles/index.ts';
+import Table from './Table/index.tsx';
 
 export default function Products() {
   return (

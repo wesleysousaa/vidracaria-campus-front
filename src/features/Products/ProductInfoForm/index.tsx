@@ -1,9 +1,8 @@
 import { Box, Divider, IconButton } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import useGetIcons from '../../../hooks/useGetIcons';
 import { useGetProductById } from '../services';
-import { boxStyles } from '../../../styles';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 
 export default function ProducstInfoForm() {
   const { id } = useParams();
