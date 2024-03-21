@@ -1,4 +1,8 @@
 import { Box, Typography } from '@mui/material';
+import cartIcon from '../../assets/images/cart.webp';
+import chartUpIcon from '../../assets/images/chart_up.webp';
+import coinIcon from '../../assets/images/coin.webp';
+import moneyIcon from '../../assets/images/money_icon.webp';
 import { BarChart, CardChart, LineChart } from './Charts';
 import { boxCards, mainStyles, secondBox } from './styles';
 
@@ -30,28 +34,28 @@ export default function Dashboard() {
           fontColor="#fff"
           title="R$ 2.300,25"
           subtitle="Faturamento Mês Atual"
-          imgPath="/images/money_icon.webp"
+          imgPath={moneyIcon}
           bgColor="#9650B9"
         />
         <CardChart
           fontColor="#fff"
           title="+ 4.5%"
           subtitle="Comparação com mês passado"
-          imgPath="/images/chart_up.webp"
+          imgPath={chartUpIcon}
           bgColor="#53AA6E"
         />
         <CardChart
           fontColor="#fff"
           title="38"
           subtitle="Serviços contratados (esse mês)"
-          imgPath="/images/cart.webp"
+          imgPath={cartIcon}
           bgColor="#2196F3"
         />
         <CardChart
           fontColor="#fff"
           title="R$ 1.800,00"
           subtitle="Ganhos Líquidos"
-          imgPath="/images/coin.webp"
+          imgPath={coinIcon}
           bgColor="#EA5E0B"
         />
       </Box>

@@ -1,13 +1,12 @@
-import { Box, Divider, IconButton } from '@mui/material';
-import { Link, useParams } from 'react-router-dom';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
-import useGetIcons from '../../../hooks/useGetIcons';
+import { Box, Divider } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import CustomLabel from '../../../components/CustomLabel';
+import ReturnButton from '../../../components/ReturnButton';
 import { useGetProductById } from '../services';
 
 export default function ProducstInfoForm() {
   const { id } = useParams();
   const product = useGetProductById(id).data;
-  const { ArrowBackIosIcon } = useGetIcons();
 
   return (
     <Box
@@ -17,20 +16,7 @@ export default function ProducstInfoForm() {
       alignItems={'center'}
       sx={{ width: '70%', marginLeft: '2em', backgroundColor: '#fff' }}
     >
-      <Link
-        to="/produtos"
-        style={{
-          color: '#000',
-          justifySelf: 'flex-start',
-          alignSelf: 'flex-start',
-          marginTop: '1em',
-        }}
-      >
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Voltar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/products" />
       <Box
         sx={{
           display: 'flex',

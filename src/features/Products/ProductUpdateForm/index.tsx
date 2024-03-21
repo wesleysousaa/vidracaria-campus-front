@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -11,8 +10,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
-import useGetIcons from '../../../hooks/useGetIcons.tsx';
+import { useParams } from 'react-router-dom';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
 import { boxStyles, boxStylesForm } from '../../../styles/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
 import useProductSelectState from '../hooks/useProductSelectStates.ts';
@@ -22,7 +21,6 @@ import { ProductValidation } from '../types/index.ts';
 
 export default function ProducstUpdateForm() {
   const { id } = useParams();
-  const { ArrowBackIosIcon } = useGetIcons();
   const product = useGetProductById(id);
   const updateCustomer = useUpdateProduct();
   const { categrories, unitOfMeasure } = useProductSelectState();
@@ -51,12 +49,7 @@ export default function ProducstUpdateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/produtos" style={{ color: '#000' }}>
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Fechar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/products" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{

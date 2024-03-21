@@ -11,7 +11,7 @@ const useAuthUser = () => {
     },
     onSuccess: (data) => {
       localStorage.setItem('token', JSON.stringify(data.token));
-      navigate('/relatorios');
+      navigate('/dashboard');
     },
   });
 };

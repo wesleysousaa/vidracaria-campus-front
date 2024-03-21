@@ -1,13 +1,13 @@
-import { Box, IconButton, Typography } from '@mui/material';
-import { Link, useParams } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import ReturnButton from '../../../components/ReturnButton';
 import useGetIcons from '../../../hooks/useGetIcons';
 import { useGetCustomerById } from '../services';
 
 export default function CustomerInfoForm() {
   const { id } = useParams();
   const customer = useGetCustomerById(id);
-  const { EmailOutlinedIcon, LocalPhoneOutlinedIcon, ArrowBackIosIcon } =
-    useGetIcons();
+  const { EmailOutlinedIcon, LocalPhoneOutlinedIcon } = useGetIcons();
 
   return (
     <Box
@@ -17,20 +17,7 @@ export default function CustomerInfoForm() {
       alignItems={'center'}
       sx={{ width: '70%', marginLeft: '2em', backgroundColor: '#fff' }}
     >
-      <Link
-        to="/customers"
-        style={{
-          color: '#000',
-          justifySelf: 'flex-start',
-          alignSelf: 'flex-start',
-          marginTop: '1em',
-        }}
-      >
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Voltar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/customers" />
 
       <Box
         display={'flex'}

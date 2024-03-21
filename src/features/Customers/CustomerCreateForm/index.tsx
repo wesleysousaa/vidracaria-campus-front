@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -11,17 +10,15 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import useGetIcons from '../../../hooks/useGetIcons.tsx';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
 import useGetState from '../hooks/useGetState.tsx';
 import { ClientSchema } from '../schemas/index.ts';
 import { useCreateCustomer } from '../services/index.tsx';
 import { CustomerValidation } from '../types/index.ts';
 import { boxStylesForm, textFieldStyles } from './styles/index.ts';
-import { boxStyles } from '../../../styles/index.ts';
 
 export default function CustomerCreateForm() {
-  const { ArrowBackIosIcon } = useGetIcons();
   const states = useGetState();
   const createCustomer = useCreateCustomer();
 
@@ -55,12 +52,7 @@ export default function CustomerCreateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/customers" style={{ color: '#000' }}>
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Fechar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/customers" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{

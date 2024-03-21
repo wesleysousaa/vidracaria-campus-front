@@ -14,7 +14,7 @@ const useCreateProduct = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
-      navigate('/produtos');
+      navigate('/products');
       enqueueSnackbar('Produto salvo com sucesso!', {
         variant: 'success',
       });
@@ -38,7 +38,7 @@ const useUpdateProduct = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
-      navigate('/produtos');
+      navigate('/products');
       enqueueSnackbar('Produto atualizado com sucesso!', {
         variant: 'success',
       });

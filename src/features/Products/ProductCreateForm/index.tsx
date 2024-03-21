@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -11,9 +10,9 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
 import useGetIcons from '../../../hooks/useGetIcons.tsx';
-import { boxStyles, boxStylesForm } from '../../../styles/index.ts';
+import { boxStyles } from '../../../styles/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
 import useProductSelectState from '../hooks/useProductSelectStates.ts';
 import { CreateProductSchema } from '../schemas/index.ts';
@@ -44,12 +43,7 @@ export default function ProductsCreateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/customers" style={{ color: '#000' }}>
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Fechar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/products" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -80,7 +74,7 @@ export default function ProductsCreateForm() {
           )}
         />
 
-        <Box sx={boxStylesForm}>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
           <Controller
             name="category"
             control={control}

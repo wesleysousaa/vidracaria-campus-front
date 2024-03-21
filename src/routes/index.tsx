@@ -9,7 +9,7 @@ export default function Router() {
       <Suspense fallback={<Loader open={true} />}>
         <Routes>
           <Route element={<TemplateImports.PrivateRoute />}>
-            <Route path="relatorios" element={<TemplateImports.Dashboard />} />
+            <Route path="dashboard" element={<TemplateImports.Dashboard />} />
             <Route path="customers">
               <Route index element={<TemplateImports.Customers.index />} />
               <Route
@@ -25,7 +25,7 @@ export default function Router() {
                 element={<TemplateImports.Customers.CustomerUpdateForm />}
               />
             </Route>
-            <Route path="produtos">
+            <Route path="products">
               <Route index element={<TemplateImports.Products.index />} />
               <Route
                 path="add"
