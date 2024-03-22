@@ -1,73 +1,85 @@
-import { Box, Divider } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Box, Divider, Modal, Typography } from '@mui/material';
+import CloseButton from '../../../components/CloseButton';
 import CustomLabel from '../../../components/CustomLabel';
-import ReturnButton from '../../../components/ReturnButton';
+import { modalStyles } from '../../../styles';
+import Loader from '../../Loader';
+import useProductSelectState from '../hooks/useProductSelectStates';
 import { useGetProductById } from '../services';
+import { modalHeaderStyles, productBoxInfoStyles } from './styles';
 
-export default function ProducstInfoForm() {
-  const { id } = useParams();
+export interface ProductInfoFormProps {
+  open: boolean;
+  onClose: () => void;
+  id: string;
+}
+
+export default function ProducstInfoForm({
+  onClose,
+  open,
+  id,
+}: ProductInfoFormProps) {
   const product = useGetProductById(id).data;
+  const { translateUnitOfMeasure, translateCategory } = useProductSelectState();
+
+  if (product === undefined) return <Loader open={true} />;
 
   return (
-    <Box
-      display={'flex'}
-      flexDirection={'column'}
-      justifyContent={'flex-start'}
-      alignItems={'center'}
-      sx={{ width: '70%', marginLeft: '2em', backgroundColor: '#fff' }}
-    >
-      <ReturnButton link="/products" />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1em',
-        }}
-      >
-        <h1>{product?.name as string}</h1>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: '1em',
-            justifyContent: 'space-between',
-          }}
-        >
-          <CustomLabel title="Categoria" text={product?.category as string} />
-          <CustomLabel
-            title="Preço"
-            text={
-              product?.price?.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              }) || ''
-            }
-          />
-        </Box>
-        <Divider />
-        <Box
-          sx={{
-            display: 'flex',
-            gap: '1em',
-          }}
-        >
-          <CustomLabel
-            title="Profundidade"
-            text={product?.depth?.toString() as string}
-          />
-          <CustomLabel
-            title="Largura"
-            text={product?.width?.toString() as string}
-          />
-          <CustomLabel
-            title="Altura"
-            text={product?.height?.toString() as string}
-          />
-          <CustomLabel
-            title="Unidade de medida"
-            text={product?.unitOfMeasure?.toString() as string}
-          />
+    <Modal open={open} onClose={onClose} sx={modalStyles}>
+      <Box sx={productBoxInfoStyles}>
+        <Box>
+          <Box sx={modalHeaderStyles}>
+            <CloseButton onClose={onClose} />
+            <Typography variant="h5">{product.name}</Typography>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '1em',
+              justifyContent: 'space-between',
+            }}
+          >
+            <CustomLabel
+              title="Categoria"
+              text={translateCategory(product.category)}
+            />
+            <CustomLabel
+              title="Preço"
+              text={
+                product.price?.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                }) || 'R$ 0,00'
+              }
+            />
+          </Box>
+          <Divider />
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '1em',
+            }}
+          >
+            <CustomLabel
+              title="Profundidade"
+              text={product.depth == 0 ? 'Não informada' : product.depth + ''}
+            />
+            <CustomLabel
+              title="Largura"
+              text={product.width == 0 ? 'Não informada' : product.width + ''}
+            />
+            <CustomLabel
+              title="Altura"
+              text={product.height == 0 ? 'Não informada' : product.height + ''}
+            />
+            <CustomLabel
+              title="Unidade de medida"
+              text={translateUnitOfMeasure(
+                product?.unitOfMeasure?.toString() as string,
+              )}
+            />
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </Modal>
   );
 }

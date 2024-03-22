@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
-import useGetIcons from '../../../hooks/useGetIcons.tsx';
 import { boxStyles } from '../../../styles/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
 import useProductSelectState from '../hooks/useProductSelectStates.ts';
@@ -20,8 +19,12 @@ import { useCreateProduct } from '../services/index.tsx';
 import { CreateProductValidation } from '../types/index.ts';
 
 export default function ProductsCreateForm() {
-  const { categrories, unitOfMeasure } = useProductSelectState();
-  const { ArrowBackIosIcon } = useGetIcons();
+  const {
+    categories,
+    unitOfMeasure,
+    translateCategory,
+    translateUnitOfMeasure,
+  } = useProductSelectState();
   const create = useCreateProduct();
 
   const onSubmit: SubmitHandler<CreateProductValidation> = (data) => {
@@ -79,7 +82,7 @@ export default function ProductsCreateForm() {
             name="category"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel htmlFor="category">Categoria</InputLabel>
                 <Select
                   type="text"
@@ -89,9 +92,9 @@ export default function ProductsCreateForm() {
                   placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  {categrories.map((state) => (
+                  {categories.map((state) => (
                     <MenuItem key={state} value={state}>
-                      {state}
+                      {translateCategory(state)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -117,7 +120,7 @@ export default function ProductsCreateForm() {
                 >
                   {unitOfMeasure.map((state) => (
                     <MenuItem key={state} value={state}>
-                      {state}
+                      {translateUnitOfMeasure(state)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -131,7 +134,7 @@ export default function ProductsCreateForm() {
           type="submit"
           variant="contained"
           sx={{
-            width: '15em',
+            width: '100%',
             display: 'flex',
             alignSelf: 'center',
           }}

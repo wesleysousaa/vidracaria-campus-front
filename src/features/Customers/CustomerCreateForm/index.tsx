@@ -88,7 +88,7 @@ export default function CustomerCreateForm() {
             name="customerType"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel id="select-people-label">Pessoa</InputLabel>
                 <Select
                   labelId="select-people-label"
@@ -109,10 +109,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 type="text"
                 id="cpf_cnpj"
                 label="CPF/CNPJ"
@@ -129,10 +126,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 id="email"
                 type="text"
                 label="Email"
@@ -146,10 +140,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 id="phone"
                 type="tel"
                 label="Telefone"
@@ -185,10 +176,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 type="text"
                 id="zipCode"
                 label="CEP"
@@ -204,7 +192,7 @@ export default function CustomerCreateForm() {
             defaultValue="PB"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel id="select-state-label">Estado</InputLabel>
                 <Select
                   labelId="select-state-label"
@@ -229,10 +217,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 type="text"
                 id="city-textfiled"
                 label="Cidade"
@@ -284,7 +269,7 @@ export default function CustomerCreateForm() {
           type="submit"
           variant="contained"
           sx={{
-            width: '15em',
+            width: '100%',
             display: 'flex',
             alignSelf: 'center',
           }}

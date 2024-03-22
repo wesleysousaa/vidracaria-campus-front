@@ -4,14 +4,24 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
+import ProducstInfoForm from '../ProductInfoForm';
+import useProductSelectState from '../hooks/useProductSelectStates';
 import { useDeleteProductById, useGetAllProducts } from '../services';
 
 export default function Table() {
   const allProducts = useGetAllProducts();
   const deleteProducts = useDeleteProductById();
+  const { translateCategory, translateUnitOfMeasure } = useProductSelectState();
+  const [open, setOpen] = useState(false);
+  const [currentId, setCurrentId] = useState<string>('' as string);
+
+  const handleClick = (id: string) => {
+    setOpen(true);
+    setCurrentId(id);
+  };
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
@@ -24,26 +34,61 @@ export default function Table() {
         accessorKey: 'unitOfMeasure',
         header: 'Unidade de Medida',
         enableHiding: true,
+        Cell: (options) => {
+          return (
+            <>{translateUnitOfMeasure(options.row.original.unitOfMeasure)}</>
+          );
+        },
       },
       {
         accessorKey: 'category',
         header: 'Categoria',
         enableHiding: true,
+        Cell: (options) => {
+          return <>{translateCategory(options.row.original.category)}</>;
+        },
       },
       {
         accessorKey: 'height',
         header: 'Altura',
         enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.height == 0
+                ? 'Não informada'
+                : options.row.original.height}
+            </strong>
+          );
+        },
       },
       {
         accessorKey: 'width',
         header: 'Largura',
         enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.width == 0
+                ? 'Não informada'
+                : options.row.original.width}
+            </strong>
+          );
+        },
       },
       {
         accessorKey: 'depth',
         header: 'Profundidade',
         enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.depth == 0
+                ? 'Não informada'
+                : options.row.original.depth}
+            </strong>
+          );
+        },
       },
       {
         accessorKey: 'price',
@@ -70,7 +115,8 @@ export default function Table() {
           return (
             <TableCellActions
               dispach={handleDelete}
-              idObject={options.row.original.id as string}
+              idObject={options.row.original.id}
+              handleClick={handleClick}
             />
           );
         },
@@ -93,12 +139,19 @@ export default function Table() {
 
   if (allProducts.isLoading) return <Loader open={true} />;
   return (
-    <Box
-      sx={{
-        width: '100%',
-      }}
-    >
-      <MaterialReactTable table={table} />
-    </Box>
+    <>
+      <ProducstInfoForm
+        open={open}
+        onClose={() => setOpen(false)}
+        id={currentId}
+      />
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Box>
+    </>
   );
 }

@@ -32,10 +32,6 @@ export default function Router() {
                 element={<TemplateImports.Products.ProductsCreateForm />}
               />
               <Route
-                path="info/:id"
-                element={<TemplateImports.Products.ProductsInfoForm />}
-              />
-              <Route
                 path="edit/:id"
                 element={<TemplateImports.Products.ProductsUpdateForm />}
               />

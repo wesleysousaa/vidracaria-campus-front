@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import userIcon from '../../../assets//images/user-icon.webp';
 import ReturnButton from '../../../components/ReturnButton';
 import useGetIcons from '../../../hooks/useGetIcons';
 import { useGetCustomerById } from '../services';
@@ -28,7 +29,8 @@ export default function CustomerInfoForm() {
         marginTop={'3em'}
       >
         <img
-          src="/images/user-icon.webp"
+          src={userIcon}
+          placeholder="user icon"
           alt="user"
           style={{ width: '11em' }}
           loading="lazy"

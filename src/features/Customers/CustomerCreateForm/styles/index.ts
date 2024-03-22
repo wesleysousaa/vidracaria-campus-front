@@ -1,7 +1,7 @@
 import { CSSProperties } from '@mui/material/styles/createMixins';
 
 export const textFieldStyles: CSSProperties = {
-  margin: '1.5em 0 1.5em 0',
+  margin: '1em 0 1em 0',
   flex: 1,
 };
 

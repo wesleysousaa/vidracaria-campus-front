@@ -12,7 +12,7 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
-import { boxStyles, boxStylesForm } from '../../../styles/index.ts';
+import { boxStyles } from '../../../styles/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
 import useProductSelectState from '../hooks/useProductSelectStates.ts';
 import { ProductSchema } from '../schemas/index.ts';
@@ -23,7 +23,12 @@ export default function ProducstUpdateForm() {
   const { id } = useParams();
   const product = useGetProductById(id);
   const updateCustomer = useUpdateProduct();
-  const { categrories, unitOfMeasure } = useProductSelectState();
+  const {
+    categories,
+    unitOfMeasure,
+    translateCategory,
+    translateUnitOfMeasure,
+  } = useProductSelectState();
 
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     updateCustomer.mutate(data);
@@ -80,12 +85,12 @@ export default function ProducstUpdateForm() {
           )}
         />
 
-        <Box sx={boxStylesForm}>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
           <Controller
             name="category"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel htmlFor="category">Categoria</InputLabel>
                 <Select
                   type="text"
@@ -95,9 +100,9 @@ export default function ProducstUpdateForm() {
                   placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  {categrories.map((state) => (
+                  {categories.map((state) => (
                     <MenuItem key={state} value={state}>
-                      {state}
+                      {translateCategory(state)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -109,7 +114,7 @@ export default function ProducstUpdateForm() {
             name="unitOfMeasure"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel htmlFor="unitOfMeasure">
                   Unidade de Medida
                 </InputLabel>
@@ -123,7 +128,7 @@ export default function ProducstUpdateForm() {
                 >
                   {unitOfMeasure.map((state) => (
                     <MenuItem key={state} value={state}>
-                      {state}
+                      {translateUnitOfMeasure(state)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -132,13 +137,13 @@ export default function ProducstUpdateForm() {
           />
         </Box>
 
-        <Box sx={boxStylesForm}>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
           <Controller
             name="depth"
             control={control}
             render={({ field }) => (
               <TextField
-                type="text"
+                type="number"
                 id="depth"
                 label="Profundidade"
                 placeholder="Digite a profundidade do produto"
@@ -154,7 +159,7 @@ export default function ProducstUpdateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                type="text"
+                type="number"
                 id="height"
                 label="Altura"
                 placeholder="Digite a altura do produto"
@@ -170,7 +175,7 @@ export default function ProducstUpdateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                type="text"
+                type="number"
                 id="width"
                 label="Largura"
                 placeholder="Digite a largura do produto"
@@ -186,7 +191,7 @@ export default function ProducstUpdateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                type="text"
+                type="number"
                 id="price"
                 label="Preço"
                 placeholder="Digite o preço do produto"
@@ -204,7 +209,7 @@ export default function ProducstUpdateForm() {
           type="submit"
           variant="contained"
           sx={{
-            width: '15em',
+            width: '100%',
             display: 'flex',
             alignSelf: 'center',
           }}
