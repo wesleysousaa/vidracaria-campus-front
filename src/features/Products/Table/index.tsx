@@ -10,18 +10,16 @@ import Loader from '../../Loader';
 import ProducstInfoForm from '../ProductInfoForm';
 import useProductSelectState from '../hooks/useProductSelectStates';
 import { useDeleteProductById, useGetAllProducts } from '../services';
+import { ProductValidation } from '../types';
 
 export default function Table() {
+  const { translateCategory, translateUnitOfMeasure } = useProductSelectState();
   const allProducts = useGetAllProducts();
   const deleteProducts = useDeleteProductById();
-  const { translateCategory, translateUnitOfMeasure } = useProductSelectState();
   const [open, setOpen] = useState(false);
-  const [currentId, setCurrentId] = useState<string>('' as string);
-
-  const handleClick = (id: string) => {
-    setOpen(true);
-    setCurrentId(id);
-  };
+  const [currentProduct, setCurrenProduct] = useState<
+    ProductValidation | undefined
+  >();
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
@@ -129,6 +127,11 @@ export default function Table() {
     deleteProducts.mutate(id);
   };
 
+  const handleClick = (id: string) => {
+    setOpen(true);
+    setCurrenProduct(allProducts.data?.find((product) => product.id === id));
+  };
+
   const table = useMaterialReactTable({
     columns,
     data: allProducts.data ?? [],
@@ -143,7 +146,7 @@ export default function Table() {
       <ProducstInfoForm
         open={open}
         onClose={() => setOpen(false)}
-        id={currentId}
+        product={currentProduct}
       />
       <Box
         sx={{

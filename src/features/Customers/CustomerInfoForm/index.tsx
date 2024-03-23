@@ -1,159 +1,98 @@
-import { Box, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Box, Modal, Typography } from '@mui/material';
 import userIcon from '../../../assets//images/user-icon.webp';
-import ReturnButton from '../../../components/ReturnButton';
+import CloseButton from '../../../components/CloseButton';
 import useGetIcons from '../../../hooks/useGetIcons';
-import { useGetCustomerById } from '../services';
+import { modalStyles } from '../../../styles';
+import { modalHeaderStyles } from '../../Products/ProductInfoForm/styles';
+import { CustomerValidation } from '../types';
+import AddressInfoSpan from './AddressInfoSpan';
+import {
+  addressContentStyles,
+  boxContentStyles,
+  customerBoxInfoStyles,
+  modalContentStyles,
+  textContentStyles,
+} from './styles';
 
-export default function CustomerInfoForm() {
-  const { id } = useParams();
-  const customer = useGetCustomerById(id);
+interface CustomerInfoFormProps {
+  open: boolean;
+  onClose: () => void;
+  customer?: CustomerValidation;
+}
+
+export default function CustomerInfoForm({
+  onClose,
+  open,
+  customer,
+}: CustomerInfoFormProps) {
   const { EmailOutlinedIcon, LocalPhoneOutlinedIcon } = useGetIcons();
 
+  if (customer === undefined) return;
+
   return (
-    <Box
-      display={'flex'}
-      flexDirection={'column'}
-      justifyContent={'flex-start'}
-      alignItems={'center'}
-      sx={{ width: '70%', marginLeft: '2em', backgroundColor: '#fff' }}
-    >
-      <ReturnButton link="/customers" />
+    <Modal open={open} onClose={onClose} sx={modalStyles}>
+      <Box sx={customerBoxInfoStyles}>
+        <Box sx={modalHeaderStyles}>
+          <CloseButton onClose={onClose} />
+        </Box>
 
-      <Box
-        display={'flex'}
-        flexDirection={'column'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        width={'50%'}
-        marginTop={'3em'}
-      >
-        <img
-          src={userIcon}
-          placeholder="user icon"
-          alt="user"
-          style={{ width: '11em' }}
-          loading="lazy"
-        />
-        <Typography variant="h5" fontWeight={'bold'}>
-          {customer.data?.name}
-        </Typography>
-        <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          Pessoa {customer.data?.customerType}
-        </Typography>
-        <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          {customer.data?.cpfcnpj}
-        </Typography>
-      </Box>
-
-      <Box
-        display={'flex'}
-        flexDirection={'column'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        width={'30%'}
-        borderTop={'1px solid #000'}
-        marginTop={'1em'}
-        padding={'0.5em'}
-      >
-        <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          Informações de Contato
-        </Typography>
-        <Box display={'flex'}>
-          <Typography
-            variant="body2"
-            fontWeight={'bold'}
-            color={'GrayText'}
-            display={'flex'}
-            alignItems={'center'}
-            margin={'1em'}
-          >
-            <LocalPhoneOutlinedIcon /> {customer.data?.phone}
+        <Box sx={modalContentStyles}>
+          <img
+            src={userIcon}
+            placeholder="user icon"
+            alt="user"
+            style={{ width: '11em' }}
+            loading="lazy"
+          />
+          <Typography variant="h5" fontWeight={'bold'}>
+            {customer.name}
           </Typography>
-          <Typography
-            variant="body2"
-            fontWeight={'bold'}
-            color={'GrayText'}
-            display={'flex'}
-            alignItems={'center'}
-            margin={'1em'}
-          >
-            <EmailOutlinedIcon /> {customer.data?.email}
+          <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
+            Pessoa {customer.customerType}
+          </Typography>
+          <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
+            {customer.cpfcnpj}
           </Typography>
         </Box>
-      </Box>
 
-      <Box
-        display={'flex'}
-        flexDirection={'column'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        width={'30%'}
-        borderTop={'1px solid #000'}
-        marginTop={'1em'}
-        padding={'0.5em'}
-      >
-        <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
-          Endereço
-        </Typography>
-        <Box display={'flex'} flexDirection={'row'}>
-          <Typography
-            variant="body2"
-            fontWeight={'bold'}
-            color={'GrayText'}
-            display={'flex'}
-            textAlign={'center'}
-            flexDirection={'column'}
-            alignItems={'center'}
-            margin={'1em'}
-          >
-            <span style={{ fontWeight: 'bold', color: '#000' }}>Rua</span>
-            {customer.data?.address.address}{' '}
+        <Box sx={boxContentStyles}>
+          <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
+            Informações de Contato
           </Typography>
-          <Typography
-            variant="body2"
-            fontWeight={'bold'}
-            color={'GrayText'}
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'center'}
-            textAlign={'center'}
-            margin={'1em'}
-          >
-            <span style={{ fontWeight: 'bold', color: '#000' }}>CEP</span>
-            {customer.data?.address.zipCode}{' '}
+          <Box display={'flex'}>
+            <Typography variant="body2" sx={textContentStyles}>
+              <LocalPhoneOutlinedIcon /> {customer.phone}
+            </Typography>
+            <Typography variant="body2" sx={textContentStyles}>
+              <EmailOutlinedIcon /> {customer.email}
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={boxContentStyles}>
+          <Typography variant="body2" fontWeight={'bold'} color={'GrayText'}>
+            Endereço
           </Typography>
-          <Typography
-            variant="body2"
-            fontWeight={'bold'}
-            color={'GrayText'}
-            display={'flex'}
-            textAlign={'center'}
-            flexDirection={'column'}
-            alignItems={'center'}
-            margin={'1em'}
-          >
-            <span style={{ fontWeight: 'bold', color: '#000' }}>Estado</span>
-            {customer.data?.address.state}{' '}
-          </Typography>
-          <Typography
-            variant="body2"
-            fontWeight={'bold'}
-            color={'GrayText'}
-            display={'flex'}
-            textAlign={'center'}
-            flexDirection={'column'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            margin={'1em'}
-          >
-            <span style={{ fontWeight: 'bold', color: '#000' }}>
-              Referência
-            </span>
-            {customer.data?.address.landmark}{' '}
-          </Typography>
+          <Box display={'flex'} flexDirection={'row'}>
+            <Typography variant="body2" sx={addressContentStyles}>
+              <AddressInfoSpan text="Rua" />
+              {customer.address.address}
+            </Typography>
+            <Typography variant="body2" sx={addressContentStyles}>
+              <AddressInfoSpan text="CEP" />
+              {customer.address.zipCode}
+            </Typography>
+            <Typography variant="body2" sx={addressContentStyles}>
+              <AddressInfoSpan text="Estado" />
+              {customer.address.state}
+            </Typography>
+            <Typography variant="body2" sx={addressContentStyles}>
+              <AddressInfoSpan text="Referência" />
+              {customer.address.landmark}
+            </Typography>
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </Modal>
   );
 }

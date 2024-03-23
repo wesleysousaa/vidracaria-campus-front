@@ -38,7 +38,10 @@ export default function CustomerUpdateForm() {
     formState: { errors },
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
-    defaultValues: customer.data || {},
+    defaultValues: {
+      name: customer.data?.name || '',
+      customerType: customer.data?.customerType || '',
+    },
   });
 
   return (

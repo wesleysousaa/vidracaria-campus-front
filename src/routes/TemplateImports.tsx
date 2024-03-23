@@ -14,9 +14,6 @@ const CustomerCreateForm = lazy(
 const CustomerUpdateForm = lazy(
   () => import('../features/Customers/CustomerUpdateForm'),
 );
-const CustomerInfoForm = lazy(
-  () => import('../features/Customers/CustomerInfoForm'),
-);
 const Dashboard = lazy(() => import('../features/Dashboard'));
 
 const TemplateImports = {
@@ -28,7 +25,6 @@ const TemplateImports = {
     index: Customers,
     CustomerCreateForm,
     CustomerUpdateForm,
-    CustomerInfoForm,
   },
   Products: {
     index: Products,

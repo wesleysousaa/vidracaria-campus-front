@@ -1,18 +1,30 @@
+import { Box } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
+import CustomerInfoForm from '../CustomerInfoForm';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
-import { Box } from '@mui/material';
 
 export default function Table() {
   const allCustomers = useGetAllCustomers();
   const deleteCustomer = useDeleteCustomerById();
+  const [open, setOpen] = useState(false);
+  const [currentCustomer, setCurrentCustomer] = useState<
+    CustomerValidation | undefined
+  >();
+
+  const handleClick = (id: string) => {
+    setOpen(true);
+    setCurrentCustomer(
+      allCustomers.data?.find((customer) => customer.id === id),
+    );
+  };
 
   const columns = useMemo<MRT_ColumnDef<CustomerValidation>[]>(
     () => [
@@ -55,6 +67,7 @@ export default function Table() {
             <TableCellActions
               dispach={handleDelete}
               idObject={options.row.original.id as string}
+              handleClick={handleClick}
             />
           );
         },
@@ -77,12 +90,19 @@ export default function Table() {
 
   if (allCustomers.isLoading) return <Loader open={true} />;
   return (
-    <Box
-      sx={{
-        width: '100%',
-      }}
-    >
-      <MaterialReactTable table={table} />
-    </Box>
+    <>
+      <CustomerInfoForm
+        open={open}
+        onClose={() => setOpen(false)}
+        customer={currentCustomer}
+      />
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Box>
+    </>
   );
 }

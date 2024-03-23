@@ -2,26 +2,24 @@ import { Box, Divider, Modal, Typography } from '@mui/material';
 import CloseButton from '../../../components/CloseButton';
 import CustomLabel from '../../../components/CustomLabel';
 import { modalStyles } from '../../../styles';
-import Loader from '../../Loader';
 import useProductSelectState from '../hooks/useProductSelectStates';
-import { useGetProductById } from '../services';
+import { ProductValidation } from '../types';
 import { modalHeaderStyles, productBoxInfoStyles } from './styles';
 
-export interface ProductInfoFormProps {
+interface ProductInfoFormProps {
   open: boolean;
   onClose: () => void;
-  id: string;
+  product?: ProductValidation;
 }
 
 export default function ProducstInfoForm({
   onClose,
   open,
-  id,
+  product,
 }: ProductInfoFormProps) {
-  const product = useGetProductById(id).data;
   const { translateUnitOfMeasure, translateCategory } = useProductSelectState();
 
-  if (product === undefined) return <Loader open={true} />;
+  if (product === undefined) return;
 
   return (
     <Modal open={open} onClose={onClose} sx={modalStyles}>

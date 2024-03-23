@@ -1,8 +1,7 @@
-import { IconButton, Modal } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useGetIcons from '../../hooks/useGetIcons';
-import { modalStyles } from '../../styles';
 import ConfirmAction from '../ConfirmAction';
 
 export interface TableCellActionsProps {
@@ -21,16 +20,14 @@ export default function TableCellActions({
 
   return (
     <>
-      <Modal open={open} onClose={() => setOpen(false)} sx={modalStyles}>
-        <ConfirmAction
-          confirmDispach={() => {
-            dispach(idObject);
-            setOpen(false);
-          }}
-          denyDispach={() => setOpen(false)}
-          text="A ação de exclusão não poderá ser desfeita."
-        />
-      </Modal>
+      <ConfirmAction
+        confirmDispach={() => {
+          dispach(idObject);
+          setOpen(false);
+        }}
+        open={open}
+        denyDispach={() => setOpen(false)}
+      />
 
       <IconButton
         aria-label="Info"

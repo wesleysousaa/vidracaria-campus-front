@@ -52,9 +52,7 @@ function MenuMobile() {
         <MenuDesktop />
       </Drawer>
       <IconButton onClick={() => setOpen(!open)}>
-        <IconButton>
-          {open ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}
-        </IconButton>
+        {open ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}
       </IconButton>
     </>
   );

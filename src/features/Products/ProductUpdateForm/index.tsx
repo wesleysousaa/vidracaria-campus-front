@@ -9,12 +9,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
 import { boxStyles } from '../../../styles/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
-import useProductSelectState from '../hooks/useProductSelectStates.ts';
 import { ProductSchema } from '../schemas/index.ts';
 import { useGetProductById, useUpdateProduct } from '../services/index.tsx';
 import { ProductValidation } from '../types/index.ts';
@@ -23,12 +23,6 @@ export default function ProducstUpdateForm() {
   const { id } = useParams();
   const product = useGetProductById(id);
   const updateCustomer = useUpdateProduct();
-  const {
-    categories,
-    unitOfMeasure,
-    translateCategory,
-    translateUnitOfMeasure,
-  } = useProductSelectState();
 
   const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     updateCustomer.mutate(data);
@@ -38,19 +32,24 @@ export default function ProducstUpdateForm() {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    getValues,
   } = useForm<ProductValidation>({
     resolver: yupResolver(ProductSchema),
-    defaultValues: product.data || {
-      category: 'REGULAR',
-      name: '',
-      unitOfMeasure: 'CENTIMETER',
-      depth: 0,
-      height: 0,
-      width: 0,
-      price: 0,
-      id: '',
-    },
   });
+
+  useEffect(() => {
+    if (product.data) {
+      setValue('name', product.data.name);
+      setValue('category', product.data.category);
+      setValue('unitOfMeasure', product.data.unitOfMeasure);
+      setValue('depth', product.data.depth);
+      setValue('height', product.data.height);
+      setValue('width', product.data.width);
+      setValue('price', product.data.price);
+      console.log(getValues());
+    }
+  }, [product.data, setValue]);
 
   return (
     <Box sx={boxStyles}>
@@ -74,12 +73,15 @@ export default function ProducstUpdateForm() {
           render={({ field }) => (
             <TextField
               type="text"
-              id="name"
+              id="Nome"
               label="Nome"
               placeholder="Digite o nome"
               error={!!errors.name}
               helperText={errors.name?.message}
               sx={textFieldStyles}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
               {...field}
             />
           )}
@@ -95,16 +97,21 @@ export default function ProducstUpdateForm() {
                 <Select
                   type="text"
                   id="category"
+                  labelId="category-label"
                   label="Categoria"
                   error={!!errors.category}
                   placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  {categories.map((state) => (
-                    <MenuItem key={state} value={state}>
-                      {translateCategory(state)}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="REGULAR" selected={true}>
+                    Regular
+                  </MenuItem>
+                  <MenuItem
+                    value="TEMPERED"
+                    selected={field.value === 'TEMPERED'}
+                  >
+                    Temperado
+                  </MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -115,22 +122,20 @@ export default function ProducstUpdateForm() {
             control={control}
             render={({ field }) => (
               <FormControl sx={textFieldStyles}>
-                <InputLabel htmlFor="unitOfMeasure">
+                <InputLabel htmlFor="unitOfMeasure" shrink={!!field.value}>
                   Unidade de Medida
                 </InputLabel>
                 <Select
                   type="text"
                   id="unitOfMeasure"
                   label="Unidade de Medida"
-                  error={!!errors.category}
+                  error={!!errors.unitOfMeasure}
                   placeholder="Digite a unidade de medida do produto"
-                  {...field}
+                  value={field.value}
                 >
-                  {unitOfMeasure.map((state) => (
-                    <MenuItem key={state} value={state}>
-                      {translateUnitOfMeasure(state)}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="CENTIMETER">Centímetro</MenuItem>
+                  <MenuItem value="METER">Metro</MenuItem>
+                  <MenuItem value="MILIMETER">Milímetro</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -150,6 +155,9 @@ export default function ProducstUpdateForm() {
                 error={!!errors.depth}
                 helperText={errors.depth?.message}
                 sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
                 {...field}
               />
             )}
@@ -166,6 +174,9 @@ export default function ProducstUpdateForm() {
                 error={!!errors.height}
                 helperText={errors.height?.message}
                 sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
                 {...field}
               />
             )}
@@ -182,6 +193,9 @@ export default function ProducstUpdateForm() {
                 error={!!errors.width}
                 helperText={errors.width?.message}
                 sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
                 {...field}
               />
             )}
@@ -198,6 +212,9 @@ export default function ProducstUpdateForm() {
                 error={!!errors.price}
                 helperText={errors.price?.message}
                 sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
                 {...field}
               />
             )}

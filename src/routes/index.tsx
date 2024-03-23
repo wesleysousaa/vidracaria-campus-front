@@ -17,10 +17,6 @@ export default function Router() {
                 element={<TemplateImports.Customers.CustomerCreateForm />}
               />
               <Route
-                path="info/:id"
-                element={<TemplateImports.Customers.CustomerInfoForm />}
-              />
-              <Route
                 path="edit/:id"
                 element={<TemplateImports.Customers.CustomerUpdateForm />}
               />
