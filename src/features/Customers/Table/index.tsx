@@ -26,6 +26,26 @@ export default function Table() {
     );
   };
 
+  function formatDocument(document?: string) {
+    if (!document) return '';
+
+    const documentClean = document.replace(/\D/g, '');
+
+    const isCPF = documentClean.length === 11;
+
+    if (isCPF) {
+      return documentClean.replace(
+        /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+        '$1.$2.$3-$4',
+      );
+    } else {
+      return documentClean.replace(
+        /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+        '$1.$2.$3/$4-$5',
+      );
+    }
+  }
+
   const columns = useMemo<MRT_ColumnDef<CustomerValidation>[]>(
     () => [
       {
@@ -47,6 +67,9 @@ export default function Table() {
         accessorKey: 'cpfcnpj',
         header: 'CPF/CNPJ (Se tiver)',
         enableHiding: true,
+        Cell: (options) => {
+          return <>{formatDocument(options.row.original.cpfcnpj)}</>;
+        },
       },
       {
         accessorKey: 'customerType',
