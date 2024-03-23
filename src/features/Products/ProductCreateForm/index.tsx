@@ -13,18 +13,11 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
 import { boxStyles } from '../../../styles/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
-import useProductSelectState from '../hooks/useProductSelectStates.ts';
 import { CreateProductSchema } from '../schemas/index.ts';
 import { useCreateProduct } from '../services/index.tsx';
 import { CreateProductValidation } from '../types/index.ts';
 
 export default function ProductsCreateForm() {
-  const {
-    categories,
-    unitOfMeasure,
-    translateCategory,
-    translateUnitOfMeasure,
-  } = useProductSelectState();
   const create = useCreateProduct();
 
   const onSubmit: SubmitHandler<CreateProductValidation> = (data) => {
@@ -92,11 +85,8 @@ export default function ProductsCreateForm() {
                   placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  {categories.map((state) => (
-                    <MenuItem key={state} value={state}>
-                      {translateCategory(state)}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="REGULAR">Regular</MenuItem>
+                  <MenuItem value="TEMPERED">Temperado</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -118,11 +108,9 @@ export default function ProductsCreateForm() {
                   placeholder="Digite a unidade de medida do produto"
                   {...field}
                 >
-                  {unitOfMeasure.map((state) => (
-                    <MenuItem key={state} value={state}>
-                      {translateUnitOfMeasure(state)}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="CENTIMETER">Centímetro</MenuItem>
+                  <MenuItem value="METER">Metro</MenuItem>
+                  <MenuItem value="MILIMETER">Milímetro</MenuItem>
                 </Select>
               </FormControl>
             )}

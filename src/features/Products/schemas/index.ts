@@ -17,6 +17,10 @@ export const ProductSchema = Yup.object({
 
 export const CreateProductSchema = Yup.object({
   name: Yup.string().required('Campo obrigatório'),
-  unitOfMeasure: Yup.string().required('Campo obrigatório'),
-  category: Yup.string().required('Campo obrigatório'),
+  unitOfMeasure: Yup.string()
+    .oneOf(['CENTIMETER', 'METER', 'MILIMETER'])
+    .required('Campo obrigatório'),
+  category: Yup.string()
+    .oneOf(['REGULAR', 'TEMPERED'])
+    .required('Campo obrigatório'),
 });

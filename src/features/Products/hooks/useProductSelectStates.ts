@@ -1,7 +1,4 @@
 export default function useProductSelectState() {
-  const categories = ['REGULAR', 'TEMPERED'];
-  const unitOfMeasure = ['CENTIMETER', 'METER', 'MILIMETER'];
-
   function translateCategory(category: string): string {
     const categoryTranslated: { [key: string]: string } = {
       REGULAR: 'Regular',
@@ -22,8 +19,6 @@ export default function useProductSelectState() {
   }
 
   return {
-    categories,
-    unitOfMeasure,
     translateCategory,
     translateUnitOfMeasure,
   };

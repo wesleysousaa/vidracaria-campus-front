@@ -33,7 +33,6 @@ export default function ProducstUpdateForm() {
     control,
     formState: { errors },
     setValue,
-    getValues,
   } = useForm<ProductValidation>({
     resolver: yupResolver(ProductSchema),
   });
@@ -47,7 +46,6 @@ export default function ProducstUpdateForm() {
       setValue('height', product.data.height);
       setValue('width', product.data.width);
       setValue('price', product.data.price);
-      console.log(getValues());
     }
   }, [product.data, setValue]);
 
@@ -103,15 +101,8 @@ export default function ProducstUpdateForm() {
                   placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  <MenuItem value="REGULAR" selected={true}>
-                    Regular
-                  </MenuItem>
-                  <MenuItem
-                    value="TEMPERED"
-                    selected={field.value === 'TEMPERED'}
-                  >
-                    Temperado
-                  </MenuItem>
+                  <MenuItem value="REGULAR">Regular</MenuItem>
+                  <MenuItem value="TEMPERED">Temperado</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -122,7 +113,7 @@ export default function ProducstUpdateForm() {
             control={control}
             render={({ field }) => (
               <FormControl sx={textFieldStyles}>
-                <InputLabel htmlFor="unitOfMeasure" shrink={!!field.value}>
+                <InputLabel htmlFor="unitOfMeasure">
                   Unidade de Medida
                 </InputLabel>
                 <Select
@@ -156,7 +147,7 @@ export default function ProducstUpdateForm() {
                 helperText={errors.depth?.message}
                 sx={textFieldStyles}
                 InputLabelProps={{
-                  shrink: !!field.value,
+                  shrink: !!field.value || field.value === 0,
                 }}
                 {...field}
               />
@@ -175,7 +166,7 @@ export default function ProducstUpdateForm() {
                 helperText={errors.height?.message}
                 sx={textFieldStyles}
                 InputLabelProps={{
-                  shrink: !!field.value,
+                  shrink: !!field.value || field.value === 0,
                 }}
                 {...field}
               />
@@ -194,7 +185,7 @@ export default function ProducstUpdateForm() {
                 helperText={errors.width?.message}
                 sx={textFieldStyles}
                 InputLabelProps={{
-                  shrink: !!field.value,
+                  shrink: !!field.value || field.value === 0,
                 }}
                 {...field}
               />
@@ -213,7 +204,7 @@ export default function ProducstUpdateForm() {
                 helperText={errors.price?.message}
                 sx={textFieldStyles}
                 InputLabelProps={{
-                  shrink: !!field.value,
+                  shrink: !!field.value || field.value === 0,
                 }}
                 {...field}
               />
