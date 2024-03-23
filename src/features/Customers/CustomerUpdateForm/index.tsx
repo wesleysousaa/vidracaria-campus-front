@@ -9,6 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
@@ -36,13 +37,27 @@ export default function CustomerUpdateForm() {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
-    defaultValues: {
-      name: customer.data?.name || '',
-      customerType: customer.data?.customerType || '',
-    },
   });
+
+  useEffect(() => {
+    if (customer.data) {
+      setValue('id', customer.data.id);
+      setValue('name', customer.data.name);
+      setValue('customerType', customer.data.customerType);
+      setValue('cpfcnpj', customer.data.cpfcnpj);
+      setValue('email', customer.data.email);
+      setValue('phone', customer.data.phone);
+      setValue('address.address', customer.data.address.address);
+      setValue('address.zipCode', customer.data.address.zipCode);
+      setValue('address.state', customer.data.address.state);
+      setValue('address.city', customer.data.address.city);
+      setValue('address.number', customer.data.address.number);
+      setValue('address.landmark', customer.data.address.landmark);
+    }
+  }, [customer.data, setValue]);
 
   return (
     <Box sx={boxStyles}>
@@ -72,6 +87,9 @@ export default function CustomerUpdateForm() {
               error={!!errors.name}
               helperText={errors.name?.message}
               sx={textFieldStyles}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
               {...field}
             />
           )}
@@ -112,6 +130,9 @@ export default function CustomerUpdateForm() {
                 label="CPF/CNPJ"
                 placeholder="Digite o CPF ou CNPJ do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -132,6 +153,9 @@ export default function CustomerUpdateForm() {
                 label="Email"
                 placeholder="Digite o email do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -151,6 +175,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.phone?.message}
                 placeholder="Digite o telefone do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -169,6 +196,9 @@ export default function CustomerUpdateForm() {
               sx={textFieldStyles}
               placeholder="Digite o nome da rua"
               {...field}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
             />
           )}
         />
@@ -190,6 +220,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.address?.zipCode?.message}
                 placeholder="Digite o CEP do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -234,6 +267,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.address?.city?.message}
                 placeholder="Digite a cidade do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -253,6 +289,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.address?.number?.message}
                 placeholder="Digite o número da casa do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -269,6 +308,9 @@ export default function CustomerUpdateForm() {
               label="Referência"
               placeholder="ex: próximo ao mercado central"
               {...field}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
             />
           )}
         />

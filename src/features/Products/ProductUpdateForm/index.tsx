@@ -39,6 +39,7 @@ export default function ProducstUpdateForm() {
 
   useEffect(() => {
     if (product.data) {
+      setValue('id', product.data.id);
       setValue('name', product.data.name);
       setValue('category', product.data.category);
       setValue('unitOfMeasure', product.data.unitOfMeasure);
