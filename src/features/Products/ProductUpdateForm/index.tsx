@@ -123,7 +123,7 @@ export default function ProducstUpdateForm() {
                   label="Unidade de Medida"
                   error={!!errors.unitOfMeasure}
                   placeholder="Digite a unidade de medida do produto"
-                  value={field.value}
+                  {...field}
                 >
                   <MenuItem value="CENTIMETER">Centímetro</MenuItem>
                   <MenuItem value="METER">Metro</MenuItem>

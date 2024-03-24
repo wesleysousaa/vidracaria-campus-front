@@ -320,7 +320,7 @@ export default function CustomerUpdateForm() {
           type="submit"
           variant="contained"
           sx={{
-            width: '15em',
+            width: '100%',
             display: 'flex',
             alignSelf: 'center',
           }}
