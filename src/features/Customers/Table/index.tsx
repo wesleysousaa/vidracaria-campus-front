@@ -12,7 +12,7 @@ import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
 
 export default function Table() {
-  const allCustomers = useGetAllCustomers();
+  const { data, isLoading } = useGetAllCustomers();
   const deleteCustomer = useDeleteCustomerById();
   const [open, setOpen] = useState(false);
   const [currentCustomer, setCurrentCustomer] = useState<
@@ -21,9 +21,7 @@ export default function Table() {
 
   const handleClick = (id: string) => {
     setOpen(true);
-    setCurrentCustomer(
-      allCustomers.data?.find((customer) => customer.id === id),
-    );
+    setCurrentCustomer(data?.find((customer) => customer.id === id));
   };
 
   function formatDocument(document?: string) {
@@ -105,13 +103,13 @@ export default function Table() {
 
   const table = useMaterialReactTable({
     columns,
-    data: allCustomers.data ?? [],
+    data: data || [],
     enableColumnOrdering: true,
     enableGlobalFilter: false,
     enableDensityToggle: false,
   });
 
-  if (allCustomers.isLoading) return <Loader open={true} />;
+  if (isLoading) return <Loader open={true} />;
   return (
     <>
       <CustomerInfoForm

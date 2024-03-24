@@ -3,10 +3,10 @@ import * as Yup from 'yup';
 export const ProductSchema = Yup.object({
   name: Yup.string().required('Campo obrigatório'),
   unitOfMeasure: Yup.string()
-    .oneOf(['CENTIMETER', 'METER', 'MILIMETER'])
+    .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
     .required('Campo obrigatório'),
   category: Yup.string()
-    .oneOf(['REGULAR', 'TEMPERED'])
+    .oneOf(['REGULAR', 'TEMPERADO'])
     .required('Campo obrigatório'),
   height: Yup.number().required('Campo obrigatório'),
   width: Yup.number().required('Campo obrigatório'),
@@ -18,9 +18,9 @@ export const ProductSchema = Yup.object({
 export const CreateProductSchema = Yup.object({
   name: Yup.string().required('Campo obrigatório'),
   unitOfMeasure: Yup.string()
-    .oneOf(['CENTIMETER', 'METER', 'MILIMETER'])
+    .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
     .required('Campo obrigatório'),
   category: Yup.string()
-    .oneOf(['REGULAR', 'TEMPERED'])
+    .oneOf(['REGULAR', 'TEMPERADO'])
     .required('Campo obrigatório'),
 });

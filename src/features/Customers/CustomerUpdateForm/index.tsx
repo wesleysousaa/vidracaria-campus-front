@@ -36,28 +36,45 @@ export default function CustomerUpdateForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, defaultValues },
     setValue,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
+    defaultValues: {
+      name: '',
+      customerType: '',
+      cpfcnpj: '',
+      email: '',
+      phone: '',
+      address: {
+        address: '',
+        zipCode: '',
+        state: '',
+        city: '',
+        number: '',
+        landmark: '',
+      },
+    },
   });
 
   useEffect(() => {
     if (customer.data) {
-      setValue('id', customer.data.id);
-      setValue('name', customer.data.name);
-      setValue('customerType', customer.data.customerType);
-      setValue('cpfcnpj', customer.data.cpfcnpj);
-      setValue('email', customer.data.email);
-      setValue('phone', customer.data.phone);
-      setValue('address.address', customer.data.address.address);
-      setValue('address.zipCode', customer.data.address.zipCode);
-      setValue('address.state', customer.data.address.state);
-      setValue('address.city', customer.data.address.city);
-      setValue('address.number', customer.data.address.number);
-      setValue('address.landmark', customer.data.address.landmark);
+      const data = customer.data;
+
+      setValue('id', data.id);
+      setValue('name', data.name);
+      setValue('customerType', data.customerType);
+      setValue('cpfcnpj', data.cpfcnpj);
+      setValue('email', data.email);
+      setValue('phone', data.phone);
+      setValue('address.address', data.address.address);
+      setValue('address.zipCode', data.address.zipCode);
+      setValue('address.state', data.address.state);
+      setValue('address.city', data.address.city);
+      setValue('address.number', data.address.number);
+      setValue('address.landmark', data.address.landmark);
     }
-  }, [customer.data, setValue]);
+  }, [customer.data]);
 
   return (
     <Box sx={boxStyles}>
@@ -108,9 +125,7 @@ export default function CustomerUpdateForm() {
                   label="Pessoa"
                   {...field}
                 >
-                  <MenuItem value={'FISICA'} defaultChecked>
-                    Física
-                  </MenuItem>
+                  <MenuItem value={'FISICA'}>Física</MenuItem>
                   <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
                 </Select>
               </FormControl>

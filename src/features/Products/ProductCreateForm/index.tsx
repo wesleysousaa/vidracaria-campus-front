@@ -33,7 +33,7 @@ export default function ProductsCreateForm() {
     defaultValues: {
       category: 'REGULAR',
       name: '',
-      unitOfMeasure: 'CENTIMETER',
+      unitOfMeasure: 'CENTIMETRO',
     },
   });
 
@@ -86,7 +86,7 @@ export default function ProductsCreateForm() {
                   {...field}
                 >
                   <MenuItem value="REGULAR">Regular</MenuItem>
-                  <MenuItem value="TEMPERED">Temperado</MenuItem>
+                  <MenuItem value="TEMPERADO">Temperado</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -108,9 +108,9 @@ export default function ProductsCreateForm() {
                   placeholder="Digite a unidade de medida do produto"
                   {...field}
                 >
-                  <MenuItem value="CENTIMETER">Centímetro</MenuItem>
-                  <MenuItem value="METER">Metro</MenuItem>
-                  <MenuItem value="MILIMETER">Milímetro</MenuItem>
+                  <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
+                  <MenuItem value="METRO">Metro</MenuItem>
+                  <MenuItem value="MILIMETRO">Milímetro</MenuItem>
                 </Select>
               </FormControl>
             )}

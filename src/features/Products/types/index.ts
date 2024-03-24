@@ -1,5 +1,5 @@
-export type category = 'REGULAR' | 'TEMPERED';
-export type unitOfMeasure = 'CENTIMETER' | 'METER' | 'MILIMETER';
+export type category = 'REGULAR' | 'TEMPERADO';
+export type unitOfMeasure = 'CENTIMETRO' | 'METRO' | 'MILIMETRO';
 
 export interface ProductBase {
   name: string;

@@ -35,6 +35,16 @@ export default function ProducstUpdateForm() {
     setValue,
   } = useForm<ProductValidation>({
     resolver: yupResolver(ProductSchema),
+    defaultValues: {
+      id: '',
+      name: '',
+      category: 'REGULAR',
+      unitOfMeasure: 'CENTIMETRO',
+      depth: 0,
+      height: 0,
+      width: 0,
+      price: 0,
+    },
   });
 
   useEffect(() => {
@@ -103,7 +113,7 @@ export default function ProducstUpdateForm() {
                   {...field}
                 >
                   <MenuItem value="REGULAR">Regular</MenuItem>
-                  <MenuItem value="TEMPERED">Temperado</MenuItem>
+                  <MenuItem value="TEMPERADO">Temperado</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -125,9 +135,9 @@ export default function ProducstUpdateForm() {
                   placeholder="Digite a unidade de medida do produto"
                   {...field}
                 >
-                  <MenuItem value="CENTIMETER">Centímetro</MenuItem>
-                  <MenuItem value="METER">Metro</MenuItem>
-                  <MenuItem value="MILIMETER">Milímetro</MenuItem>
+                  <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
+                  <MenuItem value="METRO">Metro</MenuItem>
+                  <MenuItem value="MILIMETRO">Milímetro</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -201,13 +211,13 @@ export default function ProducstUpdateForm() {
                 id="price"
                 label="Preço"
                 placeholder="Digite o preço do produto"
+                {...field}
                 error={!!errors.price}
                 helperText={errors.price?.message}
                 sx={textFieldStyles}
                 InputLabelProps={{
                   shrink: !!field.value || field.value === 0,
                 }}
-                {...field}
               />
             )}
           />

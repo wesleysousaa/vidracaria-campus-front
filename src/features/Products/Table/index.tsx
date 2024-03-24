@@ -8,12 +8,10 @@ import { useMemo, useState } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
 import ProducstInfoForm from '../ProductInfoForm';
-import useProductSelectState from '../hooks/useProductSelectStates';
 import { useDeleteProductById, useGetAllProducts } from '../services';
 import { ProductValidation } from '../types';
 
 export default function Table() {
-  const { translateCategory, translateUnitOfMeasure } = useProductSelectState();
   const allProducts = useGetAllProducts();
   const deleteProducts = useDeleteProductById();
   const [open, setOpen] = useState(false);
@@ -33,9 +31,7 @@ export default function Table() {
         header: 'Unidade de Medida',
         enableHiding: true,
         Cell: (options) => {
-          return (
-            <>{translateUnitOfMeasure(options.row.original.unitOfMeasure)}</>
-          );
+          return <>{options.row.original.unitOfMeasure}</>;
         },
       },
       {
@@ -43,7 +39,7 @@ export default function Table() {
         header: 'Categoria',
         enableHiding: true,
         Cell: (options) => {
-          return <>{translateCategory(options.row.original.category)}</>;
+          return <>{options.row.original.category}</>;
         },
       },
       {

@@ -2,7 +2,6 @@ import { Box, Divider, Modal, Typography } from '@mui/material';
 import CloseButton from '../../../components/CloseButton';
 import CustomLabel from '../../../components/CustomLabel';
 import { modalStyles } from '../../../styles';
-import useProductSelectState from '../hooks/useProductSelectStates';
 import { ProductValidation } from '../types';
 import { modalHeaderStyles, productBoxInfoStyles } from './styles';
 
@@ -17,7 +16,6 @@ export default function ProducstInfoForm({
   open,
   product,
 }: ProductInfoFormProps) {
-  const { translateUnitOfMeasure, translateCategory } = useProductSelectState();
 
   if (product === undefined) return;
 
@@ -38,7 +36,7 @@ export default function ProducstInfoForm({
           >
             <CustomLabel
               title="Categoria"
-              text={translateCategory(product.category)}
+              text={(product.category)}
             />
             <CustomLabel
               title="Preço"
@@ -71,7 +69,7 @@ export default function ProducstInfoForm({
             />
             <CustomLabel
               title="Unidade de medida"
-              text={translateUnitOfMeasure(
+              text={(
                 product?.unitOfMeasure?.toString() as string,
               )}
             />

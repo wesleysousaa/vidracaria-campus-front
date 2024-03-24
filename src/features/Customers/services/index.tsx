@@ -9,8 +9,9 @@ const useCreateCustomer = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: (customer: CustomerValidation) => {
-      return api.post('/customers', customer, config).then((res) => res.data);
+    mutationFn: async (customer: CustomerValidation) => {
+      const res = await api.post('/customers', customer, config);
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
@@ -31,10 +32,9 @@ const useUpdateCustomer = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: (customer: CustomerValidation) => {
-      return api
-        .put(`/customers/${customer.id}`, customer, config)
-        .then((res) => res.data);
+    mutationFn: async (customer: CustomerValidation) => {
+      const res = await api.put(`/customers/${customer.id}`, customer, config);
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
@@ -54,8 +54,9 @@ const useUpdateCustomer = () => {
 const useGetAllCustomers = () => {
   return useQuery<CustomerValidation[]>({
     queryKey: ['/all-customers'],
-    queryFn: () => {
-      return api.get('/customers', config).then((res) => res.data);
+    queryFn: async () => {
+      const res = await api.get('/customers', config);
+      return res.data;
     },
     staleTime: Infinity,
   });
@@ -64,8 +65,9 @@ const useGetAllCustomers = () => {
 const useGetCustomerById = (id?: string) => {
   return useQuery<CustomerValidation>({
     queryKey: ['/customers', id],
-    queryFn: () => {
-      return api.get(`/customers/${id}`, config).then((res) => res.data);
+    queryFn: async () => {
+      const res = await api.get(`/customers/${id}`, config);
+      return res.data;
     },
     enabled: id !== undefined,
     staleTime: 600000,
@@ -76,8 +78,9 @@ const useDeleteCustomerById = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => {
-      return api.delete(`/customers/${id}`, config).then((res) => res.data);
+    mutationFn: async (id: string) => {
+      const res = await api.delete(`/customers/${id}`, config);
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
