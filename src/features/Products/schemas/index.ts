@@ -6,7 +6,7 @@ export const ProductSchema = Yup.object({
     .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
     .required('Campo obrigatório'),
   category: Yup.string()
-    .oneOf(['REGULAR', 'TEMPERADO'])
+    .oneOf(['COMUM', 'TEMPERADO'])
     .required('Campo obrigatório'),
   height: Yup.number().required('Campo obrigatório'),
   width: Yup.number().required('Campo obrigatório'),
@@ -21,6 +21,6 @@ export const CreateProductSchema = Yup.object({
     .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
     .required('Campo obrigatório'),
   category: Yup.string()
-    .oneOf(['REGULAR', 'TEMPERADO'])
+    .oneOf(['COMUM', 'TEMPERADO'])
     .required('Campo obrigatório'),
 });

@@ -31,7 +31,7 @@ export default function ProductsCreateForm() {
   } = useForm<CreateProductValidation>({
     resolver: yupResolver(CreateProductSchema),
     defaultValues: {
-      category: 'REGULAR',
+      category: 'COMUM',
       name: '',
       unitOfMeasure: 'CENTIMETRO',
     },
@@ -85,7 +85,7 @@ export default function ProductsCreateForm() {
                   placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  <MenuItem value="REGULAR">Regular</MenuItem>
+                  <MenuItem value="COMUM">Comum</MenuItem>
                   <MenuItem value="TEMPERADO">Temperado</MenuItem>
                 </Select>
               </FormControl>

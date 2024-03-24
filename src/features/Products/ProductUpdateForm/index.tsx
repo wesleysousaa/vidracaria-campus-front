@@ -38,7 +38,7 @@ export default function ProducstUpdateForm() {
     defaultValues: {
       id: '',
       name: '',
-      category: 'REGULAR',
+      category: 'COMUM',
       unitOfMeasure: 'CENTIMETRO',
       depth: 0,
       height: 0,
@@ -112,7 +112,7 @@ export default function ProducstUpdateForm() {
                   placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  <MenuItem value="REGULAR">Regular</MenuItem>
+                  <MenuItem value="COMUM">Comum</MenuItem>
                   <MenuItem value="TEMPERADO">Temperado</MenuItem>
                 </Select>
               </FormControl>
