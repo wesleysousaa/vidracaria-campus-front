@@ -3,10 +3,10 @@ import { CustomerValidation } from '../types';
 
 export const ClientSchema = Yup.object<CustomerValidation>().shape({
   id: Yup.string().optional(),
-  name: Yup.string().required('O nome é obrigatório'),
   cpf_cnpj: Yup.string().optional(),
-  email: Yup.string().email('Digite o email no formato correto').optional(),
   customerType: Yup.string().required('O campo pessoa é obrigatório'),
+  email: Yup.string().email('Digite o email no formato correto').optional(),
+  name: Yup.string().required('O nome é obrigatório'),
   phone: Yup.string().required('O telefone é obrigatório'),
   address: Yup.object().shape({
     address: Yup.string().required('a rua é obrigatório'),
