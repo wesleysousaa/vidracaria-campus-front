@@ -10,8 +10,8 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { LoginSchema } from './schemas';
 import { useAuthUser } from './services';
-import { boxStyles, formControlStyles, loginButtonStyles } from './styles';
 import { UserValidation } from './types';
+import { boxStyles, formControlStyles, loginButtonStyles } from './styles';
 
 export default function Login() {
   const authUser = useAuthUser();

@@ -1,4 +1,5 @@
 import 'normalize.css';
+import './index.css';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom/client';

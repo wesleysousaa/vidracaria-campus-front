@@ -1,20 +1,48 @@
+import { Box } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
-import ConfirmAction from '../../../components/ConfirmAction';
-import Modal from '../../../components/Modal';
 import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
+import CustomerInfoForm from '../CustomerInfoForm';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
 
 export default function Table() {
-  const allCustomers = useGetAllCustomers();
+  const { data, isLoading } = useGetAllCustomers();
   const deleteCustomer = useDeleteCustomerById();
   const [open, setOpen] = useState(false);
+  const [currentCustomer, setCurrentCustomer] = useState<
+    CustomerValidation | undefined
+  >();
+
+  const handleClick = (id: string) => {
+    setOpen(true);
+    setCurrentCustomer(data?.find((customer) => customer.id === id));
+  };
+
+  function formatDocument(document?: string) {
+    if (!document) return '';
+
+    const documentClean = document.replace(/\D/g, '');
+
+    const isCPF = documentClean.length === 11;
+
+    if (isCPF) {
+      return documentClean.replace(
+        /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+        '$1.$2.$3-$4',
+      );
+    } else {
+      return documentClean.replace(
+        /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+        '$1.$2.$3/$4-$5',
+      );
+    }
+  }
 
   const columns = useMemo<MRT_ColumnDef<CustomerValidation>[]>(
     () => [
@@ -37,6 +65,9 @@ export default function Table() {
         accessorKey: 'cpfcnpj',
         header: 'CPF/CNPJ (Se tiver)',
         enableHiding: true,
+        Cell: (options) => {
+          return <>{formatDocument(options.row.original.cpfcnpj)}</>;
+        },
       },
       {
         accessorKey: 'customerType',
@@ -55,8 +86,9 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              dispach={handleOpen}
+              dispach={handleDelete}
               idObject={options.row.original.id as string}
+              handleClick={handleClick}
             />
           );
         },
@@ -65,40 +97,33 @@ export default function Table() {
     [],
   );
 
-  const handleOpen = (idItem: string) => {
-    setOpen(true);
+  const handleDelete = (idItem: string) => {
     deleteCustomer.mutate(idItem);
-  };
-
-  const handleDelete = () => {
-    deleteCustomer.mutate(deleteCustomer.data);
-    setOpen(false);
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: allCustomers.data ?? [],
+    data: data || [],
     enableColumnOrdering: true,
     enableGlobalFilter: false,
     enableDensityToggle: false,
   });
 
-  if (allCustomers.isLoading) return <Loader open={true} />;
+  if (isLoading) return <Loader open={true} />;
   return (
     <>
-      <Modal
+      <CustomerInfoForm
         open={open}
-        onCloseDispach={() => setOpen(false)}
-        component={
-          <ConfirmAction
-            confirmDispach={handleDelete}
-            denyDispach={() => setOpen(false)}
-            text="A ação de exclusão não poderá ser desfeita."
-          />
-        }
+        onClose={() => setOpen(false)}
+        customer={currentCustomer}
       />
-
-      <MaterialReactTable table={table} />
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Box>
     </>
   );
 }
