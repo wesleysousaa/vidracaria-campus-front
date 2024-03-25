@@ -3,16 +3,17 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
-import useGetIcons from '../../../hooks/useGetIcons.tsx';
+import { useParams } from 'react-router-dom';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
 import {
   boxStylesForm,
   textFieldStyles,
@@ -20,12 +21,10 @@ import {
 import useGetState from '../hooks/useGetState.tsx';
 import { ClientSchema } from '../schemas/index.ts';
 import { useGetCustomerById, useUpdateCustomer } from '../services/index.tsx';
-import { boxStyles } from '../styles/index.ts';
 import { CustomerValidation } from '../types/index.ts';
 
 export default function CustomerUpdateForm() {
   const { id } = useParams();
-  const { ArrowBackIosIcon } = useGetIcons();
   const states = useGetState();
   const customer = useGetCustomerById(id);
   const updateCustomer = useUpdateCustomer();
@@ -37,20 +36,49 @@ export default function CustomerUpdateForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, defaultValues },
+    setValue,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
-    defaultValues: customer.data || {},
+    defaultValues: {
+      name: '',
+      customerType: '',
+      cpfcnpj: '',
+      email: '',
+      phone: '',
+      address: {
+        address: '',
+        zipCode: '',
+        state: '',
+        city: '',
+        number: '',
+        landmark: '',
+      },
+    },
   });
+
+  useEffect(() => {
+    if (customer.data) {
+      const data = customer.data;
+
+      setValue('id', data.id);
+      setValue('name', data.name);
+      setValue('customerType', data.customerType);
+      setValue('cpfcnpj', data.cpfcnpj);
+      setValue('email', data.email);
+      setValue('phone', data.phone);
+      setValue('address.address', data.address.address);
+      setValue('address.zipCode', data.address.zipCode);
+      setValue('address.state', data.address.state);
+      setValue('address.city', data.address.city);
+      setValue('address.number', data.address.number);
+      setValue('address.landmark', data.address.landmark);
+    }
+  }, [customer.data]);
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/customers" style={{ color: '#000' }}>
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Fechar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/customers" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -76,6 +104,9 @@ export default function CustomerUpdateForm() {
               error={!!errors.name}
               helperText={errors.name?.message}
               sx={textFieldStyles}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
               {...field}
             />
           )}
@@ -94,9 +125,7 @@ export default function CustomerUpdateForm() {
                   label="Pessoa"
                   {...field}
                 >
-                  <MenuItem value={'FISICA'} defaultChecked>
-                    Física
-                  </MenuItem>
+                  <MenuItem value={'FISICA'}>Física</MenuItem>
                   <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
                 </Select>
               </FormControl>
@@ -116,6 +145,9 @@ export default function CustomerUpdateForm() {
                 label="CPF/CNPJ"
                 placeholder="Digite o CPF ou CNPJ do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -136,6 +168,9 @@ export default function CustomerUpdateForm() {
                 label="Email"
                 placeholder="Digite o email do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -155,6 +190,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.phone?.message}
                 placeholder="Digite o telefone do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -173,6 +211,9 @@ export default function CustomerUpdateForm() {
               sx={textFieldStyles}
               placeholder="Digite o nome da rua"
               {...field}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
             />
           )}
         />
@@ -194,6 +235,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.address?.zipCode?.message}
                 placeholder="Digite o CEP do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -238,6 +282,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.address?.city?.message}
                 placeholder="Digite a cidade do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -257,6 +304,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.address?.number?.message}
                 placeholder="Digite o número da casa do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -273,6 +323,9 @@ export default function CustomerUpdateForm() {
               label="Referência"
               placeholder="ex: próximo ao mercado central"
               {...field}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
             />
           )}
         />
@@ -282,7 +335,7 @@ export default function CustomerUpdateForm() {
           type="submit"
           variant="contained"
           sx={{
-            width: '15em',
+            width: '100%',
             display: 'flex',
             alignSelf: 'center',
           }}

@@ -3,31 +3,28 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
-import useGetIcons from '../../../hooks/useGetIcons.tsx';
-import { ClientSchema } from '../schemas/index.ts';
-import { useGetCustomerById, useUpdateCustomer } from '../services/index.tsx';
-import { boxStyles, boxStylesForm } from '../../../styles/index.ts';
-import { CustomerValidation } from '../types/index.ts';
+import { useParams } from 'react-router-dom';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
 import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
-import useGetState from '../../Customers/hooks/useGetState.tsx';
+import { ProductSchema } from '../schemas/index.ts';
+import { useGetProductById, useUpdateProduct } from '../services/index.tsx';
+import { ProductValidation } from '../types/index.ts';
 
 export default function ProducstUpdateForm() {
   const { id } = useParams();
-  const { ArrowBackIosIcon } = useGetIcons();
-  const states = useGetState();
-  const customer = useGetCustomerById(id);
-  const updateCustomer = useUpdateCustomer();
+  const product = useGetProductById(id);
+  const updateCustomer = useUpdateProduct();
 
-  const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
+  const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
     updateCustomer.mutate(data);
   };
 
@@ -35,19 +32,37 @@ export default function ProducstUpdateForm() {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<CustomerValidation>({
-    resolver: yupResolver(ClientSchema),
-    defaultValues: customer.data || {},
+    setValue,
+  } = useForm<ProductValidation>({
+    resolver: yupResolver(ProductSchema),
+    defaultValues: {
+      id: '',
+      name: '',
+      category: 'COMUM',
+      unitOfMeasure: 'CENTIMETRO',
+      depth: 0,
+      height: 0,
+      width: 0,
+      price: 0,
+    },
   });
+
+  useEffect(() => {
+    if (product.data) {
+      setValue('id', product.data.id);
+      setValue('name', product.data.name);
+      setValue('category', product.data.category);
+      setValue('unitOfMeasure', product.data.unitOfMeasure);
+      setValue('depth', product.data.depth);
+      setValue('height', product.data.height);
+      setValue('width', product.data.width);
+      setValue('price', product.data.price);
+    }
+  }, [product.data, setValue]);
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/customers" style={{ color: '#000' }}>
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Fechar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/products" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -58,7 +73,7 @@ export default function ProducstUpdateForm() {
         }}
       >
         <Typography variant="h3" marginBottom="1em">
-          Editar Cliente
+          Editar Produto
         </Typography>
 
         <Controller
@@ -67,219 +82,153 @@ export default function ProducstUpdateForm() {
           render={({ field }) => (
             <TextField
               type="text"
-              id="name"
+              id="Nome"
               label="Nome"
               placeholder="Digite o nome"
               error={!!errors.name}
               helperText={errors.name?.message}
               sx={textFieldStyles}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
               {...field}
             />
           )}
         />
 
-        <Box sx={boxStylesForm}>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
           <Controller
-            name="customerType"
+            name="category"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
-                <InputLabel id="select-people-label">Pessoa</InputLabel>
+              <FormControl sx={textFieldStyles}>
+                <InputLabel htmlFor="category">Categoria</InputLabel>
                 <Select
-                  labelId="select-people-label"
-                  id="select-people"
-                  label="Pessoa"
+                  type="text"
+                  id="category"
+                  labelId="category-label"
+                  label="Categoria"
+                  error={!!errors.category}
+                  placeholder="Digite a categoria do produto"
                   {...field}
                 >
-                  <MenuItem value={'FISICA'} defaultChecked>
-                    Física
-                  </MenuItem>
-                  <MenuItem value={'JURIDICA'}>Jurídica</MenuItem>
+                  <MenuItem value="COMUM">Comum</MenuItem>
+                  <MenuItem value="TEMPERADO">Temperado</MenuItem>
                 </Select>
               </FormControl>
             )}
           />
-          <Controller
-            name="cpfcnpj"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
-                type="text"
-                id="cpf_cnpj"
-                label="CPF/CNPJ"
-                placeholder="Digite o CPF ou CNPJ do cliente"
-                {...field}
-              />
-            )}
-          />
-        </Box>
 
-        <Box sx={boxStylesForm}>
           <Controller
-            name="email"
+            name="unitOfMeasure"
             control={control}
             render={({ field }) => (
-              <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
-                id="email"
-                type="text"
-                label="Email"
-                placeholder="Digite o email do cliente"
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="phone"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
-                id="phone"
-                type="tel"
-                label="Telefone"
-                error={!!errors.phone}
-                helperText={errors.phone?.message}
-                placeholder="Digite o telefone do cliente"
-                {...field}
-              />
-            )}
-          />
-        </Box>
-
-        <Controller
-          name="address.address"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              id="address"
-              type="text"
-              label="Rua"
-              error={!!errors.address?.address}
-              helperText={errors.address?.address?.message}
-              sx={textFieldStyles}
-              placeholder="Digite o nome da rua"
-              {...field}
-            />
-          )}
-        />
-
-        <Box sx={boxStylesForm}>
-          <Controller
-            name="address.zipCode"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
-                type="text"
-                id="zipCode"
-                label="CEP"
-                error={!!errors.address?.zipCode}
-                helperText={errors.address?.zipCode?.message}
-                placeholder="Digite o CEP do cliente"
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="address.state"
-            defaultValue="PB"
-            control={control}
-            render={({ field }) => (
-              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
-                <InputLabel id="select-state-label">Estado</InputLabel>
+              <FormControl sx={textFieldStyles}>
+                <InputLabel htmlFor="unitOfMeasure">
+                  Unidade de Medida
+                </InputLabel>
                 <Select
-                  labelId="select-state-label"
-                  id="select-state"
-                  label="Estado"
+                  type="text"
+                  id="unitOfMeasure"
+                  label="Unidade de Medida"
+                  error={!!errors.unitOfMeasure}
+                  placeholder="Digite a unidade de medida do produto"
                   {...field}
                 >
-                  {states.map((state) => (
-                    <MenuItem key={state} value={state}>
-                      {state}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
+                  <MenuItem value="METRO">Metro</MenuItem>
+                  <MenuItem value="MILIMETRO">Milímetro</MenuItem>
                 </Select>
               </FormControl>
             )}
           />
         </Box>
 
-        <Box sx={boxStylesForm}>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
           <Controller
-            name="address.city"
+            name="depth"
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
+                type="number"
+                id="depth"
+                label="Profundidade"
+                placeholder="Digite a profundidade do produto"
+                error={!!errors.depth}
+                helperText={errors.depth?.message}
+                sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value || field.value === 0,
                 }}
-                type="text"
-                id="city-textfiled"
-                label="Cidade"
-                error={!!errors.address?.city}
-                helperText={errors.address?.city?.message}
-                placeholder="Digite a cidade do cliente"
                 {...field}
               />
             )}
           />
           <Controller
-            name="address.number"
+            name="height"
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
+                type="number"
+                id="height"
+                label="Altura"
+                placeholder="Digite a altura do produto"
+                error={!!errors.height}
+                helperText={errors.height?.message}
+                sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value || field.value === 0,
                 }}
-                type="text"
-                id="number-address"
-                label="Número"
-                error={!!errors.address?.number}
-                helperText={errors.address?.number?.message}
-                placeholder="Digite o número da casa do cliente"
                 {...field}
+              />
+            )}
+          />
+          <Controller
+            name="width"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                type="number"
+                id="width"
+                label="Largura"
+                placeholder="Digite a largura do produto"
+                error={!!errors.width}
+                helperText={errors.width?.message}
+                sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value || field.value === 0,
+                }}
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="price"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                type="number"
+                id="price"
+                label="Preço"
+                placeholder="Digite o preço do produto"
+                {...field}
+                error={!!errors.price}
+                helperText={errors.price?.message}
+                sx={textFieldStyles}
+                InputLabelProps={{
+                  shrink: !!field.value || field.value === 0,
+                }}
               />
             )}
           />
         </Box>
-
-        <Controller
-          name="address.landmark"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              type="text"
-              id="landmark"
-              sx={textFieldStyles}
-              label="Referência"
-              placeholder="ex: próximo ao mercado central"
-              {...field}
-            />
-          )}
-        />
 
         <Button
           id="btn-save"
           type="submit"
           variant="contained"
           sx={{
-            width: '15em',
+            width: '100%',
             display: 'flex',
             alignSelf: 'center',
           }}

@@ -25,6 +25,8 @@ export default function CardChart(props: cardChartProps) {
           color: '#fff',
           width: '5em',
         }}
+        loading="lazy"
+        placeholder="dashboardIcons"
       />
       <Box>
         <Typography variant="h5" fontWeight={'bold'} textAlign={'end'}>

@@ -15,7 +15,7 @@ export default function MenuListItem() {
     {
       Icon: DashboardOutlinedIcon,
       label: 'RELATÓRIOS',
-      path: '/relatorios',
+      path: '/dashboard',
     },
     {
       Icon: AccountCircleOutlinedIcon,
@@ -30,7 +30,7 @@ export default function MenuListItem() {
     {
       Icon: ShoppingCartOutlinedIcon,
       label: 'PRODUTOS',
-      path: '/produtos',
+      path: '/products',
     },
   ];
 

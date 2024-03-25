@@ -1,18 +1,11 @@
-import {
-  Box,
-  Button,
-  Drawer,
-  Grid,
-  IconButton,
-  Typography,
-} from '@mui/material/';
+import { Box, Button, Drawer, IconButton } from '@mui/material/';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import queryClient from '../../config/queryClient';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
 import { exitStyles, headerStyles, navStyles } from './styles';
-import { useState } from 'react';
 
 function MenuDesktop() {
   const navigate = useNavigate();
@@ -58,10 +51,8 @@ function MenuMobile() {
       <Drawer open={open} onClose={() => setOpen(!open)}>
         <MenuDesktop />
       </Drawer>
-      <IconButton>
-        <IconButton onClick={() => setOpen(!open)}>
-          {open ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}
-        </IconButton>
+      <IconButton onClick={() => setOpen(!open)}>
+        {open ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}
       </IconButton>
     </>
   );

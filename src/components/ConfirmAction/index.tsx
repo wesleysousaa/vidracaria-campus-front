@@ -1,77 +1,86 @@
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import useGetIcons from '../../hooks/useGetIcons';
+import { modalStyles } from '../../styles';
 
-export default function ConfirmAction(props: {
+interface ConfirmActionProps {
   confirmDispach: () => void;
   denyDispach: () => void;
-  text: string;
-}) {
+  open: boolean;
+}
+
+export default function ConfirmAction({
+  confirmDispach,
+  denyDispach,
+  open,
+}: ConfirmActionProps) {
   const { CloseIcon } = useGetIcons();
   return (
-    <Box
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      width={'fit-content'}
-      padding={'1em'}
-      flexDirection={'column'}
-      borderRadius={'0.3em'}
-      sx={{
-        backgroundColor: '#fff',
-      }}
-    >
+    <Modal open={open} onClose={denyDispach} sx={modalStyles}>
       <Box
         display={'flex'}
-        flexDirection={'row'}
-        justifyContent={'space-between'}
+        justifyContent={'center'}
         alignItems={'center'}
-        width={'100%'}
-        borderBottom={'1px solid #ccc'}
-      >
-        <Typography variant="h6">Confirmação de ação</Typography>
-        <IconButton onClick={props.denyDispach}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      <Typography
-        variant="body1"
+        width={'fit-content'}
+        padding={'1em'}
+        flexDirection={'column'}
+        borderRadius={'0.3em'}
         sx={{
-          marginTop: '1em',
-          padding: '1em',
-          borderRadius: '0.3em',
-          backgroundColor: '#f5d9dd',
-          color: 'red',
+          backgroundColor: '#fff',
         }}
       >
-        {props.text}
-      </Typography>
-      <Box
-        display={'flex'}
-        justifyContent={'flex-end'}
-        width={'100%'}
-        margin={'1em'}
-        paddingTop={'1em'}
-        sx={{
-          borderTop: '1px solid #ccc',
-        }}
-      >
-        <Button
-          variant="text"
-          onClick={props.denyDispach}
-          sx={{ marginLeft: '1em' }}
-          color="success"
+        <Box
+          display={'flex'}
+          flexDirection={'row'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          width={'100%'}
+          borderBottom={'1px solid #ccc'}
         >
-          Não
-        </Button>
-        <Button
-          variant="contained"
-          onClick={props.confirmDispach}
-          sx={{ marginRight: '0.3em' }}
-          color="error"
+          <Typography variant="h6">Confirmação de ação</Typography>
+          <IconButton onClick={denyDispach}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Typography
+          variant="body1"
+          sx={{
+            marginTop: '1em',
+            padding: '1em',
+            borderRadius: '0.3em',
+            backgroundColor: '#f5d9dd',
+            color: 'red',
+          }}
         >
-          Sim
-        </Button>
+          A ação de exclusão não poderá ser desfeita.
+        </Typography>
+        <Box
+          display={'flex'}
+          justifyContent={'flex-end'}
+          width={'100%'}
+          margin={'1em'}
+          paddingTop={'1em'}
+          sx={{
+            borderTop: '1px solid #ccc',
+          }}
+        >
+          <Button
+            variant="text"
+            onClick={confirmDispach}
+            sx={{ marginLeft: '1em' }}
+            color="success"
+          >
+            Não
+          </Button>
+          <Button
+            variant="contained"
+            onClick={confirmDispach}
+            sx={{ marginRight: '0.3em' }}
+            color="error"
+          >
+            Sim
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </Modal>
   );
 }

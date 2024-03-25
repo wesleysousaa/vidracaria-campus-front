@@ -1,20 +1,18 @@
 import { lazy } from 'react';
 import { PrivateRoute, PublicRoute } from './AuthRoutes';
+
 import Products from '../features/Products';
 import ProductsCreateForm from '../features/Products/ProductCreateForm';
-import ProductsInfoForm from '../features/Products/ProductInfoForm';
 import ProductsUpdateForm from '../features/Products/ProductUpdateForm';
 
 const Login = lazy(() => import('../features/Login'));
+
 const Customers = lazy(() => import('../features/Customers'));
 const CustomerCreateForm = lazy(
   () => import('../features/Customers/CustomerCreateForm'),
 );
 const CustomerUpdateForm = lazy(
   () => import('../features/Customers/CustomerUpdateForm'),
-);
-const CustomerInfoForm = lazy(
-  () => import('../features/Customers/CustomerInfoForm'),
 );
 const Dashboard = lazy(() => import('../features/Dashboard'));
 
@@ -25,15 +23,13 @@ const TemplateImports = {
   Dashboard: Dashboard,
   Customers: {
     index: Customers,
-    CustomerCreateForm: CustomerCreateForm,
-    CustomerUpdateForm: CustomerUpdateForm,
-    CustomerInfoForm: CustomerInfoForm,
+    CustomerCreateForm,
+    CustomerUpdateForm,
   },
   Products: {
     index: Products,
     ProductsCreateForm,
     ProductsUpdateForm,
-    ProductsInfoForm,
   },
 };
 

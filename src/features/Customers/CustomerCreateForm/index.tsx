@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -11,17 +10,15 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import useGetIcons from '../../../hooks/useGetIcons.tsx';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
 import useGetState from '../hooks/useGetState.tsx';
 import { ClientSchema } from '../schemas/index.ts';
 import { useCreateCustomer } from '../services/index.tsx';
-import { boxStyles } from '../styles/index.ts';
 import { CustomerValidation } from '../types/index.ts';
 import { boxStylesForm, textFieldStyles } from './styles/index.ts';
 
 export default function CustomerCreateForm() {
-  const { ArrowBackIosIcon } = useGetIcons();
   const states = useGetState();
   const createCustomer = useCreateCustomer();
 
@@ -55,12 +52,7 @@ export default function CustomerCreateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <Link to="/customers" style={{ color: '#000' }}>
-        <IconButton aria-label="Voltar" color="inherit">
-          <ArrowBackIosIcon />
-          Fechar
-        </IconButton>
-      </Link>
+      <ReturnButton link="/customers" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -96,7 +88,7 @@ export default function CustomerCreateForm() {
             name="customerType"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel id="select-people-label">Pessoa</InputLabel>
                 <Select
                   labelId="select-people-label"
@@ -117,10 +109,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 type="text"
                 id="cpf_cnpj"
                 label="CPF/CNPJ"
@@ -137,10 +126,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 id="email"
                 type="text"
                 label="Email"
@@ -154,10 +140,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 id="phone"
                 type="tel"
                 label="Telefone"
@@ -193,10 +176,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 type="text"
                 id="zipCode"
                 label="CEP"
@@ -212,7 +192,7 @@ export default function CustomerCreateForm() {
             defaultValue="PB"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '30%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel id="select-state-label">Estado</InputLabel>
                 <Select
                   labelId="select-state-label"
@@ -237,10 +217,7 @@ export default function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 type="text"
                 id="city-textfiled"
                 label="Cidade"
@@ -292,7 +269,7 @@ export default function CustomerCreateForm() {
           type="submit"
           variant="contained"
           sx={{
-            width: '15em',
+            width: '100%',
             display: 'flex',
             alignSelf: 'center',
           }}

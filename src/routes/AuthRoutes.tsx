@@ -15,5 +15,5 @@ export function PrivateRoute() {
 }
 
 export function PublicRoute() {
-  return isAuthenticated() ? <Navigate to="/relatorios" replace /> : <Outlet />;
+  return isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Outlet />;
 }

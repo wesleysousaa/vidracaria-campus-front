@@ -1,18 +1,18 @@
-export interface CustomerValidation {
-  id?: string;
+export type category = 'COMUM' | 'TEMPERADO';
+export type unitOfMeasure = 'CENTIMETRO' | 'METRO' | 'MILIMETRO';
+
+export interface ProductBase {
   name: string;
-  customerType: string;
-  cpfcnpj?: string;
-  email?: string;
-  phone: string;
-  address: AddressValidation;
+  unitOfMeasure: unitOfMeasure;
+  category: category;
 }
 
-export interface AddressValidation {
-  address: string;
-  zipCode: string;
-  number: string;
-  city: string;
-  state: string;
-  landmark?: string;
+export interface ProductValidation extends ProductBase {
+  id?: string;
+  height: number;
+  width: number;
+  depth: number;
+  price: number;
 }
+
+export interface CreateProductValidation extends ProductBase {}

@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import { memo } from 'react';
+import logo from '../../../assets/images/logo-icon.webp';
 
 function LogoItem() {
   return (
@@ -13,12 +14,7 @@ function LogoItem() {
       padding={'2em'}
     >
       <Grid item>
-        <img
-          src="/images/logo-icon.webp"
-          alt="logo"
-          style={{ maxWidth: '3em' }}
-          loading="lazy"
-        />
+        <img src={logo} alt="logo" style={{ maxWidth: '3em' }} loading="lazy" />
       </Grid>
 
       <Grid item>

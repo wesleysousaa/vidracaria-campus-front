@@ -1,18 +1,23 @@
+import { Box } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
-import ConfirmAction from '../../../components/ConfirmAction';
-import Modal from '../../../components/Modal';
 import TableCellActions from '../../../components/TableCellActions';
 import Loader from '../../Loader';
+import ProducstInfoForm from '../ProductInfoForm';
+import { useDeleteProductById, useGetAllProducts } from '../services';
+import { ProductValidation } from '../types';
 
 export default function Table() {
-  // const allCustomers = useGetAllCustomers();
-  // const deleteCustomer = useDeleteCustomerById();
+  const allProducts = useGetAllProducts();
+  const deleteProducts = useDeleteProductById();
   const [open, setOpen] = useState(false);
+  const [currentProduct, setCurrenProduct] = useState<
+    ProductValidation | undefined
+  >();
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
@@ -22,14 +27,79 @@ export default function Table() {
         enableHiding: true,
       },
       {
-        accessorKey: 'value',
-        header: 'Preço',
+        accessorKey: 'unitOfMeasure',
+        header: 'Unidade de Medida',
         enableHiding: true,
+        Cell: (options) => {
+          return <>{options.row.original.unitOfMeasure}</>;
+        },
       },
       {
-        accessorKey: 'qtd',
-        header: 'Quantidade',
+        accessorKey: 'category',
+        header: 'Categoria',
         enableHiding: true,
+        Cell: (options) => {
+          return <>{options.row.original.category}</>;
+        },
+      },
+      {
+        accessorKey: 'height',
+        header: 'Altura',
+        enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.height == 0
+                ? 'Não informada'
+                : options.row.original.height}
+            </strong>
+          );
+        },
+      },
+      {
+        accessorKey: 'width',
+        header: 'Largura',
+        enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.width == 0
+                ? 'Não informada'
+                : options.row.original.width}
+            </strong>
+          );
+        },
+      },
+      {
+        accessorKey: 'depth',
+        header: 'Profundidade',
+        enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.depth == 0
+                ? 'Não informada'
+                : options.row.original.depth}
+            </strong>
+          );
+        },
+      },
+      {
+        accessorKey: 'price',
+        header: 'Preço',
+        enableHiding: true,
+        Cell: (options) => {
+          return (
+            <strong>
+              {options.row.original.price
+                ? options.row.original.price?.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })
+                : 'Não informado'}
+            </strong>
+          );
+        },
       },
       {
         accessorKey: 'actions',
@@ -38,8 +108,9 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              dispach={handleOpen}
-              idObject={options.row.original.id as string}
+              dispach={handleDelete}
+              idObject={options.row.original.id}
+              handleClick={handleClick}
             />
           );
         },
@@ -48,56 +119,38 @@ export default function Table() {
     [],
   );
 
-  const handleOpen = (idItem: string) => {
-    setOpen(true);
-    // deleteCustomer.mutate(idItem);
+  const handleDelete = (id: string) => {
+    deleteProducts.mutate(id);
   };
 
-  const handleDelete = () => {
-    // deleteCustomer.mutate(deleteCustomer.data);
-    setOpen(false);
+  const handleClick = (id: string) => {
+    setOpen(true);
+    setCurrenProduct(allProducts.data?.find((product) => product.id === id));
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: [
-      {
-        name: 'Produto 1',
-        value: 'R$ 10,00',
-        qtd: '10',
-      },
-      {
-        name: 'Produto 2',
-        value: 'R$ 20,00',
-        qtd: '20',
-      },
-      {
-        name: 'Produto 3',
-        value: 'R$ 30,00',
-        qtd: '30',
-      },
-    ],
+    data: allProducts.data ?? [],
     enableColumnOrdering: true,
     enableGlobalFilter: false,
     enableDensityToggle: false,
   });
 
-  // if (allCustomers.isLoading) return <Loader open={true} />;
+  if (allProducts.isLoading) return <Loader open={true} />;
   return (
     <>
-      <Modal
+      <ProducstInfoForm
         open={open}
-        onCloseDispach={() => setOpen(false)}
-        component={
-          <ConfirmAction
-            confirmDispach={handleDelete}
-            denyDispach={() => setOpen(false)}
-            text="A ação de exclusão não poderá ser desfeita."
-          />
-        }
+        onClose={() => setOpen(false)}
+        product={currentProduct}
       />
-
-      <MaterialReactTable table={table} />
+      <Box
+        sx={{
+          width: '100%',
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Box>
     </>
   );
 }
