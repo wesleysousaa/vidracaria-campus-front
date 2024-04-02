@@ -3,10 +3,11 @@ import { CSSProperties } from 'react';
 export const mainStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  width: '80%',
+  width: '100%',
   height: '100%',
-  marginLeft: '2em',
-  marginTop: '2em',
+  marginTop: '90px',
+  padding: '1em',
+  overflow: 'auto',
 };
 
 export const boxCards: CSSProperties = {
