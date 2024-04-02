@@ -13,6 +13,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
 import { boxStyles } from '../../../styles/index.ts';
 import useGetState from '../hooks/useGetState.tsx';
+import useRegex from '../hooks/useRegex.tsx';
 import { ClientSchema } from '../schemas/index.ts';
 import { useCreateCustomer } from '../services/index.tsx';
 import { CustomerValidation } from '../types/index.ts';
@@ -20,6 +21,7 @@ import { boxStylesForm, textFieldStyles } from './styles/index.ts';
 
 export default function CustomerCreateForm() {
   const states = useGetState();
+  const { handleChangePhone } = useRegex();
   const createCustomer = useCreateCustomer();
 
   const onSubmit: SubmitHandler<CustomerValidation> = (data) => {
@@ -107,14 +109,13 @@ export default function CustomerCreateForm() {
           <Controller
             name="cpfcnpj"
             control={control}
-            render={({ field }) => (
+            render={() => (
               <TextField
                 sx={textFieldStyles}
                 type="text"
                 id="cpf_cnpj"
                 label="CPF/CNPJ"
                 placeholder="Digite o CPF ou CNPJ do cliente"
-                {...field}
               />
             )}
           />
@@ -138,7 +139,7 @@ export default function CustomerCreateForm() {
           <Controller
             name="phone"
             control={control}
-            render={({ field }) => (
+            render={() => (
               <TextField
                 sx={textFieldStyles}
                 id="phone"
@@ -147,7 +148,11 @@ export default function CustomerCreateForm() {
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
                 placeholder="Digite o telefone do cliente"
-                {...field}
+                onChange={(e) => {
+                  if (e.target.value.length <= 15) {
+                    handleChangePhone(e);
+                  }
+                }}
               />
             )}
           />

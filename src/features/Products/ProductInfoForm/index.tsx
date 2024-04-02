@@ -16,7 +16,6 @@ export default function ProducstInfoForm({
   open,
   product,
 }: ProductInfoFormProps) {
-
   if (product === undefined) return;
 
   return (
@@ -34,10 +33,7 @@ export default function ProducstInfoForm({
               justifyContent: 'space-between',
             }}
           >
-            <CustomLabel
-              title="Categoria"
-              text={(product.category)}
-            />
+            <CustomLabel title="Categoria" text={product.category} />
             <CustomLabel
               title="Preço"
               text={
@@ -69,9 +65,7 @@ export default function ProducstInfoForm({
             />
             <CustomLabel
               title="Unidade de medida"
-              text={(
-                product?.unitOfMeasure?.toString() as string,
-              )}
+              text={product.unitOfMeasure}
             />
           </Box>
         </Box>

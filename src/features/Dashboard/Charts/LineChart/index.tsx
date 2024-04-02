@@ -58,11 +58,10 @@ export default function LineChart(props: propsLineChart) {
 
   return (
     <Box
-      sx={{
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        padding: '1em',
-        borderRadius: '0.3em',
-      }}
+      borderRadius=".3em"
+      padding={'1em'}
+      boxShadow={'0px 4px 4px rgba(0, 0, 0, 0.25)'}
+      flex={1}
     >
       <Typography variant="h6" textAlign={'center'}>
         {props.title}

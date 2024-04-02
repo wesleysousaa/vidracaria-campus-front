@@ -216,7 +216,10 @@ export default function ProducstUpdateForm() {
                 helperText={errors.price?.message}
                 sx={textFieldStyles}
                 InputLabelProps={{
-                  shrink: !!field.value || field.value === 0,
+                  shrink:
+                    field.value !== undefined && field.value !== 0
+                      ? true
+                      : false,
                 }}
               />
             )}

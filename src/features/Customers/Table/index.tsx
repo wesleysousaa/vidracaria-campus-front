@@ -5,8 +5,8 @@ import {
   type MRT_ColumnDef,
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
+import Loader from '../../../components/Loader';
 import TableCellActions from '../../../components/TableCellActions';
-import Loader from '../../Loader';
 import CustomerInfoForm from '../CustomerInfoForm';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
@@ -105,7 +105,7 @@ export default function Table() {
     columns,
     data: data || [],
     enableColumnOrdering: true,
-    enableGlobalFilter: false,
+    enableGlobalFilter: true,
     enableDensityToggle: false,
   });
 
