@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { Navigate, Outlet } from 'react-router-dom';
 import Menu from '../features/Menu';
-import isAuthenticated from './utils/isAuthenticated';
+import { isAuthenticated } from './utils/isAuthenticated';
 
 export function PrivateRoute() {
   return isAuthenticated() ? (
