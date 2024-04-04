@@ -21,7 +21,7 @@ import { boxStylesForm, textFieldStyles } from './styles/index.ts';
 
 export default function CustomerCreateForm() {
   const states = useGetState();
-  const { handleChangePhone } = useRegex();
+  const { handleChangePhone, handleChangeCpfCnpj } = useRegex();
   const createCustomer = useCreateCustomer();
 
   const onSubmit: SubmitHandler<CustomerValidation> = (data) => {
@@ -116,6 +116,9 @@ export default function CustomerCreateForm() {
                 id="cpf_cnpj"
                 label="CPF/CNPJ"
                 placeholder="Digite o CPF ou CNPJ do cliente"
+                onChange={(e) => {
+                  handleChangeCpfCnpj(e);
+                }}
               />
             )}
           />
@@ -149,9 +152,7 @@ export default function CustomerCreateForm() {
                 helperText={errors.phone?.message}
                 placeholder="Digite o telefone do cliente"
                 onChange={(e) => {
-                  if (e.target.value.length <= 15) {
-                    handleChangePhone(e);
-                  }
+                  handleChangePhone(e);
                 }}
               />
             )}

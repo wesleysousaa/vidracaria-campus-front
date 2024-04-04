@@ -8,13 +8,13 @@ const useRegex = () => {
       /^(\d{2})(\d{4,5})(\d{4})$/,
       '($1) $2-$3',
     );
-    console.log(formattedPhoneNumber);
-    if (formattedPhoneNumber.length >= 15) return;
 
     event.target.value = formattedPhoneNumber;
   }
 
-  function handleChangeCpfCnpj(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleChangeCpfCnpj(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
     const inputCpfCnpj = event.target.value.replace(/\D/g, '');
 
     const isCpf = inputCpfCnpj.length === 11;
