@@ -38,7 +38,7 @@ export default function CustomerUpdateForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors, defaultValues },
+    formState: { errors },
     setValue,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
