@@ -1,6 +1,6 @@
 import api from '../../services';
 
-export const verifyToken = async (token: string) => {
+const verifyToken = async (token: string) => {
   if (token.length > 0) {
     await api
       .post(`/auth/isValidToken?token=${token}`)
