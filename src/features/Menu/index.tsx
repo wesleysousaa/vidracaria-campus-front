@@ -1,12 +1,13 @@
 import { Box, Button, Drawer, IconButton } from '@mui/material/';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import queryClient from '../../config/queryClient';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
 import { exitStyles, headerStyles, navStyles } from './styles';
 
+console.log('src/features/Menu/index.tsx');
 function MenuDesktop() {
   const navigate = useNavigate();
   const { LogoutOutlinedIcon } = useGetIcons();
@@ -14,7 +15,7 @@ function MenuDesktop() {
   const logout = () => {
     localStorage.removeItem('token');
     queryClient.clear();
-    navigate('/');
+    navigate({ from: '/dashboard' });
   };
 
   return (

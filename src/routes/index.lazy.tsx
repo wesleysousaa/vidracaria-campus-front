@@ -7,14 +7,25 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { LoginSchema } from './schemas';
-import { useAuthUser } from './services';
-import { UserValidation } from './types';
-import { boxStyles, formControlStyles, loginButtonStyles } from './styles';
+import { LoginSchema } from '../features/Login/schemas';
+import { useAuthUser } from '../features/Login/services';
+import {
+  boxStyles,
+  formControlStyles,
+  loginButtonStyles,
+} from '../features/Login/styles';
+import { UserValidation } from '../features/Login/types';
 
-export default function Login() {
+function Login() {
   const authUser = useAuthUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authUser.isSuccess) navigate({ to: '/dashboard' });
+  }, [authUser.isSuccess]);
 
   const login = (userData: UserValidation) => {
     authUser.mutate(userData);
@@ -78,7 +89,12 @@ export default function Login() {
             Email ou senha inválidos!
           </Alert>
         )}
+        <Link to=""></Link>
       </FormControl>
     </Box>
   );
 }
+
+export const Route = createLazyFileRoute('/')({
+  component: Login,
+});
