@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
 import { Link, createLazyFileRoute } from '@tanstack/react-router';
-import { boxStylesForm } from '../../../../features/Customers/CustomerCreateForm/styles';
+import Table from '../../../../features/Customers/Table';
+import { boxStylesForm } from '../../../../features/Customers/styles';
 import { mainStyles } from '../../../../features/Dashboard/styles';
-import Table from '../../../../features/Products/Table';
 
 function Customers() {
   return (
@@ -12,7 +12,7 @@ function Customers() {
           Clientes
         </Typography>
 
-        <Link to="">
+        <Link to="/customers/add">
           <Button variant="contained" color="success">
             Novo Cliente
           </Button>

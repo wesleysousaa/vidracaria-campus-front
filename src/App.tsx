@@ -8,6 +8,7 @@ import { routeTree } from './routeTree.gen';
 const router = createRouter({
   routeTree,
   context: { authentication: undefined! },
+  defaultErrorComponent: () => <div>Erro</div>,
 });
 
 declare module '@tanstack/react-router' {

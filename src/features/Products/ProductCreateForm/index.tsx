@@ -12,7 +12,7 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
 import { boxStyles } from '../../../styles/index.ts';
-import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
+import { textFieldStyles } from '../../Customers/styles/index.ts';
 import { CreateProductSchema } from '../schemas/index.ts';
 import { useCreateProduct } from '../services/index.tsx';
 import { CreateProductValidation } from '../types/index.ts';

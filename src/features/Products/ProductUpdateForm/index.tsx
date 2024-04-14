@@ -11,10 +11,9 @@ import {
 } from '@mui/material';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 import ReturnButton from '../../../components/ReturnButton/index.tsx';
 import { boxStyles } from '../../../styles/index.ts';
-import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
+import { textFieldStyles } from '../../Customers/styles/index.ts';
 import { ProductSchema } from '../schemas/index.ts';
 import { useGetProductById, useUpdateProduct } from '../services/index.tsx';
 import { ProductValidation } from '../types/index.ts';

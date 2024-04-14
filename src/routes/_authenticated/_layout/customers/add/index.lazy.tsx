@@ -9,19 +9,21 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../components/ReturnButton/index.tsx';
-import { boxStyles } from '../../../styles/index.ts';
-import useGetState from '../hooks/useGetState.tsx';
-import useRegex from '../hooks/useRegex.tsx';
-import { ClientSchema } from '../schemas/index.ts';
-import { useCreateCustomer } from '../services/index.tsx';
-import { CustomerValidation } from '../types/index.ts';
-import { boxStylesForm, textFieldStyles } from './styles/index.ts';
+import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
+import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
+import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
+import { useCreateCustomer } from '../../../../../features/Customers/services/index.tsx';
+import {
+  boxStylesForm,
+  textFieldStyles,
+} from '../../../../../features/Customers/styles/index.ts';
+import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
+import { boxStyles } from '../../../../../styles/index.ts';
 
-export default function CustomerCreateForm() {
+function CustomerCreateForm() {
   const states = useGetState();
-  const { handleChangePhone, handleChangeCpfCnpj } = useRegex();
   const createCustomer = useCreateCustomer();
 
   const onSubmit: SubmitHandler<CustomerValidation> = (data) => {
@@ -109,16 +111,16 @@ export default function CustomerCreateForm() {
           <Controller
             name="cpfcnpj"
             control={control}
-            render={() => (
+            render={({ field }) => (
               <TextField
-                sx={textFieldStyles}
                 type="text"
-                id="cpf_cnpj"
-                label="CPF/CNPJ"
-                placeholder="Digite o CPF ou CNPJ do cliente"
-                onChange={(e) => {
-                  handleChangeCpfCnpj(e);
-                }}
+                id="cpfcnpj"
+                label="cpfcnpj"
+                placeholder="Digite o CPF/CNPJ"
+                error={!!errors.cpfcnpj}
+                helperText={errors.cpfcnpj?.message}
+                sx={textFieldStyles}
+                {...field}
               />
             )}
           />
@@ -135,6 +137,8 @@ export default function CustomerCreateForm() {
                 type="text"
                 label="Email"
                 placeholder="Digite o email do cliente"
+                error={!!errors.email}
+                helperText={errors.email?.message}
                 {...field}
               />
             )}
@@ -142,18 +146,16 @@ export default function CustomerCreateForm() {
           <Controller
             name="phone"
             control={control}
-            render={() => (
+            render={({ field }) => (
               <TextField
                 sx={textFieldStyles}
                 id="phone"
-                type="tel"
-                label="Telefone"
+                type="text"
+                label="phone"
+                placeholder="Digite o Telefone do cliente"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
-                placeholder="Digite o telefone do cliente"
-                onChange={(e) => {
-                  handleChangePhone(e);
-                }}
+                {...field}
               />
             )}
           />
@@ -286,3 +288,9 @@ export default function CustomerCreateForm() {
     </Box>
   );
 }
+
+export const Route = createLazyFileRoute(
+  '/_authenticated/_layout/customers/add/',
+)({
+  component: CustomerCreateForm,
+});

@@ -9,27 +9,34 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
-import ReturnButton from '../../../components/ReturnButton/index.tsx';
-import { boxStyles } from '../../../styles/index.ts';
+import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
+import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
+import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
+import {
+  useGetCustomerById,
+  useUpdateCustomer,
+} from '../../../../../features/Customers/services/index.tsx';
 import {
   boxStylesForm,
   textFieldStyles,
-} from '../CustomerCreateForm/styles/index.ts';
-import useGetState from '../hooks/useGetState.tsx';
-import useRegex from '../hooks/useRegex.tsx';
-import { ClientSchema } from '../schemas/index.ts';
-import { useGetCustomerById, useUpdateCustomer } from '../services/index.tsx';
-import { CustomerValidation } from '../types/index.ts';
+} from '../../../../../features/Customers/styles/index.ts';
+import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
+import { boxStyles } from '../../../../../styles/index.ts';
 
-export default function CustomerUpdateForm() {
-  const { id } = useParams();
+export const Route = createLazyFileRoute(
+  '/_authenticated/_layout/customers/edit/$id',
+)({
+  component: CustomerUpdateForm,
+});
+
+function CustomerUpdateForm() {
+  const { id } = Route.useParams();
   const states = useGetState();
   const customer = useGetCustomerById(id);
   const updateCustomer = useUpdateCustomer();
-  const { handleChangePhone, handleChangeCpfCnpj } = useRegex();
 
   const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
     updateCustomer.mutate(data);
@@ -138,21 +145,14 @@ export default function CustomerUpdateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '68%',
-                  ...textFieldStyles,
-                }}
                 type="text"
-                id="cpf_cnpj"
-                label="CPF/CNPJ"
-                placeholder="Digite o CPF ou CNPJ do cliente"
+                id="cpfcnpj"
+                label="cpfcnpj"
+                placeholder="Digite o CPF/CNPJ"
+                error={!!errors.cpfcnpj}
+                helperText={errors.cpfcnpj?.message}
+                sx={textFieldStyles}
                 {...field}
-                onChange={(e) => {
-                  handleChangeCpfCnpj(e);
-                }}
-                InputLabelProps={{
-                  shrink: !!field.value,
-                }}
               />
             )}
           />
@@ -184,23 +184,14 @@ export default function CustomerUpdateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={{
-                  width: '30%',
-                  ...textFieldStyles,
-                }}
+                sx={textFieldStyles}
                 id="phone"
-                type="tel"
-                label="Telefone"
+                type="text"
+                label="phone"
+                placeholder="Digite o Telefone do cliente"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
-                placeholder="Digite o telefone do cliente"
                 {...field}
-                onChange={(e) => {
-                  handleChangePhone(e);
-                }}
-                InputLabelProps={{
-                  shrink: !!field.value,
-                }}
               />
             )}
           />

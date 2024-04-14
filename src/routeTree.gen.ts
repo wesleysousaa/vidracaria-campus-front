@@ -14,11 +14,11 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedLayoutImport } from './routes/_authenticated/_layout'
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute('/')()
 const AuthenticatedLayoutProductsIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/products/',
 )()
@@ -28,6 +28,12 @@ const AuthenticatedLayoutDashboardIndexLazyImport = createFileRoute(
 const AuthenticatedLayoutCustomersIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/customers/',
 )()
+const AuthenticatedLayoutCustomersAddIndexLazyImport = createFileRoute(
+  '/_authenticated/_layout/customers/add/',
+)()
+const AuthenticatedLayoutCustomersEditIdLazyImport = createFileRoute(
+  '/_authenticated/_layout/customers/edit/$id',
+)()
 
 // Create/Update Routes
 
@@ -36,10 +42,10 @@ const AuthenticatedRoute = AuthenticatedImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any)
 
 const AuthenticatedLayoutRoute = AuthenticatedLayoutImport.update({
   id: '/_layout',
@@ -76,12 +82,32 @@ const AuthenticatedLayoutCustomersIndexLazyRoute =
     ),
   )
 
+const AuthenticatedLayoutCustomersAddIndexLazyRoute =
+  AuthenticatedLayoutCustomersAddIndexLazyImport.update({
+    path: '/customers/add/',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/customers/add/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AuthenticatedLayoutCustomersEditIdLazyRoute =
+  AuthenticatedLayoutCustomersEditIdLazyImport.update({
+    path: '/customers/edit/$id',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/customers/edit/$id.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/_authenticated': {
@@ -104,18 +130,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutProductsIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
+    '/_authenticated/_layout/customers/edit/$id': {
+      preLoaderRoute: typeof AuthenticatedLayoutCustomersEditIdLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
+    '/_authenticated/_layout/customers/add/': {
+      preLoaderRoute: typeof AuthenticatedLayoutCustomersAddIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
   }
 }
 
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  IndexLazyRoute,
+  IndexRoute,
   AuthenticatedRoute.addChildren([
     AuthenticatedLayoutRoute.addChildren([
       AuthenticatedLayoutCustomersIndexLazyRoute,
       AuthenticatedLayoutDashboardIndexLazyRoute,
       AuthenticatedLayoutProductsIndexLazyRoute,
+      AuthenticatedLayoutCustomersEditIdLazyRoute,
+      AuthenticatedLayoutCustomersAddIndexLazyRoute,
     ]),
   ]),
 ])

@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
 import { Link, createLazyFileRoute } from '@tanstack/react-router';
-import { mainStyles } from '../../../features/Dashboard/styles/index.ts';
-import Table from '../../../features/Products/Table/index.tsx';
-import { boxStylesForm } from '../../../styles/index.ts';
+import { mainStyles } from '../../../../features/Dashboard/styles/index.ts';
+import Table from '../../../../features/Products/Table/index.tsx';
+import { boxStylesForm } from '../../../../styles/index.ts';
 
 export const Route = createLazyFileRoute('/_authenticated/_layout/products/')({
   component: Products,

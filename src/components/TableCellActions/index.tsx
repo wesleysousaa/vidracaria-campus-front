@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material';
+import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import useGetIcons from '../../hooks/useGetIcons';
 import ConfirmAction from '../ConfirmAction';
 
@@ -37,7 +37,7 @@ export default function TableCellActions({
         <InfoIcon />
       </IconButton>
 
-      <Link to={`edit/${idObject}`}>
+      <Link to="/customers/edit/$id" params={{ id: idObject }}>
         <IconButton aria-label="Editar" color="warning">
           <EditIcon />
         </IconButton>

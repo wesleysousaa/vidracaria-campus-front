@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import useGetIcons from '../../hooks/useGetIcons';
 
 interface ReturnButtonProps {

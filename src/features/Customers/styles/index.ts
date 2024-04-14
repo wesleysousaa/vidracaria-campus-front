@@ -10,4 +10,5 @@ export const boxStylesForm: CSSProperties = {
   flexDirection: 'row',
   justifyContent: 'space-between',
   gap: '1em',
+  marginBottom: '1em',
 };

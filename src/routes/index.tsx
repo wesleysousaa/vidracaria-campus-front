@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { LoginSchema } from '../features/Login/schemas';
@@ -18,6 +18,7 @@ import {
   loginButtonStyles,
 } from '../features/Login/styles';
 import { UserValidation } from '../features/Login/types';
+import { useAuth } from '../hooks/useAuth';
 
 function Login() {
   const authUser = useAuthUser();
@@ -95,6 +96,10 @@ function Login() {
   );
 }
 
-export const Route = createLazyFileRoute('/')({
+export const Route = createFileRoute('/')({
+  beforeLoad: (s) => {
+    const { isAuthenticated } = useAuth();
+    if (isAuthenticated()) s.navigate({ to: '/dashboard' });
+  },
   component: Login,
 });

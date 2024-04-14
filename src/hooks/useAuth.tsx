@@ -11,7 +11,6 @@ export const useAuth = () => {
   };
 
   const isAuthenticated = () => {
-    console.log('token');
     const token = localStorage.getItem('token') || '';
     verifyToken(token);
     return token !== '';
