@@ -65,7 +65,7 @@ export default function ProducstUpdateForm() {
       setValue('depth', product.data.depth || 0);
       setValue('height', product.data.height || 0);
       setValue('width', product.data.width || 0);
-      setValue('price', product.data.price || 0);
+      setValue('price', product.data.price || 1);
     }
   }, [product.data, setValue]);
 
