@@ -66,8 +66,9 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              dispach={handleDelete}
               idObject={options.row.original.id as string}
+              type="customer"
+              dispach={handleDelete}
               handleClick={handleClick}
             />
           );

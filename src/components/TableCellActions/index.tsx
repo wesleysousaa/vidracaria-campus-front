@@ -5,13 +5,15 @@ import useGetIcons from '../../hooks/useGetIcons';
 import ConfirmAction from '../ConfirmAction';
 
 export interface TableCellActionsProps {
-  dispach: (idObject: string) => void;
   idObject: string;
+  type: 'product' | 'customer';
+  dispach: (idObject: string) => void;
   handleClick: (id: string) => void;
 }
 
 export default function TableCellActions({
   idObject,
+  type,
   dispach,
   handleClick,
 }: TableCellActionsProps) {
@@ -37,7 +39,10 @@ export default function TableCellActions({
         <InfoIcon />
       </IconButton>
 
-      <Link to="/customers/edit/$id" params={{ id: idObject }}>
+      <Link
+        to={type == 'customer' ? '/customers/edit/$id' : '/products/edit/$id'}
+        params={{ id: idObject }}
+      >
         <IconButton aria-label="Editar" color="warning">
           <EditIcon />
         </IconButton>

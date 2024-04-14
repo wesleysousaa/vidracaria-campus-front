@@ -9,17 +9,27 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../components/ReturnButton/index.tsx';
-import { boxStyles } from '../../../styles/index.ts';
-import { textFieldStyles } from '../../Customers/styles/index.ts';
-import { ProductSchema } from '../schemas/index.ts';
-import { useGetProductById, useUpdateProduct } from '../services/index.tsx';
-import { ProductValidation } from '../types/index.ts';
+import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
+import { textFieldStyles } from '../../../../../features/Customers/styles/index.ts';
+import { ProductSchema } from '../../../../../features/Products/schemas/index.ts';
+import {
+  useGetProductById,
+  useUpdateProduct,
+} from '../../../../../features/Products/services/index.tsx';
+import { ProductValidation } from '../../../../../features/Products/types/index.ts';
+import { boxStyles } from '../../../../../styles/index.ts';
+
+export const Route = createLazyFileRoute(
+  '/_authenticated/_layout/products/edit/$id',
+)({
+  component: ProducstUpdateForm,
+});
 
 export default function ProducstUpdateForm() {
-  const { id } = useParams();
+  const { id } = Route.useParams();
   const product = useGetProductById(id);
   const updateCustomer = useUpdateProduct();
 

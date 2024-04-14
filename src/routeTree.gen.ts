@@ -28,8 +28,14 @@ const AuthenticatedLayoutDashboardIndexLazyImport = createFileRoute(
 const AuthenticatedLayoutCustomersIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/customers/',
 )()
+const AuthenticatedLayoutProductsAddIndexLazyImport = createFileRoute(
+  '/_authenticated/_layout/products/add/',
+)()
 const AuthenticatedLayoutCustomersAddIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/customers/add/',
+)()
+const AuthenticatedLayoutProductsEditIdLazyImport = createFileRoute(
+  '/_authenticated/_layout/products/edit/$id',
 )()
 const AuthenticatedLayoutCustomersEditIdLazyImport = createFileRoute(
   '/_authenticated/_layout/customers/edit/$id',
@@ -82,12 +88,32 @@ const AuthenticatedLayoutCustomersIndexLazyRoute =
     ),
   )
 
+const AuthenticatedLayoutProductsAddIndexLazyRoute =
+  AuthenticatedLayoutProductsAddIndexLazyImport.update({
+    path: '/products/add/',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/products/add/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 const AuthenticatedLayoutCustomersAddIndexLazyRoute =
   AuthenticatedLayoutCustomersAddIndexLazyImport.update({
     path: '/customers/add/',
     getParentRoute: () => AuthenticatedLayoutRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/_layout/customers/add/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AuthenticatedLayoutProductsEditIdLazyRoute =
+  AuthenticatedLayoutProductsEditIdLazyImport.update({
+    path: '/products/edit/$id',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/products/edit/$id.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -134,8 +160,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutCustomersEditIdLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
+    '/_authenticated/_layout/products/edit/$id': {
+      preLoaderRoute: typeof AuthenticatedLayoutProductsEditIdLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
     '/_authenticated/_layout/customers/add/': {
       preLoaderRoute: typeof AuthenticatedLayoutCustomersAddIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
+    '/_authenticated/_layout/products/add/': {
+      preLoaderRoute: typeof AuthenticatedLayoutProductsAddIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
   }
@@ -151,7 +185,9 @@ export const routeTree = rootRoute.addChildren([
       AuthenticatedLayoutDashboardIndexLazyRoute,
       AuthenticatedLayoutProductsIndexLazyRoute,
       AuthenticatedLayoutCustomersEditIdLazyRoute,
+      AuthenticatedLayoutProductsEditIdLazyRoute,
       AuthenticatedLayoutCustomersAddIndexLazyRoute,
+      AuthenticatedLayoutProductsAddIndexLazyRoute,
     ]),
   ]),
 ])

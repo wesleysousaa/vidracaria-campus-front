@@ -7,7 +7,6 @@ import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
 import { exitStyles, headerStyles, navStyles } from './styles';
 
-console.log('src/features/Menu/index.tsx');
 function MenuDesktop() {
   const navigate = useNavigate();
   const { LogoutOutlinedIcon } = useGetIcons();
