@@ -16,7 +16,7 @@ function Products() {
           Produtos
         </Typography>
 
-        <Link to="">
+        <Link to="/products/add">
           <Button variant="contained" color="success">
             Novo Produto
           </Button>

@@ -58,14 +58,14 @@ export default function ProducstUpdateForm() {
 
   useEffect(() => {
     if (product.data) {
-      setValue('id', product.data.id);
-      setValue('name', product.data.name);
-      setValue('category', product.data.category);
-      setValue('unitOfMeasure', product.data.unitOfMeasure);
-      setValue('depth', product.data.depth);
-      setValue('height', product.data.height);
-      setValue('width', product.data.width);
-      setValue('price', product.data.price);
+      setValue('id', product.data.id || '');
+      setValue('name', product.data.name || '');
+      setValue('category', product.data.category || 'COMUM');
+      setValue('unitOfMeasure', product.data.unitOfMeasure || 'CENTIMETRO');
+      setValue('depth', product.data.depth || 0);
+      setValue('height', product.data.height || 0);
+      setValue('width', product.data.width || 0);
+      setValue('price', product.data.price || 0);
     }
   }, [product.data, setValue]);
 
