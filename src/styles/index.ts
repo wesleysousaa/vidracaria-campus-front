@@ -16,8 +16,8 @@ export const headerBoxStyles: CSSProperties = {
 
 export const headerFormStyles: CSSProperties = {
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
+  gap: '30%',
+  marginBottom: '1rem',
 };
 
 export const formStyles: CSSProperties = {

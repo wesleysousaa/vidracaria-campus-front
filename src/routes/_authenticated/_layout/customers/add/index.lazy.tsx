@@ -20,7 +20,11 @@ import {
   textFieldStyles,
 } from '../../../../../features/Customers/styles/index.ts';
 import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
-import { boxStyles, formStyles } from '../../../../../styles/index.ts';
+import {
+  boxStyles,
+  formStyles,
+  headerFormStyles,
+} from '../../../../../styles/index.ts';
 
 function CustomerCreateForm() {
   const states = useGetState();
@@ -56,11 +60,11 @@ function CustomerCreateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <ReturnButton link="/customers" />
       <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Typography variant="h3" marginBottom="1em" align="center">
-          Cadastrar Cliente
-        </Typography>
+        <Box style={headerFormStyles}>
+          <ReturnButton link="/customers" />
+          <Typography variant="h3">Cadastrar Cliente</Typography>
+        </Box>
 
         <Controller
           name="name"

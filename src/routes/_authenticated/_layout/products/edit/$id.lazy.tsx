@@ -78,7 +78,7 @@ export default function ProducstUpdateForm() {
       <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
         <Box style={headerFormStyles}>
           <ReturnButton link="/products" />
-          <Typography variant="h3" marginBottom="1em">
+          <Typography variant="h3" align="center">
             Editar Produto
           </Typography>
         </Box>
