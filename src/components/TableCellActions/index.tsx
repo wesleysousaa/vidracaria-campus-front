@@ -1,6 +1,6 @@
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { Link } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useGetIcons from '../../hooks/useGetIcons';
 import ConfirmAction from '../ConfirmAction';
 
@@ -19,6 +19,11 @@ export default function TableCellActions({
 }: TableCellActionsProps) {
   const { EditIcon, InfoIcon, DeleteIcon } = useGetIcons();
   const [open, setOpen] = useState(false);
+  const [typeTranslate, setTypeTranslate] = useState<string>('');
+
+  useEffect(() => {
+    setTypeTranslate(type === 'product' ? 'Produto' : 'Cliente');
+  }, []);
 
   return (
     <>
@@ -31,29 +36,36 @@ export default function TableCellActions({
         denyDispach={() => setOpen(false)}
       />
 
-      <IconButton
-        aria-label="Info"
-        color="info"
-        onClick={() => handleClick(idObject)}
-      >
-        <InfoIcon />
-      </IconButton>
-
-      <Link
-        to={type == 'customer' ? '/customers/edit/$id' : '/products/edit/$id'}
-        params={{ id: idObject }}
-      >
-        <IconButton aria-label="Editar" color="warning">
-          <EditIcon />
+      <Tooltip title={`Ver informação de ${typeTranslate}`}>
+        <IconButton
+          aria-label="Info"
+          color="info"
+          onClick={() => handleClick(idObject)}
+        >
+          <InfoIcon />
         </IconButton>
-      </Link>
-      <IconButton
-        aria-label="Excluir"
-        color="error"
-        onClick={() => setOpen(true)}
-      >
-        <DeleteIcon />
-      </IconButton>
+      </Tooltip>
+
+      <Tooltip title={`Editar informações de ${typeTranslate}`}>
+        <Link
+          to={type == 'customer' ? '/customers/edit/$id' : '/products/edit/$id'}
+          params={{ id: idObject }}
+        >
+          <IconButton aria-label="Editar" color="warning">
+            <EditIcon />
+          </IconButton>
+        </Link>
+      </Tooltip>
+
+      <Tooltip title={`Excluir informações de ${typeTranslate}`}>
+        <IconButton
+          aria-label="Excluir"
+          color="error"
+          onClick={() => setOpen(true)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     </>
   );
 }

@@ -20,7 +20,11 @@ import {
   useUpdateProduct,
 } from '../../../../../features/Products/services/index.tsx';
 import { ProductValidation } from '../../../../../features/Products/types/index.ts';
-import { boxStyles } from '../../../../../styles/index.ts';
+import {
+  boxStyles,
+  formStyles,
+  headerFormStyles,
+} from '../../../../../styles/index.ts';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/products/edit/$id',
@@ -71,19 +75,13 @@ export default function ProducstUpdateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <ReturnButton link="/products" />
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '1em',
-          width: '98%',
-        }}
-      >
-        <Typography variant="h3" marginBottom="1em">
-          Editar Produto
-        </Typography>
+      <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
+        <Box style={headerFormStyles}>
+          <ReturnButton link="/products" />
+          <Typography variant="h3" marginBottom="1em">
+            Editar Produto
+          </Typography>
+        </Box>
 
         <Controller
           name="name"

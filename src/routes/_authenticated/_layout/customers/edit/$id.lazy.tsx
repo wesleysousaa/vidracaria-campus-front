@@ -24,7 +24,7 @@ import {
   textFieldStyles,
 } from '../../../../../features/Customers/styles/index.ts';
 import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
-import { boxStyles } from '../../../../../styles/index.ts';
+import { boxStyles, formStyles } from '../../../../../styles/index.ts';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/customers/edit/$id',
@@ -88,15 +88,7 @@ function CustomerUpdateForm() {
   return (
     <Box sx={boxStyles}>
       <ReturnButton link="/customers" />
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '1em',
-          width: '98%',
-        }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
         <Typography variant="h3" marginBottom="1em">
           Editar Cliente
         </Typography>

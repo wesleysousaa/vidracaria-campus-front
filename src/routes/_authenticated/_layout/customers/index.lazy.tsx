@@ -1,22 +1,19 @@
-import { Box, Button, Typography } from '@mui/material';
-import { Link, createLazyFileRoute } from '@tanstack/react-router';
+import { Box, Typography } from '@mui/material';
+import { createLazyFileRoute } from '@tanstack/react-router';
+import AddButton from '../../../../components/AddButton';
 import Table from '../../../../features/Customers/Table';
-import { boxStylesForm } from '../../../../features/Customers/styles';
 import { mainStyles } from '../../../../features/Dashboard/styles';
+import { headerBoxStyles } from '../../../../styles';
 
 function Customers() {
   return (
     <Box sx={mainStyles} component={'main'}>
-      <Box sx={boxStylesForm}>
-        <Typography variant="h4" fontWeight={'bold'}>
+      <Box sx={headerBoxStyles}>
+        <Typography variant="h3" fontWeight={'bold'}>
           Clientes
         </Typography>
 
-        <Link to="/customers/add">
-          <Button variant="contained" color="success">
-            Novo Cliente
-          </Button>
-        </Link>
+        <AddButton link="/customers/add" />
       </Box>
       <Table />
     </Box>

@@ -1,8 +1,9 @@
-import { Box, Button, Typography } from '@mui/material';
-import { Link, createLazyFileRoute } from '@tanstack/react-router';
+import { Box, Typography } from '@mui/material';
+import { createLazyFileRoute } from '@tanstack/react-router';
+import AddButton from '../../../../components/AddButton/index.tsx';
 import { mainStyles } from '../../../../features/Dashboard/styles/index.ts';
 import Table from '../../../../features/Products/Table/index.tsx';
-import { boxStylesForm } from '../../../../styles/index.ts';
+import { headerBoxStyles } from '../../../../styles/index.ts';
 
 export const Route = createLazyFileRoute('/_authenticated/_layout/products/')({
   component: Products,
@@ -11,16 +12,11 @@ export const Route = createLazyFileRoute('/_authenticated/_layout/products/')({
 function Products() {
   return (
     <Box sx={mainStyles} component={'main'}>
-      <Box sx={boxStylesForm}>
-        <Typography variant="h4" fontWeight={'bold'}>
+      <Box sx={headerBoxStyles}>
+        <Typography variant="h3" fontWeight={'bold'}>
           Produtos
         </Typography>
-
-        <Link to="/products/add">
-          <Button variant="contained" color="success">
-            Novo Produto
-          </Button>
-        </Link>
+        <AddButton link="/products/add" />
       </Box>
       <Table />
     </Box>

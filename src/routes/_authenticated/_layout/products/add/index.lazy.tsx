@@ -16,7 +16,7 @@ import { textFieldStyles } from '../../../../../features/Customers/styles/index.
 import { CreateProductSchema } from '../../../../../features/Products/schemas/index.ts';
 import { useCreateProduct } from '../../../../../features/Products/services/index.tsx';
 import { CreateProductValidation } from '../../../../../features/Products/types/index.ts';
-import { boxStyles } from '../../../../../styles/index.ts';
+import { boxStyles, formStyles } from '../../../../../styles/index.ts';
 
 export default function ProductsCreateForm() {
   const create = useCreateProduct();
@@ -41,15 +41,7 @@ export default function ProductsCreateForm() {
   return (
     <Box sx={boxStyles}>
       <ReturnButton link="/products" />
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '1em',
-          width: '98%',
-        }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
         <Typography variant="h3" marginBottom="1em">
           Cadastrar Produto
         </Typography>
