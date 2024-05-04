@@ -39,7 +39,6 @@ export default function CustomerInfoForm({
         <Box sx={modalContentStyles}>
           <img
             src={userIcon}
-            placeholder="user icon"
             alt="user"
             style={{ width: '11em' }}
             loading="lazy"

@@ -5,8 +5,8 @@ import {
   type MRT_ColumnDef,
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
+import Loader from '../../../components/Loader';
 import TableCellActions from '../../../components/TableCellActions';
-import Loader from '../../Loader';
 import ProducstInfoForm from '../ProductInfoForm';
 import { useDeleteProductById, useGetAllProducts } from '../services';
 import { ProductValidation } from '../types';
@@ -43,44 +43,14 @@ export default function Table() {
         },
       },
       {
-        accessorKey: 'height',
-        header: 'Altura',
+        header: 'Dimensão A x L x P',
         enableHiding: true,
         Cell: (options) => {
+          const item = options.row.original;
           return (
-            <strong>
-              {options.row.original.height == 0
-                ? 'Não informada'
-                : options.row.original.height}
-            </strong>
-          );
-        },
-      },
-      {
-        accessorKey: 'width',
-        header: 'Largura',
-        enableHiding: true,
-        Cell: (options) => {
-          return (
-            <strong>
-              {options.row.original.width == 0
-                ? 'Não informada'
-                : options.row.original.width}
-            </strong>
-          );
-        },
-      },
-      {
-        accessorKey: 'depth',
-        header: 'Profundidade',
-        enableHiding: true,
-        Cell: (options) => {
-          return (
-            <strong>
-              {options.row.original.depth == 0
-                ? 'Não informada'
-                : options.row.original.depth}
-            </strong>
+            <>
+              {item.height} x {item.width} x {item.depth}
+            </>
           );
         },
       },
@@ -90,14 +60,14 @@ export default function Table() {
         enableHiding: true,
         Cell: (options) => {
           return (
-            <strong>
+            <>
               {options.row.original.price
                 ? options.row.original.price?.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
                   })
                 : 'Não informado'}
-            </strong>
+            </>
           );
         },
       },
@@ -131,9 +101,13 @@ export default function Table() {
   const table = useMaterialReactTable({
     columns,
     data: allProducts.data ?? [],
-    enableColumnOrdering: true,
-    enableGlobalFilter: false,
+    enableGlobalFilter: true,
     enableDensityToggle: false,
+    muiTableContainerProps: {
+      sx: {
+        width: '100%',
+      },
+    },
   });
 
   if (allProducts.isLoading) return <Loader open={true} />;
@@ -144,11 +118,7 @@ export default function Table() {
         onClose={() => setOpen(false)}
         product={currentProduct}
       />
-      <Box
-        sx={{
-          width: '100%',
-        }}
-      >
+      <Box>
         <MaterialReactTable table={table} />
       </Box>
     </>

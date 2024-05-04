@@ -19,6 +19,7 @@ import {
   textFieldStyles,
 } from '../CustomerCreateForm/styles/index.ts';
 import useGetState from '../hooks/useGetState.tsx';
+import useRegex from '../hooks/useRegex.tsx';
 import { ClientSchema } from '../schemas/index.ts';
 import { useGetCustomerById, useUpdateCustomer } from '../services/index.tsx';
 import { CustomerValidation } from '../types/index.ts';
@@ -28,6 +29,7 @@ export default function CustomerUpdateForm() {
   const states = useGetState();
   const customer = useGetCustomerById(id);
   const updateCustomer = useUpdateCustomer();
+  const { handleChangePhone, handleChangeCpfCnpj } = useRegex();
 
   const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
     updateCustomer.mutate(data);
@@ -36,7 +38,7 @@ export default function CustomerUpdateForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors, defaultValues },
+    formState: { errors },
     setValue,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
@@ -145,6 +147,9 @@ export default function CustomerUpdateForm() {
                 label="CPF/CNPJ"
                 placeholder="Digite o CPF ou CNPJ do cliente"
                 {...field}
+                onChange={(e) => {
+                  handleChangeCpfCnpj(e);
+                }}
                 InputLabelProps={{
                   shrink: !!field.value,
                 }}
@@ -190,6 +195,9 @@ export default function CustomerUpdateForm() {
                 helperText={errors.phone?.message}
                 placeholder="Digite o telefone do cliente"
                 {...field}
+                onChange={(e) => {
+                  handleChangePhone(e);
+                }}
                 InputLabelProps={{
                   shrink: !!field.value,
                 }}

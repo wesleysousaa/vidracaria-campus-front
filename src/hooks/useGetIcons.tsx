@@ -13,9 +13,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 export default function useGetIcons() {
   return {
     LogoutOutlinedIcon,
+    MenuOutlinedIcon,
     ArrowBackIosRoundedIcon,
     ArrowForwardIosRoundedIcon,
     DashboardOutlinedIcon,
