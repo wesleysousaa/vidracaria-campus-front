@@ -9,18 +9,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { createLazyFileRoute } from '@tanstack/react-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
-import { textFieldStyles } from '../../../../../features/Customers/styles/index.ts';
-import { CreateProductSchema } from '../../../../../features/Products/schemas/index.ts';
-import { useCreateProduct } from '../../../../../features/Products/services/index.tsx';
-import { CreateProductValidation } from '../../../../../features/Products/types/index.ts';
-import {
-  boxStyles,
-  formStyles,
-  headerFormStyles,
-} from '../../../../../styles/index.ts';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
+import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
+import { CreateProductSchema } from '../schemas/index.ts';
+import { useCreateProduct } from '../services/index.tsx';
+import { CreateProductValidation } from '../types/index.ts';
 
 export default function ProductsCreateForm() {
   const create = useCreateProduct();
@@ -44,13 +39,19 @@ export default function ProductsCreateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/products" />
-          <Typography variant="h3" align="center">
-            Cadastrar Produto
-          </Typography>
-        </Box>
+      <ReturnButton link="/products" />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '1em',
+          width: '98%',
+        }}
+      >
+        <Typography variant="h3" marginBottom="1em">
+          Cadastrar Produto
+        </Typography>
 
         <Controller
           name="name"
@@ -132,9 +133,3 @@ export default function ProductsCreateForm() {
     </Box>
   );
 }
-
-export const Route = createLazyFileRoute(
-  '/_authenticated/_layout/products/add/',
-)({
-  component: ProductsCreateForm,
-});

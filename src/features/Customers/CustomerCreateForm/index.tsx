@@ -9,24 +9,16 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { createLazyFileRoute } from '@tanstack/react-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
-import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
-import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
-import { useCreateCustomer } from '../../../../../features/Customers/services/index.tsx';
-import {
-  boxStylesForm,
-  textFieldStyles,
-} from '../../../../../features/Customers/styles/index.ts';
-import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
-import {
-  boxStyles,
-  formStyles,
-  headerFormStyles,
-} from '../../../../../styles/index.ts';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
+import useGetState from '../hooks/useGetState.tsx';
+import { ClientSchema } from '../schemas/index.ts';
+import { useCreateCustomer } from '../services/index.tsx';
+import { CustomerValidation } from '../types/index.ts';
+import { boxStylesForm, textFieldStyles } from './styles/index.ts';
 
-function CustomerCreateForm() {
+export default function CustomerCreateForm() {
   const states = useGetState();
   const createCustomer = useCreateCustomer();
 
@@ -60,11 +52,19 @@ function CustomerCreateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/customers" />
-          <Typography variant="h3">Cadastrar Cliente</Typography>
-        </Box>
+      <ReturnButton link="/customers" />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '1em',
+          width: '98%',
+        }}
+      >
+        <Typography variant="h3" marginBottom="1em">
+          Cadastrar Cliente
+        </Typography>
 
         <Controller
           name="name"
@@ -109,13 +109,11 @@ function CustomerCreateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                type="text"
-                id="cpfcnpj"
-                label="cpfcnpj"
-                placeholder="Digite o CPF/CNPJ"
-                error={!!errors.cpfcnpj}
-                helperText={errors.cpfcnpj?.message}
                 sx={textFieldStyles}
+                type="text"
+                id="cpf_cnpj"
+                label="CPF/CNPJ"
+                placeholder="Digite o CPF ou CNPJ do cliente"
                 {...field}
               />
             )}
@@ -133,8 +131,6 @@ function CustomerCreateForm() {
                 type="text"
                 label="Email"
                 placeholder="Digite o email do cliente"
-                error={!!errors.email}
-                helperText={errors.email?.message}
                 {...field}
               />
             )}
@@ -146,11 +142,11 @@ function CustomerCreateForm() {
               <TextField
                 sx={textFieldStyles}
                 id="phone"
-                type="text"
-                label="phone"
-                placeholder="Digite o Telefone do cliente"
+                type="tel"
+                label="Telefone"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
+                placeholder="Digite o telefone do cliente"
                 {...field}
               />
             )}
@@ -284,9 +280,3 @@ function CustomerCreateForm() {
     </Box>
   );
 }
-
-export const Route = createLazyFileRoute(
-  '/_authenticated/_layout/customers/add/',
-)({
-  component: CustomerCreateForm,
-});

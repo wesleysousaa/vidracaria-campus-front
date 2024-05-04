@@ -6,9 +6,12 @@ function LogoItem() {
   return (
     <Grid
       container
+      spacing={2}
       alignItems={'center'}
       justifyContent={'center'}
-      height={'80px'}
+      borderBottom={'1px solid #ccc'}
+      boxShadow={'0px 4px 15px 0px rgba(0,0,0,0.1)'}
+      padding={'2em'}
     >
       <Grid item>
         <img src={logo} alt="logo" style={{ maxWidth: '3em' }} loading="lazy" />

@@ -3,11 +3,7 @@ import CloseButton from '../../../components/CloseButton';
 import CustomLabel from '../../../components/CustomLabel';
 import { modalStyles } from '../../../styles';
 import { ProductValidation } from '../types';
-import {
-  modalHeaderStyles,
-  modalTitleStyles,
-  productBoxInfoStyles,
-} from './styles';
+import { modalHeaderStyles, productBoxInfoStyles } from './styles';
 
 interface ProductInfoFormProps {
   open: boolean;
@@ -20,6 +16,7 @@ export default function ProducstInfoForm({
   open,
   product,
 }: ProductInfoFormProps) {
+
   if (product === undefined) return;
 
   return (
@@ -28,12 +25,8 @@ export default function ProducstInfoForm({
         <Box>
           <Box sx={modalHeaderStyles}>
             <CloseButton onClose={onClose} />
+            <Typography variant="h5">{product.name}</Typography>
           </Box>
-
-          <Typography sx={modalTitleStyles} variant="h5">
-            {product.name}
-          </Typography>
-          <Divider />
           <Box
             sx={{
               display: 'flex',
@@ -41,7 +34,10 @@ export default function ProducstInfoForm({
               justifyContent: 'space-between',
             }}
           >
-            <CustomLabel title="Categoria" text={product.category} />
+            <CustomLabel
+              title="Categoria"
+              text={(product.category)}
+            />
             <CustomLabel
               title="Preço"
               text={
@@ -52,11 +48,11 @@ export default function ProducstInfoForm({
               }
             />
           </Box>
+          <Divider />
           <Box
             sx={{
               display: 'flex',
               gap: '1em',
-              backgroundColor: '#f5f5f5',
             }}
           >
             <CustomLabel
@@ -73,7 +69,9 @@ export default function ProducstInfoForm({
             />
             <CustomLabel
               title="Unidade de medida"
-              text={product.unitOfMeasure}
+              text={(
+                product?.unitOfMeasure?.toString() as string,
+              )}
             />
           </Box>
         </Box>

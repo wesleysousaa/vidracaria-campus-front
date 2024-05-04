@@ -9,31 +9,18 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
-import { textFieldStyles } from '../../../../../features/Customers/styles/index.ts';
-import { ProductSchema } from '../../../../../features/Products/schemas/index.ts';
-import {
-  useGetProductById,
-  useUpdateProduct,
-} from '../../../../../features/Products/services/index.tsx';
-import { ProductValidation } from '../../../../../features/Products/types/index.ts';
-import {
-  boxStyles,
-  formStyles,
-  headerFormStyles,
-} from '../../../../../styles/index.ts';
-
-export const Route = createLazyFileRoute(
-  '/_authenticated/_layout/products/edit/$id',
-)({
-  component: ProducstUpdateForm,
-});
+import { useParams } from 'react-router-dom';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
+import { textFieldStyles } from '../../Customers/CustomerCreateForm/styles/index.ts';
+import { ProductSchema } from '../schemas/index.ts';
+import { useGetProductById, useUpdateProduct } from '../services/index.tsx';
+import { ProductValidation } from '../types/index.ts';
 
 export default function ProducstUpdateForm() {
-  const { id } = Route.useParams();
+  const { id } = useParams();
   const product = useGetProductById(id);
   const updateCustomer = useUpdateProduct();
 
@@ -62,26 +49,32 @@ export default function ProducstUpdateForm() {
 
   useEffect(() => {
     if (product.data) {
-      setValue('id', product.data.id || '');
-      setValue('name', product.data.name || '');
-      setValue('category', product.data.category || 'COMUM');
-      setValue('unitOfMeasure', product.data.unitOfMeasure || 'CENTIMETRO');
-      setValue('depth', product.data.depth || 0);
-      setValue('height', product.data.height || 0);
-      setValue('width', product.data.width || 0);
-      setValue('price', product.data.price || 1);
+      setValue('id', product.data.id);
+      setValue('name', product.data.name);
+      setValue('category', product.data.category);
+      setValue('unitOfMeasure', product.data.unitOfMeasure);
+      setValue('depth', product.data.depth);
+      setValue('height', product.data.height);
+      setValue('width', product.data.width);
+      setValue('price', product.data.price);
     }
   }, [product.data, setValue]);
 
   return (
     <Box sx={boxStyles}>
-      <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/products" />
-          <Typography variant="h3" align="center">
-            Editar Produto
-          </Typography>
-        </Box>
+      <ReturnButton link="/products" />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '1em',
+          width: '98%',
+        }}
+      >
+        <Typography variant="h3" marginBottom="1em">
+          Editar Produto
+        </Typography>
 
         <Controller
           name="name"
@@ -223,10 +216,7 @@ export default function ProducstUpdateForm() {
                 helperText={errors.price?.message}
                 sx={textFieldStyles}
                 InputLabelProps={{
-                  shrink:
-                    field.value !== undefined && field.value !== 0
-                      ? true
-                      : false,
+                  shrink: !!field.value || field.value === 0,
                 }}
               />
             )}

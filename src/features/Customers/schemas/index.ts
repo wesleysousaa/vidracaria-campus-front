@@ -7,7 +7,7 @@ export const ClientSchema = Yup.object<CustomerValidation>().shape({
   customerType: Yup.string().required('O campo pessoa é obrigatório'),
   email: Yup.string().email('Digite o email no formato correto').optional(),
   name: Yup.string().required('O nome é obrigatório'),
-  phone: Yup.string(),
+  phone: Yup.string().required('O telefone é obrigatório'),
   address: Yup.object().shape({
     address: Yup.string().required('a rua é obrigatório'),
     zipCode: Yup.string().required('O cep é obrigatório'),

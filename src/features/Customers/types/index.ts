@@ -4,7 +4,7 @@ export interface CustomerValidation {
   customerType: string;
   cpfcnpj?: string;
   email?: string;
-  phone?: string;
+  phone: string;
   address: AddressValidation;
 }
 

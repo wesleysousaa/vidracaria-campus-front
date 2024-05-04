@@ -1,13 +1,19 @@
 import { Box, Typography } from '@mui/material';
-import { createLazyFileRoute } from '@tanstack/react-router';
-import cartIcon from '../../../../assets/images/cart.webp';
-import chartUpIcon from '../../../../assets/images/chart_up.webp';
-import groupIcon from '../../../../assets/images/group.png';
-import moneyIcon from '../../../../assets/images/money_icon.webp';
-import { CardChart, LineChart } from '../../../../features/Dashboard/Charts';
-import { boxCards, mainStyles } from '../../../../features/Dashboard/styles';
+import cartIcon from '../../assets/images/cart.webp';
+import chartUpIcon from '../../assets/images/chart_up.webp';
+import coinIcon from '../../assets/images/coin.webp';
+import moneyIcon from '../../assets/images/money_icon.webp';
+import { BarChart, CardChart, LineChart } from './Charts';
+import { boxCards, mainStyles, secondBox } from './styles';
 
-function Dashboard() {
+export default function Dashboard() {
+  const dataBar = [
+    { item: 'Vidro Temperado 300cm x 300cm', value: 30 },
+    { item: 'Vidro 400cm x 800cm', value: 25 },
+    { item: 'Kit para banheiro', value: 20 },
+    { item: 'Box de banheiro', value: 40 },
+  ];
+
   const lineChartData = [
     { date: '2023-01-01', month: 'Janeiro', value: 1500 },
     { date: '2023-02-01', month: 'Fevereiro', value: 1200 },
@@ -47,19 +53,31 @@ function Dashboard() {
         />
         <CardChart
           fontColor="#fff"
-          title="55"
-          subtitle="Clientes Novos (esse mês)"
-          imgPath={groupIcon}
+          title="R$ 1.800,00"
+          subtitle="Ganhos Líquidos"
+          imgPath={coinIcon}
           bgColor="#EA5E0B"
         />
       </Box>
-      <Box marginTop={5} display="flex">
-        <LineChart data={lineChartData} title="Faturamento Mensal" />
+      <Box>
+        <LineChart data={lineChartData} title="Faturamento (durante meses)" />
+      </Box>
+      <Box sx={secondBox}>
+        <Box
+          sx={{
+            width: '47%',
+          }}
+        >
+          <BarChart data={dataBar} title="Produtos mais vendidos" />
+        </Box>
+        <Box
+          sx={{
+            width: '47%',
+          }}
+        >
+          <BarChart data={dataBar} title="Produtos com baixa no estoque" />
+        </Box>
       </Box>
     </Box>
   );
 }
-
-export const Route = createLazyFileRoute('/_authenticated/_layout/dashboard/')({
-  component: Dashboard,
-});
