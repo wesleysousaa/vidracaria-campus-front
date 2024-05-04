@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
 import { enqueueSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 import api, { config } from '../../../services';
 import { CreateProductValidation, ProductValidation } from '../types';
 
@@ -14,7 +14,7 @@ const useCreateProduct = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
-      navigate({ to: '/products' });
+      navigate('/products');
       enqueueSnackbar('Produto salvo com sucesso!', {
         variant: 'success',
       });
@@ -38,7 +38,7 @@ const useUpdateProduct = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
-      navigate({ to: '/products' });
+      navigate('/products');
       enqueueSnackbar('Produto atualizado com sucesso!', {
         variant: 'success',
       });

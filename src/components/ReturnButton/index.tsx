@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useNavigate } from '@tanstack/react-router';
+import { Link } from 'react-router-dom';
 import useGetIcons from '../../hooks/useGetIcons';
 
 interface ReturnButtonProps {
@@ -8,17 +8,17 @@ interface ReturnButtonProps {
 
 export default function ReturnButton({ link }: ReturnButtonProps) {
   const { ArrowBackIosIcon } = useGetIcons();
-  const navigate = useNavigate();
 
   return (
-    <Button
-      aria-label="Voltar"
-      color="inherit"
-      onClick={() => navigate({ to: link })}
-      sx={{ color: '#000', fontSize: '1.5rem' }}
-    >
-      <ArrowBackIosIcon />
-      Voltar
-    </Button>
+    <Link to={link}>
+      <Button
+        aria-label="Voltar"
+        color="inherit"
+        sx={{ color: '#000', fontSize: '1rem' }}
+      >
+        <ArrowBackIosIcon />
+        Voltar
+      </Button>
+    </Link>
   );
 }

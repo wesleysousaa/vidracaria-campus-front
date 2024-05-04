@@ -4,15 +4,15 @@ import CloseButton from '../../../components/CloseButton';
 import useGetIcons from '../../../hooks/useGetIcons';
 import { modalStyles } from '../../../styles';
 import { modalHeaderStyles } from '../../Products/ProductInfoForm/styles';
+import { CustomerValidation } from '../types';
+import AddressInfoSpan from './AddressInfoSpan';
 import {
   addressContentStyles,
   boxContentStyles,
   customerBoxInfoStyles,
   modalContentStyles,
   textContentStyles,
-} from '../styles';
-import { CustomerValidation } from '../types';
-import AddressInfoSpan from './AddressInfoSpan';
+} from './styles';
 
 interface CustomerInfoFormProps {
   open: boolean;
@@ -39,6 +39,7 @@ export default function CustomerInfoForm({
         <Box sx={modalContentStyles}>
           <img
             src={userIcon}
+            placeholder="user icon"
             alt="user"
             style={{ width: '11em' }}
             loading="lazy"

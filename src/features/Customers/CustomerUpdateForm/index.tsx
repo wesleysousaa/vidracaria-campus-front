@@ -9,35 +9,22 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
-import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
-import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
-import {
-  useGetCustomerById,
-  useUpdateCustomer,
-} from '../../../../../features/Customers/services/index.tsx';
+import { useParams } from 'react-router-dom';
+import ReturnButton from '../../../components/ReturnButton/index.tsx';
+import { boxStyles } from '../../../styles/index.ts';
 import {
   boxStylesForm,
   textFieldStyles,
-} from '../../../../../features/Customers/styles/index.ts';
-import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
-import {
-  boxStyles,
-  formStyles,
-  headerFormStyles,
-} from '../../../../../styles/index.ts';
+} from '../CustomerCreateForm/styles/index.ts';
+import useGetState from '../hooks/useGetState.tsx';
+import { ClientSchema } from '../schemas/index.ts';
+import { useGetCustomerById, useUpdateCustomer } from '../services/index.tsx';
+import { CustomerValidation } from '../types/index.ts';
 
-export const Route = createLazyFileRoute(
-  '/_authenticated/_layout/customers/edit/$id',
-)({
-  component: CustomerUpdateForm,
-});
-
-function CustomerUpdateForm() {
-  const { id } = Route.useParams();
+export default function CustomerUpdateForm() {
+  const { id } = useParams();
   const states = useGetState();
   const customer = useGetCustomerById(id);
   const updateCustomer = useUpdateCustomer();
@@ -49,7 +36,7 @@ function CustomerUpdateForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, defaultValues },
     setValue,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
@@ -91,11 +78,19 @@ function CustomerUpdateForm() {
 
   return (
     <Box sx={boxStyles}>
-      <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/customers" />
-          <Typography variant="h3">Editar Cliente</Typography>
-        </Box>
+      <ReturnButton link="/customers" />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '1em',
+          width: '98%',
+        }}
+      >
+        <Typography variant="h3" marginBottom="1em">
+          Editar Cliente
+        </Typography>
 
         <Controller
           name="name"
@@ -141,14 +136,18 @@ function CustomerUpdateForm() {
             control={control}
             render={({ field }) => (
               <TextField
+                sx={{
+                  width: '68%',
+                  ...textFieldStyles,
+                }}
                 type="text"
-                id="cpfcnpj"
-                label="cpfcnpj"
-                placeholder="Digite o CPF/CNPJ"
-                error={!!errors.cpfcnpj}
-                helperText={errors.cpfcnpj?.message}
-                sx={textFieldStyles}
+                id="cpf_cnpj"
+                label="CPF/CNPJ"
+                placeholder="Digite o CPF ou CNPJ do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />
@@ -180,14 +179,20 @@ function CustomerUpdateForm() {
             control={control}
             render={({ field }) => (
               <TextField
-                sx={textFieldStyles}
+                sx={{
+                  width: '30%',
+                  ...textFieldStyles,
+                }}
                 id="phone"
-                type="text"
-                label="phone"
-                placeholder="Digite o Telefone do cliente"
+                type="tel"
+                label="Telefone"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
+                placeholder="Digite o telefone do cliente"
                 {...field}
+                InputLabelProps={{
+                  shrink: !!field.value,
+                }}
               />
             )}
           />

@@ -6,6 +6,7 @@ import {
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
+import Loader from '../../Loader';
 import CustomerInfoForm from '../CustomerInfoForm';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
@@ -22,6 +23,26 @@ export default function Table() {
     setOpen(true);
     setCurrentCustomer(data?.find((customer) => customer.id === id));
   };
+
+  function formatDocument(document?: string) {
+    if (!document) return '';
+
+    const documentClean = document.replace(/\D/g, '');
+
+    const isCPF = documentClean.length === 11;
+
+    if (isCPF) {
+      return documentClean.replace(
+        /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+        '$1.$2.$3-$4',
+      );
+    } else {
+      return documentClean.replace(
+        /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+        '$1.$2.$3/$4-$5',
+      );
+    }
+  }
 
   const columns = useMemo<MRT_ColumnDef<CustomerValidation>[]>(
     () => [
@@ -45,7 +66,7 @@ export default function Table() {
         header: 'CPF/CNPJ (Se tiver)',
         enableHiding: true,
         Cell: (options) => {
-          return <>{options.row.original.cpfcnpj}</>;
+          return <>{formatDocument(options.row.original.cpfcnpj)}</>;
         },
       },
       {
@@ -65,9 +86,8 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              idObject={options.row.original.id as string}
-              type="customer"
               dispach={handleDelete}
+              idObject={options.row.original.id as string}
               handleClick={handleClick}
             />
           );
@@ -85,13 +105,11 @@ export default function Table() {
     columns,
     data: data || [],
     enableColumnOrdering: true,
-    enableGlobalFilter: true,
+    enableGlobalFilter: false,
     enableDensityToggle: false,
-    state: {
-      isLoading,
-    },
   });
 
+  if (isLoading) return <Loader open={true} />;
   return (
     <>
       <CustomerInfoForm

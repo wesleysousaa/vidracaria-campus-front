@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
 import { enqueueSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 import api, { config } from '../../../services';
 import { CustomerValidation } from '../types';
 
@@ -15,7 +15,7 @@ const useCreateCustomer = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
-      navigate({ to: '/customers' });
+      navigate('/customers');
       enqueueSnackbar('Cliente salvo com sucesso!', {
         variant: 'success',
       });
@@ -38,7 +38,7 @@ const useUpdateCustomer = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
-      navigate({ to: '/customers' });
+      navigate('/customers');
       enqueueSnackbar('Cliente atualizado com sucesso!', {
         variant: 'success',
       });

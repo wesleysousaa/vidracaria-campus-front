@@ -7,13 +7,7 @@ interface CustomLabelProps {
 
 export default function CustomLabel({ text, title }: CustomLabelProps) {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '1em',
-      }}
-    >
+    <Box>
       <Typography variant="caption">{title}</Typography>
       <Typography variant="h5">{text}</Typography>
     </Box>

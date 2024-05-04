@@ -5,7 +5,7 @@ export const productBoxInfoStyles: CSSProperties = {
   alignItems: 'center',
   flexDirection: 'column',
   gap: '1em',
-  padding: '1rem',
+  padding: '2rem',
   borderRadius: '5px',
   marginBottom: '1em',
   backgroundColor: '#fff',
@@ -13,13 +13,6 @@ export const productBoxInfoStyles: CSSProperties = {
 
 export const modalHeaderStyles: CSSProperties = {
   display: 'flex',
-  justifyContent: 'flex-start',
   width: '100%',
-};
-
-export const modalTitleStyles: CSSProperties = {
-  display: 'flex',
-  justifyContent: 'center',
-  width: '100%',
-  fontWeight: 'bold',
+  gap: '1em',
 };

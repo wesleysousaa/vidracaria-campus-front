@@ -6,7 +6,7 @@ const api = axios.create({
 
 export const config = {
   headers: {
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
+    Authorization: `Bearer ${localStorage.getItem('token')?.split('"')[1]}`,
   },
 };
 
