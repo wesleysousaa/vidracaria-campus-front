@@ -1,12 +1,13 @@
 import { Box, Typography } from '@mui/material';
-import cartIcon from '../../assets/images/cart.webp';
-import chartUpIcon from '../../assets/images/chart_up.webp';
-import groupIcon from '../../assets/images/group.png';
-import moneyIcon from '../../assets/images/money_icon.webp';
-import { CardChart, LineChart } from './Charts';
-import { boxCards, mainStyles } from './styles';
+import { createLazyFileRoute } from '@tanstack/react-router';
+import cartIcon from '../../../../assets/images/cart.webp';
+import chartUpIcon from '../../../../assets/images/chart_up.webp';
+import groupIcon from '../../../../assets/images/group.png';
+import moneyIcon from '../../../../assets/images/money_icon.webp';
+import { CardChart, LineChart } from '../../../../features/Dashboard/Charts';
+import { boxCards, mainStyles } from '../../../../features/Dashboard/styles';
 
-export default function Dashboard() {
+function Dashboard() {
   const lineChartData = [
     { date: '2023-01-01', month: 'Janeiro', value: 1500 },
     { date: '2023-02-01', month: 'Fevereiro', value: 1200 },
@@ -58,3 +59,7 @@ export default function Dashboard() {
     </Box>
   );
 }
+
+export const Route = createLazyFileRoute('/_authenticated/_layout/dashboard/')({
+  component: Dashboard,
+});

@@ -5,7 +5,6 @@ import {
   type MRT_ColumnDef,
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
-import Loader from '../../../components/Loader';
 import TableCellActions from '../../../components/TableCellActions';
 import CustomerInfoForm from '../CustomerInfoForm';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
@@ -66,8 +65,9 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              dispach={handleDelete}
               idObject={options.row.original.id as string}
+              type="customer"
+              dispach={handleDelete}
               handleClick={handleClick}
             />
           );
@@ -87,9 +87,11 @@ export default function Table() {
     enableColumnOrdering: true,
     enableGlobalFilter: true,
     enableDensityToggle: false,
+    state: {
+      isLoading,
+    },
   });
 
-  if (isLoading) return <Loader open={true} />;
   return (
     <>
       <CustomerInfoForm

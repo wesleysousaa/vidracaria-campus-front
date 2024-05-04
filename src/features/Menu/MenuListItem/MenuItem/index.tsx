@@ -5,8 +5,8 @@ import {
   SvgIconTypeMap,
 } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { Link, useRouterState } from '@tanstack/react-router';
 import { memo } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
 import {
   buttonStyle,
   buttonStyleActive,
@@ -25,7 +25,7 @@ export interface MenuItemProps {
 }
 
 function MenuItem(props: MenuItemProps) {
-  const location = useLocation();
+  const location = useRouterState().location;
 
   const verifyLinkActive = (link: string) => {
     return location.pathname === link
@@ -38,10 +38,10 @@ function MenuItem(props: MenuItemProps) {
   };
 
   return (
-    <NavLink to={props.path} style={verifyLinkActive(props.path).linkStyle}>
+    <Link to={props.path} style={verifyLinkActive(props.path).linkStyle}>
       <ListItemButton
         key={props.label}
-        LinkComponent={NavLink}
+        LinkComponent={Link}
         sx={verifyLinkActive(props.path).buttonStyle}
       >
         <ListItemIcon>
@@ -49,7 +49,7 @@ function MenuItem(props: MenuItemProps) {
         </ListItemIcon>
         <ListItemText primary={props.label} />
       </ListItemButton>
-    </NavLink>
+    </Link>
   );
 }
 

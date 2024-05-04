@@ -4,15 +4,15 @@ import CloseButton from '../../../components/CloseButton';
 import useGetIcons from '../../../hooks/useGetIcons';
 import { modalStyles } from '../../../styles';
 import { modalHeaderStyles } from '../../Products/ProductInfoForm/styles';
-import { CustomerValidation } from '../types';
-import AddressInfoSpan from './AddressInfoSpan';
 import {
   addressContentStyles,
   boxContentStyles,
   customerBoxInfoStyles,
   modalContentStyles,
   textContentStyles,
-} from './styles';
+} from '../styles';
+import { CustomerValidation } from '../types';
+import AddressInfoSpan from './AddressInfoSpan';
 
 interface CustomerInfoFormProps {
   open: boolean;

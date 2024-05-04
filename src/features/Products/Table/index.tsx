@@ -5,14 +5,13 @@ import {
   type MRT_ColumnDef,
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
-import Loader from '../../../components/Loader';
 import TableCellActions from '../../../components/TableCellActions';
 import ProducstInfoForm from '../ProductInfoForm';
 import { useDeleteProductById, useGetAllProducts } from '../services';
 import { ProductValidation } from '../types';
 
 export default function Table() {
-  const allProducts = useGetAllProducts();
+  const { data, isLoading } = useGetAllProducts();
   const deleteProducts = useDeleteProductById();
   const [open, setOpen] = useState(false);
   const [currentProduct, setCurrenProduct] = useState<
@@ -78,8 +77,9 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              dispach={handleDelete}
               idObject={options.row.original.id}
+              type="product"
+              dispach={handleDelete}
               handleClick={handleClick}
             />
           );
@@ -95,12 +95,12 @@ export default function Table() {
 
   const handleClick = (id: string) => {
     setOpen(true);
-    setCurrenProduct(allProducts.data?.find((product) => product.id === id));
+    setCurrenProduct(data?.find((product) => product.id === id));
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: allProducts.data ?? [],
+    data: data ?? [],
     enableGlobalFilter: true,
     enableDensityToggle: false,
     muiTableContainerProps: {
@@ -108,9 +108,10 @@ export default function Table() {
         width: '100%',
       },
     },
+    state: {
+      isLoading,
+    },
   });
-
-  if (allProducts.isLoading) return <Loader open={true} />;
   return (
     <>
       <ProducstInfoForm
