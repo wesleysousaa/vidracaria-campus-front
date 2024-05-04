@@ -6,13 +6,12 @@ import {
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
-import Loader from '../../Loader';
 import ProducstInfoForm from '../ProductInfoForm';
 import { useDeleteProductById, useGetAllProducts } from '../services';
 import { ProductValidation } from '../types';
 
 export default function Table() {
-  const allProducts = useGetAllProducts();
+  const { data, isLoading } = useGetAllProducts();
   const deleteProducts = useDeleteProductById();
   const [open, setOpen] = useState(false);
   const [currentProduct, setCurrenProduct] = useState<
@@ -43,44 +42,14 @@ export default function Table() {
         },
       },
       {
-        accessorKey: 'height',
-        header: 'Altura',
+        header: 'Dimensão A x L x P',
         enableHiding: true,
         Cell: (options) => {
+          const item = options.row.original;
           return (
-            <strong>
-              {options.row.original.height == 0
-                ? 'Não informada'
-                : options.row.original.height}
-            </strong>
-          );
-        },
-      },
-      {
-        accessorKey: 'width',
-        header: 'Largura',
-        enableHiding: true,
-        Cell: (options) => {
-          return (
-            <strong>
-              {options.row.original.width == 0
-                ? 'Não informada'
-                : options.row.original.width}
-            </strong>
-          );
-        },
-      },
-      {
-        accessorKey: 'depth',
-        header: 'Profundidade',
-        enableHiding: true,
-        Cell: (options) => {
-          return (
-            <strong>
-              {options.row.original.depth == 0
-                ? 'Não informada'
-                : options.row.original.depth}
-            </strong>
+            <>
+              {item.height} x {item.width} x {item.depth}
+            </>
           );
         },
       },
@@ -90,14 +59,14 @@ export default function Table() {
         enableHiding: true,
         Cell: (options) => {
           return (
-            <strong>
+            <>
               {options.row.original.price
                 ? options.row.original.price?.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
                   })
                 : 'Não informado'}
-            </strong>
+            </>
           );
         },
       },
@@ -108,8 +77,9 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              dispach={handleDelete}
               idObject={options.row.original.id}
+              type="product"
+              dispach={handleDelete}
               handleClick={handleClick}
             />
           );
@@ -125,18 +95,23 @@ export default function Table() {
 
   const handleClick = (id: string) => {
     setOpen(true);
-    setCurrenProduct(allProducts.data?.find((product) => product.id === id));
+    setCurrenProduct(data?.find((product) => product.id === id));
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: allProducts.data ?? [],
-    enableColumnOrdering: true,
-    enableGlobalFilter: false,
+    data: data ?? [],
+    enableGlobalFilter: true,
     enableDensityToggle: false,
+    muiTableContainerProps: {
+      sx: {
+        width: '100%',
+      },
+    },
+    state: {
+      isLoading,
+    },
   });
-
-  if (allProducts.isLoading) return <Loader open={true} />;
   return (
     <>
       <ProducstInfoForm
@@ -144,11 +119,7 @@ export default function Table() {
         onClose={() => setOpen(false)}
         product={currentProduct}
       />
-      <Box
-        sx={{
-          width: '100%',
-        }}
-      >
+      <Box>
         <MaterialReactTable table={table} />
       </Box>
     </>

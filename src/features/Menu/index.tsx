@@ -1,6 +1,6 @@
 import { Box, Button, Drawer, IconButton } from '@mui/material/';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import queryClient from '../../config/queryClient';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
@@ -14,7 +14,7 @@ function MenuDesktop() {
   const logout = () => {
     localStorage.removeItem('token');
     queryClient.clear();
-    navigate('/');
+    navigate({ from: '/dashboard', to: '/' });
   };
 
   return (
@@ -43,7 +43,7 @@ function MenuDesktop() {
 }
 
 function MenuMobile() {
-  const { ArrowBackIosRoundedIcon, ArrowForwardIosRoundedIcon } = useGetIcons();
+  const { MenuOutlinedIcon } = useGetIcons();
   const [open, setOpen] = useState(false);
 
   return (
@@ -51,9 +51,22 @@ function MenuMobile() {
       <Drawer open={open} onClose={() => setOpen(!open)}>
         <MenuDesktop />
       </Drawer>
-      <IconButton onClick={() => setOpen(!open)}>
-        {open ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}
-      </IconButton>
+      <Box
+        sx={{
+          position: 'fixed',
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '100%',
+          height: '80px',
+          borderBottom: '1px solid #ccc',
+          backgroundColor: 'var(--background)',
+        }}
+      >
+        <LogoItem />
+        <IconButton onClick={() => setOpen(!open)}>
+          {!open && <MenuOutlinedIcon />}
+        </IconButton>
+      </Box>
     </>
   );
 }

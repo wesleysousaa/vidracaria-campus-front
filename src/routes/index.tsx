@@ -1,44 +1,105 @@
-import { Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Loader from '../features/Loader';
-import TemplateImports from './TemplateImports';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { LoginSchema } from '../features/Login/schemas';
+import { useAuthUser } from '../features/Login/services';
+import {
+  boxStyles,
+  formControlStyles,
+  loginButtonStyles,
+} from '../features/Login/styles';
+import { UserValidation } from '../features/Login/types';
+import { useAuth } from '../hooks/useAuth';
 
-export default function Router() {
+function Login() {
+  const authUser = useAuthUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authUser.isSuccess) navigate({ to: '/dashboard' });
+  }, [authUser.isSuccess]);
+
+  const login = (userData: UserValidation) => {
+    authUser.mutate(userData);
+  };
+
+  const {
+    handleSubmit,
+    control,
+    formState: {},
+  } = useForm<UserValidation>({
+    resolver: yupResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit: SubmitHandler<UserValidation> = (data) => {
+    login(data);
+  };
+
   return (
-    <BrowserRouter>
-      <Suspense fallback={<Loader open={true} />}>
-        <Routes>
-          <Route element={<TemplateImports.PrivateRoute />}>
-            <Route path="dashboard" element={<TemplateImports.Dashboard />} />
-            <Route path="customers">
-              <Route index element={<TemplateImports.Customers.index />} />
-              <Route
-                path="add"
-                element={<TemplateImports.Customers.CustomerCreateForm />}
-              />
-              <Route
-                path="edit/:id"
-                element={<TemplateImports.Customers.CustomerUpdateForm />}
-              />
-            </Route>
-            <Route path="products">
-              <Route index element={<TemplateImports.Products.index />} />
-              <Route
-                path="add"
-                element={<TemplateImports.Products.ProductsCreateForm />}
-              />
-              <Route
-                path="edit/:id"
-                element={<TemplateImports.Products.ProductsUpdateForm />}
-              />
-            </Route>
-            <Route path="servicos" element={<div>Serviços</div>} />
-          </Route>
-          <Route element={<TemplateImports.PublicRoute />}>
-            <Route path="/" element={<TemplateImports.Login />} />
-          </Route>
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <Box sx={boxStyles}>
+      <Typography variant="h1">Login</Typography>
+      <FormControl
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={formControlStyles}
+      >
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              type="email"
+              label="Email"
+              placeholder="Digite seu email"
+              {...field}
+            />
+          )}
+        />
+
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              type="password"
+              label="Senha"
+              placeholder="Digite sua senha"
+              {...field}
+            />
+          )}
+        />
+
+        <Button type="submit" variant="contained" sx={loginButtonStyles}>
+          Acessar
+        </Button>
+        {authUser.error && (
+          <Alert variant="filled" severity="error">
+            Email ou senha inválidos!
+          </Alert>
+        )}
+        <Link to=""></Link>
+      </FormControl>
+    </Box>
   );
 }
+
+export const Route = createFileRoute('/')({
+  beforeLoad: (s) => {
+    const { isAuthenticated } = useAuth();
+    if (isAuthenticated()) s.navigate({ to: '/dashboard' });
+  },
+  component: Login,
+});
