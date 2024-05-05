@@ -21,6 +21,7 @@ import {
   formStyles,
   headerFormStyles,
 } from '../../../../../styles/index.ts';
+import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
 
 export default function ProductsCreateForm() {
   const create = useCreateProduct();
@@ -45,12 +46,7 @@ export default function ProductsCreateForm() {
   return (
     <Box sx={boxStyles}>
       <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/products" />
-          <Typography variant="h3" align="center">
-            Cadastrar Produto
-          </Typography>
-        </Box>
+        <PageHeader title="Cadastrar Produto" backTo="/products" />
 
         <Controller
           name="name"

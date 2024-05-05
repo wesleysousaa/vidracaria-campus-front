@@ -7,12 +7,10 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
 import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
 import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
 import {
@@ -24,11 +22,8 @@ import {
   textFieldStyles,
 } from '../../../../../features/Customers/styles/index.ts';
 import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
-import {
-  boxStyles,
-  formStyles,
-  headerFormStyles,
-} from '../../../../../styles/index.ts';
+import { boxStyles, formStyles } from '../../../../../styles/index.ts';
+import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/customers/edit/$id',
@@ -92,10 +87,7 @@ function CustomerUpdateForm() {
   return (
     <Box sx={boxStyles}>
       <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/customers" />
-          <Typography variant="h3">Editar Cliente</Typography>
-        </Box>
+        <PageHeader backTo="/customers" title="Editar Cliente" />
 
         <Controller
           name="name"

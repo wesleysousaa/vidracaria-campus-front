@@ -25,6 +25,7 @@ import {
   formStyles,
   headerFormStyles,
 } from '../../../../../styles/index.ts';
+import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
 
 function CustomerCreateForm() {
   const states = useGetState();
@@ -61,10 +62,7 @@ function CustomerCreateForm() {
   return (
     <Box sx={boxStyles}>
       <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/customers" />
-          <Typography variant="h3">Cadastrar Cliente</Typography>
-        </Box>
+        <PageHeader backTo="/customers" title="Cadastrar Cliente" />
 
         <Controller
           name="name"

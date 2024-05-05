@@ -26,7 +26,7 @@ export const formStyles: CSSProperties = {
   padding: '1rem',
   borderRadius: '.5rem',
   flexDirection: 'column',
-  boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
+  // boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
   margin: '1em',
   width: '80vw',
 };

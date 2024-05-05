@@ -10,7 +10,7 @@ const useCreateCustomer = () => {
 
   return useMutation({
     mutationFn: async (customer: CustomerValidation) => {
-      const res = await api.post('/customers', customer, config);
+      const res = await api.post('/customer', customer, config);
       return res.data;
     },
     onSuccess: () => {
@@ -33,7 +33,7 @@ const useUpdateCustomer = () => {
   const navigate = useNavigate();
   return useMutation({
     mutationFn: async (customer: CustomerValidation) => {
-      const res = await api.put(`/customers/${customer.id}`, customer, config);
+      const res = await api.put(`/customer/${customer.id}`, customer, config);
       return res.data;
     },
     onSuccess: () => {
@@ -55,7 +55,7 @@ const useGetAllCustomers = () => {
   return useQuery<CustomerValidation[]>({
     queryKey: ['/all-customers'],
     queryFn: async () => {
-      const res = await api.get('/customers', config);
+      const res = await api.get('/customer', config);
       return res.data;
     },
     staleTime: Infinity,
@@ -66,7 +66,7 @@ const useGetCustomerById = (id?: string) => {
   return useQuery<CustomerValidation>({
     queryKey: ['/customers', id],
     queryFn: async () => {
-      const res = await api.get(`/customers/${id}`, config);
+      const res = await api.get(`/customer/${id}`, config);
       return res.data;
     },
     enabled: id !== undefined,
@@ -79,7 +79,7 @@ const useDeleteCustomerById = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const res = await api.delete(`/customers/${id}`, config);
+      const res = await api.delete(`/customer/${id}`, config);
       return res.data;
     },
     onSuccess: () => {
