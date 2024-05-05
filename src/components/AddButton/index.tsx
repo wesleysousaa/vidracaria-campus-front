@@ -9,12 +9,22 @@ export default function AddButton({ link }: AddButtonProps) {
   const navigate = useNavigate();
 
   return (
-    <Link to={link}>
+    <Link
+      to={link}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textDecoration: 'none',
+      }}
+    >
       <Button
         aria-label="adicionar"
         variant="contained"
         color="success"
-        sx={{ fontSize: '1.5rem' }}
+        sx={{
+          height: '40px',
+        }}
         onClick={() => navigate({ to: link })}
       >
         Adicionar

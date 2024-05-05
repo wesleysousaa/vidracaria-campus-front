@@ -15,7 +15,7 @@ export default function ReturnButton({ link }: ReturnButtonProps) {
       aria-label="Voltar"
       color="inherit"
       onClick={() => navigate({ to: link })}
-      sx={{ color: '#000', fontSize: '1.5rem' }}
+      sx={{ color: '#000' }}
     >
       <ArrowBackIosIcon />
       Voltar

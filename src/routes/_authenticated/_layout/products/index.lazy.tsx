@@ -13,7 +13,7 @@ function Products() {
   return (
     <Box sx={mainStyles} component={'main'}>
       <Box sx={headerBoxStyles}>
-        <Typography variant="h3" fontWeight={'bold'}>
+        <Typography variant="h4" fontWeight={'bold'}>
           Produtos
         </Typography>
         <AddButton link="/products/add" />

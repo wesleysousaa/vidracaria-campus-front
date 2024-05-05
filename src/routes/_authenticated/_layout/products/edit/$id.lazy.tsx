@@ -25,6 +25,7 @@ import {
   formStyles,
   headerFormStyles,
 } from '../../../../../styles/index.ts';
+import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/products/edit/$id',
@@ -76,12 +77,7 @@ export default function ProducstUpdateForm() {
   return (
     <Box sx={boxStyles}>
       <form onSubmit={handleSubmit(onSubmit)} style={formStyles}>
-        <Box style={headerFormStyles}>
-          <ReturnButton link="/products" />
-          <Typography variant="h3" align="center">
-            Editar Produto
-          </Typography>
-        </Box>
+        <PageHeader backTo="/products" title="Editar Produto" />
 
         <Controller
           name="name"
