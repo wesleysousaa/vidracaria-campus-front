@@ -10,7 +10,7 @@ const useCreateProduct = () => {
 
   return useMutation({
     mutationFn: (product: CreateProductValidation) => {
-      return api.post('/products', product, config).then((res) => res.data);
+      return api.post('/product', product, config).then((res) => res.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
@@ -33,7 +33,7 @@ const useUpdateProduct = () => {
   return useMutation({
     mutationFn: (product: ProductValidation) => {
       return api
-        .put(`/products/${product.id}`, product, config)
+        .put(`/product/${product.id}`, product, config)
         .then((res) => res.data);
     },
     onSuccess: () => {
@@ -54,8 +54,9 @@ const useUpdateProduct = () => {
 const useGetAllProducts = () => {
   return useQuery<ProductValidation[]>({
     queryKey: ['/all-products'],
-    queryFn: () => {
-      return api.get('/products', config).then((res) => res.data);
+    queryFn: async () => {
+      const res = await api.get('/product', config);
+      return res.data;
     },
     staleTime: Infinity,
   });
@@ -65,7 +66,7 @@ const useGetProductById = (id?: string) => {
   return useQuery<ProductValidation>({
     queryKey: ['/products', id],
     queryFn: () => {
-      return api.get(`/products/${id}`, config).then((res) => res.data);
+      return api.get(`/product/${id}`, config).then((res) => res.data);
     },
     enabled: id !== undefined,
     staleTime: 600000,
@@ -77,7 +78,7 @@ const useDeleteProductById = () => {
 
   return useMutation({
     mutationFn: (id: string) => {
-      return api.delete(`/products/${id}`, config).then((res) => res.data);
+      return api.delete(`/product/${id}`, config).then((res) => res.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });

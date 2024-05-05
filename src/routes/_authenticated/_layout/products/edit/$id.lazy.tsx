@@ -26,6 +26,7 @@ import {
   headerFormStyles,
 } from '../../../../../styles/index.ts';
 import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import GetLocationBreadcrumb from '../../../../../components/GetLocationBreadcrumb/GetLocationBreadcrumb.tsx';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/products/edit/$id',
