@@ -18,7 +18,7 @@ export default function Table() {
     ProductValidation | undefined
   >();
 
-  const columns = useMemo<MRT_ColumnDef<any>[]>(
+  const columns = useMemo<MRT_ColumnDef<ProductValidation>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -77,10 +77,10 @@ export default function Table() {
         Cell: (options) => {
           return (
             <TableCellActions
-              idObject={options.row.original.id}
+              idObject={options.row.original.id as string}
               type="product"
               dispach={handleDelete}
-              handleClick={handleClick}
+              handleClick={() => handleClick(options.row.original)}
             />
           );
         },
@@ -93,9 +93,9 @@ export default function Table() {
     deleteProducts.mutate(id);
   };
 
-  const handleClick = (id: string) => {
+  const handleClick = (product: ProductValidation) => {
     setOpen(true);
-    setCurrenProduct(data?.find((product) => product.id === id));
+    setCurrenProduct(product);
   };
 
   const table = useMaterialReactTable({

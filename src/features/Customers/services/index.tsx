@@ -58,7 +58,6 @@ const useGetAllCustomers = () => {
       const res = await api.get('/customer', config);
       return res.data;
     },
-    staleTime: Infinity,
   });
 };
 

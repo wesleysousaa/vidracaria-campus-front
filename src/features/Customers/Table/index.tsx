@@ -18,11 +18,6 @@ export default function Table() {
     CustomerValidation | undefined
   >();
 
-  const handleClick = (id: string) => {
-    setOpen(true);
-    setCurrentCustomer(data?.find((customer) => customer.id === id));
-  };
-
   const columns = useMemo<MRT_ColumnDef<CustomerValidation>[]>(
     () => [
       {
@@ -68,7 +63,7 @@ export default function Table() {
               idObject={options.row.original.id as string}
               type="customer"
               dispach={handleDelete}
-              handleClick={handleClick}
+              handleClick={() => handleClick(options.row.original)}
             />
           );
         },
@@ -76,6 +71,11 @@ export default function Table() {
     ],
     [],
   );
+
+  const handleClick = (customer: CustomerValidation) => {
+    setOpen(true);
+    setCurrentCustomer(customer);
+  };
 
   const handleDelete = (idItem: string) => {
     deleteCustomer.mutate(idItem);

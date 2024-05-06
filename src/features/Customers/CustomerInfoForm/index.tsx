@@ -26,7 +26,6 @@ export default function CustomerInfoForm({
   customer,
 }: CustomerInfoFormProps) {
   const { EmailOutlinedIcon, LocalPhoneOutlinedIcon } = useGetIcons();
-
   if (customer === undefined) return;
 
   return (
