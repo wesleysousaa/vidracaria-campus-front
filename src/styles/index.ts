@@ -14,6 +14,14 @@ export const headerBoxStyles: CSSProperties = {
   marginBottom: '1em',
 };
 
+export const headerTablePageStyles: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '1em',
+  padding: '10px',
+  marginBottom: '1em',
+};
+
 export const headerFormStyles: CSSProperties = {
   display: 'flex',
   gap: '30%',
