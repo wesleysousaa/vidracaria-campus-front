@@ -1,22 +1,15 @@
-import { Box, Typography } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import AddButton from '../../../../components/AddButton';
 import Table from '../../../../features/Customers/Table';
-import { mainStyles } from '../../../../features/Dashboard/styles';
-import { headerBoxStyles } from '../../../../styles';
+import TableHeader from '../../../../components/TableHeader/TableHeader';
 
 function Customers() {
   return (
-    <Box sx={mainStyles} component={'main'}>
-      <Box sx={headerBoxStyles}>
-        <Typography variant="h4" fontWeight={'bold'}>
-          Clientes
-        </Typography>
-
-        <AddButton link="/customers/add" />
-      </Box>
-      <Table />
-    </Box>
+    <TableHeader
+      rightActionComponent={<AddButton link="/customers/add" />}
+      table={<Table />}
+      title="Clientes"
+    />
   );
 }
 

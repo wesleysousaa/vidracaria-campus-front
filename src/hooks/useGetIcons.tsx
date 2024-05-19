@@ -14,12 +14,14 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import MenuOpenRoundedIcon from '@mui/icons-material/MenuOpenRounded';
 export default function useGetIcons() {
   return {
     LogoutOutlinedIcon,
     MenuOutlinedIcon,
     ArrowBackIosRoundedIcon,
     ArrowForwardIosRoundedIcon,
+    MenuOpenRoundedIcon,
     DashboardOutlinedIcon,
     AccountCircleOutlinedIcon,
     BuildOutlinedIcon,

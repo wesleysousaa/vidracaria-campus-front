@@ -5,11 +5,17 @@ import queryClient from '../../config/queryClient';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
 import MenuListItem from './MenuListItem';
-import { exitStyles, headerStyles, navStyles } from './styles';
+import {
+  colapsableButtonMenu,
+  exitStyles,
+  headerStyles,
+  navStyles,
+} from './styles';
 
 function MenuDesktop() {
   const navigate = useNavigate();
-  const { LogoutOutlinedIcon } = useGetIcons();
+  const { LogoutOutlinedIcon, MenuOpenRoundedIcon } = useGetIcons();
+  const [colapsedMenu, setColapsedMenu] = useState(false);
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -18,11 +24,22 @@ function MenuDesktop() {
   };
 
   return (
-    <Box component={'header'} style={headerStyles}>
-      <nav style={navStyles}>
+    <Box
+      component={'header'}
+      style={{ ...headerStyles, width: colapsedMenu ? '60px' : '200px' }}
+    >
+      <nav style={{ ...navStyles, width: colapsedMenu ? '60px' : '200px' }}>
         <section>
-          <LogoItem />
-          <MenuListItem />
+          <LogoItem colapsed={colapsedMenu} />
+          <MenuListItem colapsed={colapsedMenu} />
+          <Button
+            onClick={() => setColapsedMenu(!colapsedMenu)}
+            variant="text"
+            sx={colapsableButtonMenu}
+          >
+            <MenuOpenRoundedIcon />
+            {!colapsedMenu && 'Amenizar Menu'}
+          </Button>
         </section>
         <Box sx={exitStyles}>
           <Button
@@ -34,7 +51,7 @@ function MenuDesktop() {
             }}
             onClick={() => logout()}
           >
-            Sair
+            {!colapsedMenu && 'Sair'}
           </Button>
         </Box>
       </nav>
@@ -62,7 +79,7 @@ function MenuMobile() {
           backgroundColor: 'var(--background)',
         }}
       >
-        <LogoItem />
+        <LogoItem colapsed={false} />
         <IconButton onClick={() => setOpen(!open)}>
           {!open && <MenuOutlinedIcon />}
         </IconButton>

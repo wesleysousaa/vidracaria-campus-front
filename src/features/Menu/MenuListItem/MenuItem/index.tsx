@@ -19,6 +19,7 @@ import {
 export interface MenuItemProps {
   label: string;
   path: string;
+  colapsed: boolean;
   Icon: OverridableComponent<SvgIconTypeMap<object, 'svg'>> & {
     muiName: string;
   };
@@ -47,7 +48,7 @@ function MenuItem(props: MenuItemProps) {
         <ListItemIcon>
           <props.Icon sx={verifyLinkActive(props.path).iconStyle} />
         </ListItemIcon>
-        <ListItemText primary={props.label} />
+        {!props.colapsed && <ListItemText primary={props.label} />}
       </ListItemButton>
     </Link>
   );
