@@ -43,20 +43,27 @@ export const navStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  overflow: 'auto',
+  overflow: 'hidden',
   minHeight: '100vh',
   position: 'fixed',
   boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
-  width: '250px',
+  width: '200px',
 };
 
 export const headerStyles: CSSProperties = {
-  minWidth: '250px',
-  overflow: 'auto',
-  minHeight: '100vh',
   position: 'relative',
+  width: '200px',
+  overflow: 'hidden',
+  minHeight: '100vh',
 };
 
 export const navListStyles: CSSPropertiesMui = {
   width: '100%',
+};
+
+export const colapsableButtonMenu: CSSPropertiesMui = {
+  display: 'flex',
+  gap: '5px',
+  width: '100%',
+  marginTop: '1rem',
 };

@@ -3,7 +3,10 @@ import useGetIcons from '../../../hooks/useGetIcons';
 import { navListStyles } from '../styles';
 import MenuItem from './MenuItem';
 
-export default function MenuListItem() {
+interface MenuListItemProps {
+  colapsed: boolean;
+}
+export default function MenuListItem({ colapsed }: MenuListItemProps) {
   const {
     AccountCircleOutlinedIcon,
     BuildOutlinedIcon,
@@ -39,6 +42,7 @@ export default function MenuListItem() {
       {menuItems.map((item, index) => (
         <MenuItem
           key={index}
+          colapsed={colapsed}
           Icon={item.Icon}
           label={item.label}
           path={item.path}
