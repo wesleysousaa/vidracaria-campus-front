@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 
-export const productBoxInfoStyles: CSSProperties = {
+export const stockProductStyles: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',

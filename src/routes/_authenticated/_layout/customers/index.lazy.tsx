@@ -1,11 +1,11 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import AddButton from '../../../../components/AddButton';
+import TableContainer from '../../../../components/TableContainer';
 import Table from '../../../../features/Customers/Table';
-import TableHeader from '../../../../components/TableHeader/TableHeader';
 
 function Customers() {
   return (
-    <TableHeader
+    <TableContainer
       rightActionComponent={<AddButton link="/customers/add" />}
       table={<Table />}
       title="Clientes"

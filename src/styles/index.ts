@@ -7,6 +7,11 @@ export const boxStyles: CSSProperties = {
   padding: '1em',
 };
 
+export const textFieldStyles: CSSProperties = {
+  margin: '1em 0 1em 0',
+  flex: 1,
+};
+
 export const headerBoxStyles: CSSProperties = {
   display: 'flex',
   gap: '1em',

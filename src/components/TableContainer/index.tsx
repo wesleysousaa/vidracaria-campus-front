@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
+import { ReactNode } from '@tanstack/react-router';
 import { mainStyles } from '../../features/Dashboard/styles';
 import { headerTablePageStyles } from '../../styles';
-import { ReactNode } from '@tanstack/react-router';
 
 interface TableHeaderProps {
   title: string;
@@ -9,7 +9,7 @@ interface TableHeaderProps {
   table: ReactNode;
 }
 
-export default function TableHeader({
+export default function TableContainer({
   rightActionComponent,
   table,
   title,
