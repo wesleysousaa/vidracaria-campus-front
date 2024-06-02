@@ -1,11 +1,21 @@
 export enum TransactionType {
-  ENTRADA,
-  SAIDA,
-  BAIXAESTOQUE,
+  ENTRADA = 'ENTRADA',
+  SAIDA = 'SAIDA',
+  BAIXAESTOQUE = 'BAIXAESTOQUE',
 }
 
 export interface TransactionStock {
   idProduct: string;
-  transactionType: TransactionType;
+  transactionType: string;
+  movementQuantity: number;
+}
+
+export interface ProductWithNameAndId {
+  id: string;
+  name: string;
+}
+
+export interface ReceiveProduct {
+  idProduct: string;
   movementQuantity: number;
 }

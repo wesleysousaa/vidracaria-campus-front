@@ -8,11 +8,12 @@ export interface ProductBase {
 }
 
 export interface ProductValidation extends ProductBase {
-  id?: string;
-  height: number;
-  width: number;
+  id: string;
+  actualQuantity: number;
   depth: number;
+  height: number;
   price: number;
+  width: number;
 }
 
 export interface CreateProductValidation extends ProductBase {}

@@ -56,8 +56,8 @@ export default function Table() {
       {
         header: 'Quantidade Atual',
         enableHiding: true,
-        Cell: () => {
-          return <>4</>;
+        Cell: (options) => {
+          return <>{options.row.original.actualQuantity}</>;
         },
       },
       {

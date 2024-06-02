@@ -11,38 +11,24 @@ import {
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import CloseButton from '../../../components/CloseButton';
+import Loader from '../../../components/Loader';
 import { modalStyles } from '../../../styles';
 import { modalHeaderStyles, modalTitleStyles } from '../styles';
 import { TransactionStockSchema } from './schemas';
+import { useGetAllProductsWithNameAndId, useReceiveProduct } from './services';
 import { stockProductStyles } from './styles';
-import { TransactionStock, TransactionType } from './types';
+import { ProductWithNameAndId, TransactionStock } from './types';
 
 interface StockFormProps {
   open: boolean;
   onClose: () => void;
 }
 
-interface Product {
-  id: number;
-  name: string;
-}
-
 export default function StockForm({ onClose, open }: StockFormProps) {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [product] = useState<Product[]>([
-    {
-      id: 1,
-      name: 'Maca',
-    },
-    {
-      id: 2,
-      name: 'Macarico',
-    },
-    {
-      id: 3,
-      name: 'Funil',
-    },
-  ]);
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductWithNameAndId | null>(null);
+  const { data: product } = useGetAllProductsWithNameAndId();
+  const { mutate: receiveProduct } = useReceiveProduct();
 
   const {
     handleSubmit,
@@ -53,13 +39,17 @@ export default function StockForm({ onClose, open }: StockFormProps) {
     defaultValues: {
       idProduct: '',
       movementQuantity: 0,
-      transactionType: TransactionType.ENTRADA,
+      transactionType: 'ENTRADA',
     },
   });
 
   const onSubmit: SubmitHandler<TransactionStock> = (data) => {
     console.log(data);
+    receiveProduct(data);
+    onClose();
   };
+
+  if (!product) return <Loader open />;
 
   return (
     <Modal open={open} onClose={onClose} sx={modalStyles}>
@@ -86,7 +76,7 @@ export default function StockForm({ onClose, open }: StockFormProps) {
               render={({ field }) => (
                 <Autocomplete
                   value={selectedProduct}
-                  onChange={(event, newValue) => {
+                  onChange={(_e, newValue) => {
                     setSelectedProduct(newValue);
                     field.onChange(newValue ? newValue.id : 0);
                   }}

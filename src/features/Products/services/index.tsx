@@ -14,6 +14,9 @@ const useCreateProduct = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
+      queryClient.invalidateQueries({
+        queryKey: ['/all-products-with-name-and-id'],
+      });
       navigate({ to: '/products' });
       enqueueSnackbar('Produto salvo com sucesso!', {
         variant: 'success',
@@ -55,7 +58,7 @@ const useGetAllProducts = () => {
   return useQuery<ProductValidation[]>({
     queryKey: ['/all-products'],
     queryFn: async () => {
-      const res = await api.get('/product', config);
+      const res = await api.get('/product/productsWithQuantity', config);
       return res.data;
     },
     staleTime: Infinity,
@@ -82,6 +85,12 @@ const useDeleteProductById = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
+      queryClient.invalidateQueries({
+        queryKey: ['/all-products-with-name-and-id'],
+      });
+      enqueueSnackbar('Produto deletado com sucesso!', {
+        variant: 'success',
+      });
     },
   });
 };
