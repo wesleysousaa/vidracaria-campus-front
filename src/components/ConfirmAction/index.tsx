@@ -57,7 +57,7 @@ export default function ConfirmAction({
           display={'flex'}
           justifyContent={'flex-end'}
           width={'100%'}
-          margin={'1em'}
+          gap={'1em'}
           paddingTop={'1em'}
           sx={{
             borderTop: '1px solid #ccc',
@@ -65,7 +65,7 @@ export default function ConfirmAction({
         >
           <Button
             variant="text"
-            onClick={confirmDispach}
+            onClick={denyDispach}
             sx={{ marginLeft: '1em' }}
             color="success"
           >

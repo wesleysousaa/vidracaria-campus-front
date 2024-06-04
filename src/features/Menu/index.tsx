@@ -38,7 +38,7 @@ function MenuDesktop() {
             sx={colapsableButtonMenu}
           >
             <MenuOpenRoundedIcon />
-            {!colapsedMenu && 'Amenizar Menu'}
+            {!colapsedMenu && 'Minimizar Menu'}
           </Button>
         </section>
         <Box sx={exitStyles}>

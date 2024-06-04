@@ -54,6 +54,13 @@ export default function Table() {
         },
       },
       {
+        header: 'Quantidade Atual',
+        enableHiding: true,
+        Cell: (options) => {
+          return <>{options.row.original.actualQuantity}</>;
+        },
+      },
+      {
         accessorKey: 'price',
         header: 'Preço',
         enableHiding: true,

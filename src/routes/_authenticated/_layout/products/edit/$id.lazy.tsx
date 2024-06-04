@@ -7,26 +7,22 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
-import { textFieldStyles } from '../../../../../features/Customers/styles/index.ts';
-import { ProductSchema } from '../../../../../features/Products/schemas/index.ts';
+import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import { EditProductSchema } from '../../../../../features/Products/schemas/index.ts';
 import {
   useGetProductById,
   useUpdateProduct,
 } from '../../../../../features/Products/services/index.tsx';
-import { ProductValidation } from '../../../../../features/Products/types/index.ts';
+import { EditProductValidation } from '../../../../../features/Products/types/index.ts';
 import {
   boxStyles,
   formStyles,
-  headerFormStyles,
+  textFieldStyles,
 } from '../../../../../styles/index.ts';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
-import GetLocationBreadcrumb from '../../../../../components/GetLocationBreadcrumb/GetLocationBreadcrumb.tsx';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/products/edit/$id',
@@ -39,7 +35,7 @@ export default function ProducstUpdateForm() {
   const product = useGetProductById(id);
   const updateCustomer = useUpdateProduct();
 
-  const onSubmit: SubmitHandler<ProductValidation> = async (data) => {
+  const onSubmit: SubmitHandler<EditProductValidation> = async (data) => {
     updateCustomer.mutate(data);
   };
 
@@ -48,8 +44,8 @@ export default function ProducstUpdateForm() {
     control,
     formState: { errors },
     setValue,
-  } = useForm<ProductValidation>({
-    resolver: yupResolver(ProductSchema),
+  } = useForm<EditProductValidation>({
+    resolver: yupResolver(EditProductSchema),
     defaultValues: {
       id: '',
       name: '',

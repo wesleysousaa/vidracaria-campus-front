@@ -7,25 +7,20 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import ReturnButton from '../../../../../components/ReturnButton/index.tsx';
+import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
 import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
 import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
 import { useCreateCustomer } from '../../../../../features/Customers/services/index.tsx';
-import {
-  boxStylesForm,
-  textFieldStyles,
-} from '../../../../../features/Customers/styles/index.ts';
+import { boxStylesForm } from '../../../../../features/Customers/styles/index.ts';
 import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
 import {
   boxStyles,
   formStyles,
-  headerFormStyles,
+  textFieldStyles,
 } from '../../../../../styles/index.ts';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
 
 function CustomerCreateForm() {
   const states = useGetState();
