@@ -11,19 +11,20 @@ import {
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
 import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
 import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
 import {
   useGetCustomerById,
   useUpdateCustomer,
 } from '../../../../../features/Customers/services/index.tsx';
-import {
-  boxStylesForm,
-  textFieldStyles,
-} from '../../../../../features/Customers/styles/index.ts';
+import { boxStylesForm } from '../../../../../features/Customers/styles/index.ts';
 import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
-import { boxStyles, formStyles } from '../../../../../styles/index.ts';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import {
+  boxStyles,
+  formStyles,
+  textFieldStyles,
+} from '../../../../../styles/index.ts';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/customers/edit/$id',
@@ -49,6 +50,7 @@ function CustomerUpdateForm() {
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
     defaultValues: {
+      id: '',
       name: '',
       customerType: '',
       cpfcnpj: '',

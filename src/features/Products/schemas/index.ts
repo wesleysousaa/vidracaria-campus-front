@@ -1,18 +1,19 @@
 import * as Yup from 'yup';
+import { Category, UnitOfMeasure } from '../types';
 
-export const ProductSchema = Yup.object({
+export const EditProductSchema = Yup.object().shape({
+  id: Yup.string().required('Campo obrigatório'),
   name: Yup.string().required('Campo obrigatório'),
-  unitOfMeasure: Yup.string()
+  unitOfMeasure: Yup.mixed<UnitOfMeasure>()
     .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
     .required('Campo obrigatório'),
-  category: Yup.string()
+  category: Yup.mixed<Category>()
     .oneOf(['COMUM', 'TEMPERADO'])
     .required('Campo obrigatório'),
   height: Yup.number().required('Campo obrigatório'),
   width: Yup.number().required('Campo obrigatório'),
   depth: Yup.number().required('Campo obrigatório'),
   price: Yup.number().required('Campo obrigatório'),
-  id: Yup.string(),
 });
 
 export const CreateProductSchema = Yup.object({

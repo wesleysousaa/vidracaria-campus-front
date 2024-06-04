@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { enqueueSnackbar } from 'notistack';
 import api, { config } from '../../../services';
-import { CreateProductValidation, ProductValidation } from '../types';
+import {
+  CreateProductValidation,
+  EditProductValidation,
+  ProductValidation,
+} from '../types';
 
 const useCreateProduct = () => {
   const queryClient = useQueryClient();
@@ -34,13 +38,16 @@ const useUpdateProduct = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: (product: ProductValidation) => {
+    mutationFn: (product: EditProductValidation) => {
       return api
         .put(`/product/${product.id}`, product, config)
         .then((res) => res.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-products'] });
+      queryClient.invalidateQueries({
+        queryKey: ['/products'],
+      });
       navigate({ to: '/products' });
       enqueueSnackbar('Produto atualizado com sucesso!', {
         variant: 'success',
@@ -66,7 +73,7 @@ const useGetAllProducts = () => {
 };
 
 const useGetProductById = (id?: string) => {
-  return useQuery<ProductValidation>({
+  return useQuery<EditProductValidation>({
     queryKey: ['/products', id],
     queryFn: () => {
       return api.get(`/product/${id}`, config).then((res) => res.data);
