@@ -25,6 +25,7 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import useMask from '../../../../../hooks/useMask.tsx';
 
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/customers/edit/$id',
@@ -37,9 +38,14 @@ function CustomerUpdateForm() {
   const states = useGetState();
   const customer = useGetCustomerById(id);
   const updateCustomer = useUpdateCustomer();
+  const { maskValue, unmaskValue, phoneMask, handleInputChangeWithMask } =
+    useMask();
 
   const onSubmit: SubmitHandler<CustomerValidation> = async (data) => {
-    updateCustomer.mutate(data);
+    updateCustomer.mutate({
+      ...data,
+      phone: unmaskValue(data.phone ?? ''),
+    });
   };
 
   const {
@@ -47,6 +53,7 @@ function CustomerUpdateForm() {
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
     defaultValues: {
@@ -76,7 +83,7 @@ function CustomerUpdateForm() {
       setValue('customerType', data.customerType);
       setValue('cpfcnpj', data.cpfcnpj);
       setValue('email', data.email);
-      setValue('phone', data.phone);
+      setValue('phone', maskValue(phoneMask, data.phone ?? ''));
       setValue('address.address', data.address.address);
       setValue('address.zipCode', data.address.zipCode);
       setValue('address.state', data.address.state);
@@ -182,6 +189,16 @@ function CustomerUpdateForm() {
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
                 {...field}
+                onChange={(e) =>
+                  setValue(
+                    'phone',
+                    handleInputChangeWithMask(
+                      e,
+                      phoneMask,
+                      watch('phone') ?? '',
+                    ),
+                  )
+                }
               />
             )}
           />
