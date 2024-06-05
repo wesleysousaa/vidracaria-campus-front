@@ -21,19 +21,26 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import useMask from '../../../../../hooks/useMask.tsx';
 
 function CustomerCreateForm() {
   const states = useGetState();
   const createCustomer = useCreateCustomer();
+  const { unmaskValue, phoneMask, handleInputChangeWithMask } = useMask();
 
   const onSubmit: SubmitHandler<CustomerValidation> = (data) => {
-    createCustomer.mutate(data);
+    createCustomer.mutate({
+      ...data,
+      phone: unmaskValue(data.phone ?? ''),
+    });
   };
 
   const {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<CustomerValidation>({
     resolver: yupResolver(ClientSchema),
     defaultValues: {
@@ -145,6 +152,16 @@ function CustomerCreateForm() {
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
                 {...field}
+                onChange={(e) =>
+                  setValue(
+                    'phone',
+                    handleInputChangeWithMask(
+                      e,
+                      phoneMask,
+                      watch('phone') ?? '',
+                    ),
+                  )
+                }
               />
             )}
           />
