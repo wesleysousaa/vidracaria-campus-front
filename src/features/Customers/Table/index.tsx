@@ -9,6 +9,7 @@ import TableCellActions from '../../../components/TableCellActions';
 import CustomerInfoForm from '../CustomerInfoForm';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
+import useMask from '../../../hooks/useMask';
 
 export default function Table() {
   const { data, isLoading } = useGetAllCustomers();
@@ -17,6 +18,7 @@ export default function Table() {
   const [currentCustomer, setCurrentCustomer] = useState<
     CustomerValidation | undefined
   >();
+  const { maskValue, phoneMask } = useMask();
 
   const columns = useMemo<MRT_ColumnDef<CustomerValidation>[]>(
     () => [
@@ -34,6 +36,9 @@ export default function Table() {
         accessorKey: 'phone',
         header: 'Telefone',
         enableHiding: true,
+        Cell: (options) => {
+          return <>{maskValue(phoneMask, options.row.original.phone ?? '')}</>;
+        },
       },
       {
         accessorKey: 'cpfcnpj',
