@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { LoginSchema } from '../features/Login/schemas';
@@ -20,7 +20,7 @@ import {
 import { UserValidation } from '../features/Login/types';
 import { useAuth } from '../hooks/useAuth';
 
-function Login() {
+export function Login() {
   const authUser = useAuthUser();
   const navigate = useNavigate();
 
@@ -63,6 +63,7 @@ function Login() {
             <TextField
               type="email"
               label="Email"
+              id="email"
               placeholder="Digite seu email"
               {...field}
             />
@@ -75,6 +76,7 @@ function Login() {
           render={({ field }) => (
             <TextField
               type="password"
+              id="password"
               label="Senha"
               placeholder="Digite sua senha"
               {...field}
@@ -82,15 +84,21 @@ function Login() {
           )}
         />
 
-        <Button type="submit" variant="contained" sx={loginButtonStyles}>
-          Acessar
+        <Button
+          aria-label="login-button"
+          type="submit"
+          role="button"
+          id="login-button"
+          variant="contained"
+          sx={loginButtonStyles}
+        >
+          acessar
         </Button>
         {authUser.error && (
           <Alert variant="filled" severity="error">
             Email ou senha inválidos!
           </Alert>
         )}
-        <Link to=""></Link>
       </FormControl>
     </Box>
   );
