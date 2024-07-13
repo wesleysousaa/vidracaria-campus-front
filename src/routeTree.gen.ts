@@ -19,6 +19,9 @@ import { Route as AuthenticatedLayoutImport } from './routes/_authenticated/_lay
 
 // Create Virtual Routes
 
+const AuthenticatedLayoutServicesIndexLazyImport = createFileRoute(
+  '/_authenticated/_layout/services/',
+)()
 const AuthenticatedLayoutProductsIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/products/',
 )()
@@ -57,6 +60,16 @@ const AuthenticatedLayoutRoute = AuthenticatedLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+
+const AuthenticatedLayoutServicesIndexLazyRoute =
+  AuthenticatedLayoutServicesIndexLazyImport.update({
+    path: '/services/',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/services/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthenticatedLayoutProductsIndexLazyRoute =
   AuthenticatedLayoutProductsIndexLazyImport.update({
@@ -156,6 +169,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutProductsIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
+    '/_authenticated/_layout/services/': {
+      preLoaderRoute: typeof AuthenticatedLayoutServicesIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
     '/_authenticated/_layout/customers/edit/$id': {
       preLoaderRoute: typeof AuthenticatedLayoutCustomersEditIdLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
@@ -184,6 +201,7 @@ export const routeTree = rootRoute.addChildren([
       AuthenticatedLayoutCustomersIndexLazyRoute,
       AuthenticatedLayoutDashboardIndexLazyRoute,
       AuthenticatedLayoutProductsIndexLazyRoute,
+      AuthenticatedLayoutServicesIndexLazyRoute,
       AuthenticatedLayoutCustomersEditIdLazyRoute,
       AuthenticatedLayoutProductsEditIdLazyRoute,
       AuthenticatedLayoutCustomersAddIndexLazyRoute,
