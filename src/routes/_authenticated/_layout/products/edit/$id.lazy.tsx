@@ -30,7 +30,7 @@ export const Route = createLazyFileRoute(
   component: ProducstUpdateForm,
 });
 
-export default function ProducstUpdateForm() {
+function ProducstUpdateForm() {
   const { id } = Route.useParams();
   const product = useGetProductById(id);
   const updateCustomer = useUpdateProduct();

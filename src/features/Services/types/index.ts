@@ -11,3 +11,13 @@ export interface ServiceValidation {
   price: number;
   status: Status;
 }
+
+export interface ProductInfo {
+  id: string;
+  name: string;
+  depth: number;
+  height: number;
+  price: number;
+  width: number;
+  actualQuantity: number;
+}

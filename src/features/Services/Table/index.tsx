@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { useNavigate } from '@tanstack/react-router';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -7,22 +8,17 @@ import {
 import { useMemo } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
 import { useDeleteServiceById, useGetAllServices } from '../services';
-import { ServiceValidation, Status } from '../types';
-
-const statusDictionary: { [key in Status]: string } = {
-  ORCADO: 'Orçado',
-  CONTRATADO_A_VISTA: 'Contratado à vista',
-  CONTRATADO_A_PRAZO: 'Contratado a prazo',
-  FINALIZADO: 'Finalizado',
-};
-
-function converterStatus(status: Status): string {
-  return statusDictionary[status];
-}
+import { ServiceValidation } from '../types';
+import { converterStatus } from '../utils/converterStatus';
 
 export default function Table() {
+  const navigate = useNavigate();
   const { data, isLoading } = useGetAllServices();
   const deleteServices = useDeleteServiceById();
+
+  const handleClick = (id: string) => {
+    navigate({ to: '/services/info/$id', params: { id } });
+  };
 
   const columns = useMemo<MRT_ColumnDef<ServiceValidation>[]>(
     () => [
@@ -71,7 +67,7 @@ export default function Table() {
             idObject={row.original.id as string}
             type="service"
             dispach={handleDelete}
-            handleClick={() => {}}
+            handleClick={handleClick}
           />
         ),
       },

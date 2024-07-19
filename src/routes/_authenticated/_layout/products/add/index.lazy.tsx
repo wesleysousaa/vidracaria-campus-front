@@ -20,7 +20,7 @@ import {
   textFieldStyles,
 } from '../../../../../styles/index.ts';
 
-export default function ProductsCreateForm() {
+function ProductsCreateForm() {
   const create = useCreateProduct();
 
   const onSubmit: SubmitHandler<CreateProductValidation> = (data) => {

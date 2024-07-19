@@ -43,8 +43,6 @@ export default function TableCellActions({
         denyDispach={() => setOpen(false)}
       />
 
-      {/* Se service mostar o import PrintIcon from '@mui/icons-material/Print'; */}
-
       {typeMap[type]?.label === 'Serviço' && (
         <Tooltip title={`Imprimir ${typeTranslate}`}>
           <IconButton aria-label="Imprimir" color="default">
