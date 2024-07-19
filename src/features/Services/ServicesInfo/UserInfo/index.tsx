@@ -1,12 +1,14 @@
 import { Avatar, Box, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
+import { Status } from '../../types';
+import { converterStatus } from '../../utils/converterStatus';
 
 interface UserInfoProps {
   data: {
     client: string;
     deliveryForecast: string;
     address: string;
-    status: string;
+    status: Status;
   };
 }
 
@@ -52,7 +54,7 @@ export default function UserInfo({ data }: UserInfoProps) {
             fontWeight: 'bold',
           }}
         >
-          {data.status}
+          {converterStatus(data.status).toUpperCase()}
         </Box>
       </Box>
     </Box>

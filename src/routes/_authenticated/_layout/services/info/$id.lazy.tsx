@@ -82,7 +82,7 @@ const useGetServiceById = (id: string) => {
         },
         {
           id: '3',
-          name: 'Produto 3',
+          name: 'Produto 4',
           actualQuantity: 2,
           height: 2,
           width: 2,
