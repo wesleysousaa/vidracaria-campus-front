@@ -15,9 +15,16 @@ import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MenuOpenRoundedIcon from '@mui/icons-material/MenuOpenRounded';
+import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
+
 export default function useGetIcons() {
   return {
+    AddOutlinedIcon,
+    RemoveOutlinedIcon,
     LogoutOutlinedIcon,
+    AddCircleOutlineRoundedIcon,
     MenuOutlinedIcon,
     ArrowBackIosRoundedIcon,
     ArrowForwardIosRoundedIcon,

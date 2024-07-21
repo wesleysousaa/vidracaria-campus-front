@@ -10,7 +10,11 @@ export interface ServiceValidation {
   deliveryForecast: string;
   price: number;
   status: Status;
+  products: ProductInfo[];
+  images?: File[];
 }
+
+export interface CreateServiceValidation extends ServiceValidation {}
 
 export interface ProductInfo {
   id: string;
