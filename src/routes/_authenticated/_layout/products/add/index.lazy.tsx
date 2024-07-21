@@ -79,6 +79,7 @@ function ProductsCreateForm() {
                 >
                   <MenuItem value="COMUM">Comum</MenuItem>
                   <MenuItem value="TEMPERADO">Temperado</MenuItem>
+                  <MenuItem value="DIVERSOS">Diversos</MenuItem>
                 </Select>
               </FormControl>
             )}

@@ -1,4 +1,4 @@
-export type Category = 'COMUM' | 'TEMPERADO';
+export type Category = 'COMUM' | 'TEMPERADO' | 'DIVERSOS';
 export type UnitOfMeasure = 'CENTIMETRO' | 'METRO' | 'MILIMETRO';
 
 export interface ProductBase {

@@ -29,6 +29,7 @@ import { AddressValidation } from '../../../../../features/Customers/types/index
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
+import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -52,12 +53,10 @@ function ServicesCreateForm() {
     resolver: yupResolver(CreateServiceSchema),
     defaultValues: {
       client: customers && customers[0].id,
-      deliveryForecast: '',
-      images: [],
       price: 0,
       products: [],
       status: 'ORCADO',
-      id: '',
+      images: [],
     },
   });
 
@@ -67,7 +66,7 @@ function ServicesCreateForm() {
     return {
       ...prod,
       actualQuantity: amount,
-      price: productSelected ? productSelected?.price * amount : prod.price,
+      price: productSelected ? productSelected?.price : prod.price,
     };
   };
 
@@ -75,7 +74,12 @@ function ServicesCreateForm() {
     if (watch('products'))
       setValue(
         'price',
-        Number(watch('products').reduce((acc, prod) => acc + prod.price, 0)),
+        Number(
+          watch('products').reduce(
+            (acc, prod) => acc + prod.price * prod.actualQuantity,
+            0,
+          ),
+        ),
       );
   }, [watch('products')]);
 
@@ -171,61 +175,70 @@ function ServicesCreateForm() {
                   });
               }}
             >
-              {products?.map((product) => (
-                <MenuItem value={product.id} key={product.id}>
-                  {product.name} - {product.category}
-                </MenuItem>
-              ))}
+              {products?.map(
+                (product) =>
+                  !watch('products').find(
+                    (prodd) => prodd.id === product.id,
+                  ) && (
+                    <MenuItem value={product.id} key={product.id}>
+                      {product.name} - {product.category}
+                    </MenuItem>
+                  ),
+              )}
             </Select>
           </FormControl>
-          <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-            <TextField
-              id="heightTxt"
-              value={product && product.height}
-              defaultValue={product && product.height}
-              label="Altura (cm)"
-              type="number"
-              onChange={(e) => {
-                product &&
-                  setProduct({
-                    ...product,
-                    height: Number(e.target.value) ?? 0,
-                  });
-              }}
-            />
-          </FormControl>
-          <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-            <TextField
-              id="widthTxt"
-              defaultValue={product && product.width}
-              value={product && product.width}
-              label="Largura (cm)"
-              type="number"
-              onChange={(e) => {
-                product &&
-                  setProduct({
-                    ...product,
-                    width: Number(e.target.value) ?? 0,
-                  });
-              }}
-            />
-          </FormControl>
-          <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-            <TextField
-              id="depthTxt"
-              defaultValue={product && product.depth}
-              value={product && product.depth}
-              label="Espessura (cm)"
-              type="number"
-              onChange={(e) => {
-                product &&
-                  setProduct({
-                    ...product,
-                    depth: Number(e.target.value) ?? 0,
-                  });
-              }}
-            />
-          </FormControl>
+          {product?.category !== 'DIVERSOS' && (
+            <>
+              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+                <TextField
+                  id="heightTxt"
+                  value={product && product.height}
+                  defaultValue={product && product.height}
+                  label="Altura (cm)"
+                  type="number"
+                  onChange={(e) => {
+                    product &&
+                      setProduct({
+                        ...product,
+                        height: Number(e.target.value) ?? 0,
+                      });
+                  }}
+                />
+              </FormControl>
+              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+                <TextField
+                  id="widthTxt"
+                  defaultValue={product && product.width}
+                  value={product && product.width}
+                  label="Largura (cm)"
+                  type="number"
+                  onChange={(e) => {
+                    product &&
+                      setProduct({
+                        ...product,
+                        width: Number(e.target.value) ?? 0,
+                      });
+                  }}
+                />
+              </FormControl>
+              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+                <TextField
+                  id="depthTxt"
+                  defaultValue={product && product.depth}
+                  value={product && product.depth}
+                  label="Espessura (cm)"
+                  type="number"
+                  onChange={(e) => {
+                    product &&
+                      setProduct({
+                        ...product,
+                        depth: Number(e.target.value) ?? 0,
+                      });
+                  }}
+                />
+              </FormControl>
+            </>
+          )}
           <IconButton
             onClick={() => {
               if (product) {
@@ -272,28 +285,35 @@ function ServicesCreateForm() {
           sx={{
             width: '100%',
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'flex-start',
+            alignItems: 'center',
           }}
         >
-          <TextField
-            label="Total"
-            value={watch('price')}
-            disabled
-            sx={{ minWidth: 300, mb: 2 }}
+          <Controller
+            name="price"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Total"
+                sx={{ minWidth: 300, mb: 2 }}
+                {...field}
+                value={formatCurrency(watch('price'))}
+              />
+            )}
           />
+          <Button
+            id="btn-save"
+            type="submit"
+            variant="contained"
+            sx={{
+              display: 'flex',
+              alignSelf: 'center',
+            }}
+          >
+            Salvar
+          </Button>
         </Box>
-        <Button
-          id="btn-save"
-          type="submit"
-          variant="contained"
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignSelf: 'center',
-          }}
-        >
-          Salvar
-        </Button>
       </form>
     </Box>
   );

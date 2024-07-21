@@ -1,3 +1,5 @@
+import { Category } from '../../Products/types';
+
 export type Status =
   | 'ORCADO'
   | 'CONTRATADO_A_VISTA'
@@ -5,16 +7,18 @@ export type Status =
   | 'FINALIZADO';
 
 export interface ServiceValidation {
-  id: string;
   client: string;
-  deliveryForecast: string;
   price: number;
   status: Status;
   products: ProductInfo[];
-  images?: File[];
+  images?: { file: File[] }[];
 }
 
 export interface CreateServiceValidation extends ServiceValidation {}
+export interface EditServiceValidation extends ServiceValidation {
+  id: string;
+  deliveryForecast: string;
+}
 
 export interface ProductInfo {
   id: string;
@@ -24,4 +28,5 @@ export interface ProductInfo {
   price: number;
   width: number;
   actualQuantity: number;
+  category?: Category;
 }

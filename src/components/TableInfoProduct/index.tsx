@@ -50,7 +50,7 @@ export default function TableProductInfo({
       },
       {
         accessorKey: 'price',
-        header: 'Valor',
+        header: 'Valor unitário',
         Cell: (options) => {
           return (
             <>

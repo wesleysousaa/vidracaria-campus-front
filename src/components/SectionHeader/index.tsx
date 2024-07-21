@@ -9,7 +9,7 @@ function CustomDivider() {
     <Divider
       orientation="horizontal"
       sx={{
-        width: '80%',
+        flex: 1,
       }}
     />
   );

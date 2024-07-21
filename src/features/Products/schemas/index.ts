@@ -22,6 +22,6 @@ export const CreateProductSchema = Yup.object({
     .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
     .required('Campo obrigatório'),
   category: Yup.string()
-    .oneOf(['COMUM', 'TEMPERADO'])
+    .oneOf(['COMUM', 'TEMPERADO', 'DIVERSOS'])
     .required('Campo obrigatório'),
 });
