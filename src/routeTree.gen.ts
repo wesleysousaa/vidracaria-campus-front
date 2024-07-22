@@ -19,6 +19,9 @@ import { Route as AuthenticatedLayoutImport } from './routes/_authenticated/_lay
 
 // Create Virtual Routes
 
+const AuthenticatedLayoutServicesIndexLazyImport = createFileRoute(
+  '/_authenticated/_layout/services/',
+)()
 const AuthenticatedLayoutProductsIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/products/',
 )()
@@ -28,11 +31,20 @@ const AuthenticatedLayoutDashboardIndexLazyImport = createFileRoute(
 const AuthenticatedLayoutCustomersIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/customers/',
 )()
+const AuthenticatedLayoutServicesAddIndexLazyImport = createFileRoute(
+  '/_authenticated/_layout/services/add/',
+)()
 const AuthenticatedLayoutProductsAddIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/products/add/',
 )()
 const AuthenticatedLayoutCustomersAddIndexLazyImport = createFileRoute(
   '/_authenticated/_layout/customers/add/',
+)()
+const AuthenticatedLayoutServicesInfoIdLazyImport = createFileRoute(
+  '/_authenticated/_layout/services/info/$id',
+)()
+const AuthenticatedLayoutServicesEditIdLazyImport = createFileRoute(
+  '/_authenticated/_layout/services/edit/$id',
 )()
 const AuthenticatedLayoutProductsEditIdLazyImport = createFileRoute(
   '/_authenticated/_layout/products/edit/$id',
@@ -57,6 +69,16 @@ const AuthenticatedLayoutRoute = AuthenticatedLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+
+const AuthenticatedLayoutServicesIndexLazyRoute =
+  AuthenticatedLayoutServicesIndexLazyImport.update({
+    path: '/services/',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/services/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthenticatedLayoutProductsIndexLazyRoute =
   AuthenticatedLayoutProductsIndexLazyImport.update({
@@ -88,6 +110,16 @@ const AuthenticatedLayoutCustomersIndexLazyRoute =
     ),
   )
 
+const AuthenticatedLayoutServicesAddIndexLazyRoute =
+  AuthenticatedLayoutServicesAddIndexLazyImport.update({
+    path: '/services/add/',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/services/add/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 const AuthenticatedLayoutProductsAddIndexLazyRoute =
   AuthenticatedLayoutProductsAddIndexLazyImport.update({
     path: '/products/add/',
@@ -104,6 +136,26 @@ const AuthenticatedLayoutCustomersAddIndexLazyRoute =
     getParentRoute: () => AuthenticatedLayoutRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/_layout/customers/add/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AuthenticatedLayoutServicesInfoIdLazyRoute =
+  AuthenticatedLayoutServicesInfoIdLazyImport.update({
+    path: '/services/info/$id',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/services/info/$id.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AuthenticatedLayoutServicesEditIdLazyRoute =
+  AuthenticatedLayoutServicesEditIdLazyImport.update({
+    path: '/services/edit/$id',
+    getParentRoute: () => AuthenticatedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/_layout/services/edit/$id.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -156,6 +208,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutProductsIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
+    '/_authenticated/_layout/services/': {
+      preLoaderRoute: typeof AuthenticatedLayoutServicesIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
     '/_authenticated/_layout/customers/edit/$id': {
       preLoaderRoute: typeof AuthenticatedLayoutCustomersEditIdLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
@@ -164,12 +220,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutProductsEditIdLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
+    '/_authenticated/_layout/services/edit/$id': {
+      preLoaderRoute: typeof AuthenticatedLayoutServicesEditIdLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
+    '/_authenticated/_layout/services/info/$id': {
+      preLoaderRoute: typeof AuthenticatedLayoutServicesInfoIdLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
     '/_authenticated/_layout/customers/add/': {
       preLoaderRoute: typeof AuthenticatedLayoutCustomersAddIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
     '/_authenticated/_layout/products/add/': {
       preLoaderRoute: typeof AuthenticatedLayoutProductsAddIndexLazyImport
+      parentRoute: typeof AuthenticatedLayoutImport
+    }
+    '/_authenticated/_layout/services/add/': {
+      preLoaderRoute: typeof AuthenticatedLayoutServicesAddIndexLazyImport
       parentRoute: typeof AuthenticatedLayoutImport
     }
   }
@@ -184,10 +252,14 @@ export const routeTree = rootRoute.addChildren([
       AuthenticatedLayoutCustomersIndexLazyRoute,
       AuthenticatedLayoutDashboardIndexLazyRoute,
       AuthenticatedLayoutProductsIndexLazyRoute,
+      AuthenticatedLayoutServicesIndexLazyRoute,
       AuthenticatedLayoutCustomersEditIdLazyRoute,
       AuthenticatedLayoutProductsEditIdLazyRoute,
+      AuthenticatedLayoutServicesEditIdLazyRoute,
+      AuthenticatedLayoutServicesInfoIdLazyRoute,
       AuthenticatedLayoutCustomersAddIndexLazyRoute,
       AuthenticatedLayoutProductsAddIndexLazyRoute,
+      AuthenticatedLayoutServicesAddIndexLazyRoute,
     ]),
   ]),
 ])

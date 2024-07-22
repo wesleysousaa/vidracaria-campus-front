@@ -16,12 +16,12 @@ import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts
 import { useCreateCustomer } from '../../../../../features/Customers/services/index.tsx';
 import { boxStylesForm } from '../../../../../features/Customers/styles/index.ts';
 import { CustomerValidation } from '../../../../../features/Customers/types/index.ts';
+import useMask from '../../../../../hooks/useMask.tsx';
 import {
   boxStyles,
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
-import useMask from '../../../../../hooks/useMask.tsx';
 
 function CustomerCreateForm() {
   const states = useGetState();
@@ -147,7 +147,7 @@ function CustomerCreateForm() {
                 sx={textFieldStyles}
                 id="phone"
                 type="text"
-                label="phone"
+                label="Telefone"
                 placeholder="Digite o Telefone do cliente"
                 error={!!errors.phone}
                 helperText={errors.phone?.message}

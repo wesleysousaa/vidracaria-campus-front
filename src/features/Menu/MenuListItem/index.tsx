@@ -28,7 +28,7 @@ export default function MenuListItem({ colapsed }: MenuListItemProps) {
     {
       Icon: BuildOutlinedIcon,
       label: 'SERVIÇOS',
-      path: '/servicos',
+      path: '/services',
     },
     {
       Icon: ShoppingCartOutlinedIcon,

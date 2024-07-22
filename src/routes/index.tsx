@@ -65,6 +65,9 @@ export function Login() {
               label="Email"
               id="email"
               placeholder="Digite seu email"
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
               {...field}
             />
           )}
@@ -79,6 +82,9 @@ export function Login() {
               id="password"
               label="Senha"
               placeholder="Digite sua senha"
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
               {...field}
             />
           )}

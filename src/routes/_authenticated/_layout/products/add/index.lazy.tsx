@@ -20,7 +20,7 @@ import {
   textFieldStyles,
 } from '../../../../../styles/index.ts';
 
-export default function ProductsCreateForm() {
+function ProductsCreateForm() {
   const create = useCreateProduct();
 
   const onSubmit: SubmitHandler<CreateProductValidation> = (data) => {
@@ -79,6 +79,7 @@ export default function ProductsCreateForm() {
                 >
                   <MenuItem value="COMUM">Comum</MenuItem>
                   <MenuItem value="TEMPERADO">Temperado</MenuItem>
+                  <MenuItem value="DIVERSOS">Diversos</MenuItem>
                 </Select>
               </FormControl>
             )}

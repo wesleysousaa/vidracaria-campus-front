@@ -42,7 +42,7 @@ export default function Table() {
         },
       },
       {
-        header: 'Dimensão A x L x P',
+        header: 'Dimensões A x L x P',
         enableHiding: true,
         Cell: (options) => {
           const item = options.row.original;

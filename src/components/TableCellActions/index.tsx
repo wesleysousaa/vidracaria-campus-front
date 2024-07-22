@@ -1,3 +1,4 @@
+import PrintIcon from '@mui/icons-material/Print';
 import { IconButton, Tooltip } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
@@ -6,10 +7,16 @@ import ConfirmAction from '../ConfirmAction';
 
 export interface TableCellActionsProps {
   idObject: string;
-  type: 'product' | 'customer';
+  type: 'product' | 'customer' | 'service';
   dispach: (idObject: string) => void;
   handleClick: (id: string) => void;
 }
+
+const typeMap = {
+  product: { label: 'Produto', editPath: '/products/edit/$id' },
+  customer: { label: 'Cliente', editPath: '/customers/edit/$id' },
+  service: { label: 'Serviço', editPath: '/services/edit/$id' },
+};
 
 export default function TableCellActions({
   idObject,
@@ -22,8 +29,8 @@ export default function TableCellActions({
   const [typeTranslate, setTypeTranslate] = useState<string>('');
 
   useEffect(() => {
-    setTypeTranslate(type === 'product' ? 'Produto' : 'Cliente');
-  }, []);
+    setTypeTranslate(typeMap[type]?.label || '');
+  }, [type]);
 
   return (
     <>
@@ -36,6 +43,14 @@ export default function TableCellActions({
         denyDispach={() => setOpen(false)}
       />
 
+      {typeMap[type]?.label === 'Serviço' && (
+        <Tooltip title={`Imprimir ${typeTranslate}`}>
+          <IconButton aria-label="Imprimir" color="default">
+            <PrintIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+
       <Tooltip title={`Ver informação de ${typeTranslate}`}>
         <IconButton
           aria-label="Info"
@@ -47,10 +62,7 @@ export default function TableCellActions({
       </Tooltip>
 
       <Tooltip title={`Editar informações de ${typeTranslate}`}>
-        <Link
-          to={type == 'customer' ? '/customers/edit/$id' : '/products/edit/$id'}
-          params={{ id: idObject }}
-        >
+        <Link to={typeMap[type]?.editPath.replace('$id', idObject) || ''}>
           <IconButton aria-label="Editar" color="warning">
             <EditIcon />
           </IconButton>
