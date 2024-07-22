@@ -39,14 +39,14 @@ function ServicesCreateForm() {
   const [customerAddress, setCustomerAddress] = useState<AddressValidation>();
   const [product, setProduct] = useState<ProductInfo>();
 
-  const onSubmit: SubmitHandler<CreateServiceValidation> = (data) => {
+  const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
     // create.mutate(data);
   };
 
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors: _errors },
     setValue,
     watch,
   } = useForm<CreateServiceValidation>({
