@@ -14,6 +14,15 @@ export interface ServiceValidation {
   images?: { file: File[] }[];
 }
 
+export interface ServiceValidationTable {
+  client: string;
+  price: number;
+  status: Status;
+  images?: { file: File[] }[];
+  id: string;
+  deliveryForecast: string;
+}
+
 export interface CreateServiceValidation extends ServiceValidation {}
 export interface EditServiceValidation extends ServiceValidation {
   id: string;

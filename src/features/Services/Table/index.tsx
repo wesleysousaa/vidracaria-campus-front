@@ -8,7 +8,7 @@ import {
 import { useMemo } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
 import { useDeleteServiceById, useGetAllServices } from '../services';
-import { ServiceValidation } from '../types';
+import { ServiceValidationTable } from '../types';
 import { converterStatus } from '../utils/converterStatus';
 
 export default function Table() {
@@ -20,7 +20,7 @@ export default function Table() {
     navigate({ to: '/services/info/$id', params: { id } });
   };
 
-  const columns = useMemo<MRT_ColumnDef<ServiceValidation>[]>(
+  const columns = useMemo<MRT_ColumnDef<ServiceValidationTable>[]>(
     () => [
       {
         id: 'client',

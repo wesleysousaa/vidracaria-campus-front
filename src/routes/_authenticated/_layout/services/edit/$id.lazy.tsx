@@ -63,9 +63,8 @@ function ServicesEditForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors: _errors },
     setValue,
-    getValues,
     watch,
   } = useForm<EditServiceValidation>({
     resolver: yupResolver(EditServiceSchema),
