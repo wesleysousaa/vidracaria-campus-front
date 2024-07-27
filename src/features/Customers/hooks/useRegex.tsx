@@ -1,4 +1,3 @@
-// Crie um regex para cpf/cnpj e telefone
 const useRegex = () => {
   function handleChangePhone(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

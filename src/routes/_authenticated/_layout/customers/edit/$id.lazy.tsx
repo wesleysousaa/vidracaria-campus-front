@@ -23,6 +23,7 @@ import { CustomerValidation } from '../../../../../features/Customers/types/inde
 import useMask from '../../../../../hooks/useMask.tsx';
 import {
   boxStyles,
+  buttonStyles,
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
@@ -340,11 +341,7 @@ function CustomerUpdateForm() {
           id="btn-save"
           type="submit"
           variant="contained"
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignSelf: 'center',
-          }}
+          sx={buttonStyles}
         >
           Salvar
         </Button>

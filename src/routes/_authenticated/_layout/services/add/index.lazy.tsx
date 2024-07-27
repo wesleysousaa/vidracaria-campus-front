@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
@@ -11,26 +10,28 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { createLazyFileRoute } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
-import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
-import {
-  boxStyles,
-  formStyles,
-  textFieldStyles,
-} from '../../../../../styles/index.ts';
+import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
+import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
+import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
+import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
+import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
 import {
   CreateServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
-import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
-import { useEffect, useState } from 'react';
-import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
-import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
-import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
+import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
+import {
+  boxStyles,
+  buttonStyles,
+  formStyles,
+  textFieldStyles,
+} from '../../../../../styles/index.ts';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -343,10 +344,7 @@ function ServicesCreateForm() {
             id="btn-save"
             type="submit"
             variant="contained"
-            sx={{
-              display: 'flex',
-              alignSelf: 'center',
-            }}
+            sx={buttonStyles}
           >
             Salvar
           </Button>

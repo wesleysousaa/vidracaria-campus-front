@@ -19,6 +19,7 @@ import { CustomerValidation } from '../../../../../features/Customers/types/inde
 import useMask from '../../../../../hooks/useMask.tsx';
 import {
   boxStyles,
+  buttonStyles,
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
@@ -121,7 +122,7 @@ function CustomerCreateForm() {
               <TextField
                 type="text"
                 id="cpfcnpj"
-                label={watch('customerType') === 'FISICA' ? 'Cpf' : 'Cnpj'}
+                label={watch('customerType') === 'FISICA' ? 'CPF' : 'CNPJ'}
                 placeholder="Digite o CPF/CNPJ"
                 error={!!errors.cpfcnpj}
                 helperText={errors.cpfcnpj?.message}
@@ -302,11 +303,7 @@ function CustomerCreateForm() {
           id="btn-save"
           type="submit"
           variant="contained"
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignSelf: 'center',
-          }}
+          sx={buttonStyles}
         >
           Salvar
         </Button>

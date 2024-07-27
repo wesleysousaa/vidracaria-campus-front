@@ -9,6 +9,13 @@ export const boxStyles: CSSProperties = {
   alignItems: 'center',
 };
 
+export const buttonStyles: CSSProperties = {
+  width: '100%',
+  padding: '10px',
+  display: 'flex',
+  alignSelf: 'center',
+};
+
 export const textFieldStyles: CSSProperties = {
   margin: '1em 0 1em 0',
   flex: 1,
@@ -42,7 +49,7 @@ export const formStyles: CSSProperties = {
   borderRadius: '.5rem',
   flexDirection: 'column',
   margin: '1em',
-  width: '60vw',
+  width: '50vw',
 };
 
 export const modalStyles: CSSProperties = {

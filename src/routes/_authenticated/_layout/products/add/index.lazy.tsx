@@ -16,6 +16,7 @@ import { useCreateProduct } from '../../../../../features/Products/services/inde
 import { CreateProductValidation } from '../../../../../features/Products/types/index.ts';
 import {
   boxStyles,
+  buttonStyles,
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
@@ -114,11 +115,7 @@ function ProductsCreateForm() {
           id="btn-save"
           type="submit"
           variant="contained"
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignSelf: 'center',
-          }}
+          sx={buttonStyles}
         >
           Salvar
         </Button>
