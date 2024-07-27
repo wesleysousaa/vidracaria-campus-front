@@ -26,7 +26,13 @@ import {
 function CustomerCreateForm() {
   const states = useGetState();
   const createCustomer = useCreateCustomer();
-  const { unmaskValue, phoneMask, handleInputChangeWithMask } = useMask();
+  const {
+    unmaskValue,
+    phoneMask,
+    handleInputChangeWithMask,
+    cpfMask,
+    cnpjMask,
+  } = useMask();
 
   const onSubmit: SubmitHandler<CustomerValidation> = (data) => {
     createCustomer.mutate({
@@ -95,6 +101,10 @@ function CustomerCreateForm() {
                   id="select-people"
                   label="Pessoa"
                   {...field}
+                  onChange={(e) => {
+                    setValue('customerType', e.target.value);
+                    setValue('cpfcnpj', '');
+                  }}
                 >
                   <MenuItem value={'FISICA'} defaultChecked>
                     Física
@@ -111,12 +121,22 @@ function CustomerCreateForm() {
               <TextField
                 type="text"
                 id="cpfcnpj"
-                label="cpfcnpj"
+                label={watch('customerType') === 'FISICA' ? 'Cpf' : 'Cnpj'}
                 placeholder="Digite o CPF/CNPJ"
                 error={!!errors.cpfcnpj}
                 helperText={errors.cpfcnpj?.message}
                 sx={textFieldStyles}
                 {...field}
+                onChange={(e) =>
+                  setValue(
+                    'cpfcnpj',
+                    handleInputChangeWithMask(
+                      e,
+                      watch('customerType') === 'FISICA' ? cpfMask : cnpjMask,
+                      watch('cpfcnpj') ?? '',
+                    ),
+                  )
+                }
               />
             )}
           />

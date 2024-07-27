@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  Chip,
   FormControl,
   IconButton,
   InputLabel,
@@ -38,6 +39,7 @@ function ServicesCreateForm() {
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
   const [customerAddress, setCustomerAddress] = useState<AddressValidation>();
   const [product, setProduct] = useState<ProductInfo>();
+  const [images, setImages] = useState<File[]>([]);
 
   const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
     // create.mutate(data);
@@ -68,6 +70,15 @@ function ServicesCreateForm() {
       actualQuantity: amount,
       price: productSelected ? productSelected?.price : prod.price,
     };
+  };
+
+  const addImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileInput = event.target as HTMLInputElement;
+    const file = fileInput.files?.[0];
+
+    if (file) {
+      setImages([...images, file]);
+    }
   };
 
   useEffect(() => {
@@ -139,16 +150,42 @@ function ServicesCreateForm() {
               )}
             </Select>
           </FormControl>
-
-          <Controller
-            name="images"
-            control={control}
-            render={({ field }) => (
-              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
-                <TextField type="file" id="image" {...field} />
-              </FormControl>
-            )}
-          />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Controller
+              name="images"
+              control={control}
+              render={({ field }) => (
+                <FormControl sx={{ width: '100%', ...textFieldStyles }}>
+                  <TextField
+                    type="file"
+                    label="Envie imagens"
+                    id="image"
+                    {...field}
+                    onChange={addImage}
+                  />
+                </FormControl>
+              )}
+            />
+            <Box gap={1} display={'flex'}>
+              {images &&
+                images.map((img, key) => (
+                  <Chip
+                    key={key}
+                    label={img.name.slice(0, 6)}
+                    onDelete={() =>
+                      setImages((prev) =>
+                        prev.filter((_img, index) => key !== index),
+                      )
+                    }
+                  />
+                ))}
+            </Box>
+          </Box>
         </Box>
         <SectionHeader label="Produtos" />
 

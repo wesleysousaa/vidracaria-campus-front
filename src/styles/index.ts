@@ -3,8 +3,10 @@ import { CSSProperties } from 'react';
 export const boxStyles: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  maxWidth: '80%',
+  maxWidth: '100%',
   padding: '1em',
+  width: '100%',
+  alignItems: 'center',
 };
 
 export const textFieldStyles: CSSProperties = {
@@ -40,7 +42,7 @@ export const formStyles: CSSProperties = {
   borderRadius: '.5rem',
   flexDirection: 'column',
   margin: '1em',
-  width: '80vw',
+  width: '60vw',
 };
 
 export const modalStyles: CSSProperties = {
