@@ -310,6 +310,10 @@ function ServicesEditForm() {
                   defaultValue={product && product.height}
                   label="Altura (cm)"
                   type="number"
+                  InputLabelProps={{
+                    shrink:
+                      product && (!!product.height || product.height === 0),
+                  }}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -326,6 +330,9 @@ function ServicesEditForm() {
                   value={product && product.width}
                   label="Largura (cm)"
                   type="number"
+                  InputLabelProps={{
+                    shrink: product && (!!product.width || product.width === 0),
+                  }}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -335,6 +342,7 @@ function ServicesEditForm() {
                   }}
                 />
               </FormControl>
+
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="depthTxt"
@@ -342,6 +350,9 @@ function ServicesEditForm() {
                   value={product && product.depth}
                   label="Espessura (cm)"
                   type="number"
+                  InputLabelProps={{
+                    shrink: product && (!!product.depth || product.depth === 0),
+                  }}
                   onChange={(e) => {
                     product &&
                       setProduct({
