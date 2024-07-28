@@ -11,7 +11,7 @@ import {
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import { EditProductSchema } from '../../../../../features/Products/schemas/index.ts';
 import {
   useGetProductById,

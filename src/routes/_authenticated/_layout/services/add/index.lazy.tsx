@@ -13,12 +13,13 @@ import {
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
 import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
+import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
 import {
   CreateServiceValidation,
@@ -71,15 +72,6 @@ function ServicesCreateForm() {
       actualQuantity: amount,
       price: productSelected ? productSelected?.price : prod.price,
     };
-  };
-
-  const addImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileInput = event.target as HTMLInputElement;
-    const file = fileInput.files?.[0];
-
-    if (file) {
-      setImages([...images, file]);
-    }
   };
 
   useEffect(() => {
@@ -155,24 +147,28 @@ function ServicesCreateForm() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
+              width: '20vw',
+              marginBottom: '1rem',
             }}
           >
             <Controller
               name="images"
               control={control}
               render={({ field }) => (
-                <FormControl sx={{ width: '100%', ...textFieldStyles }}>
-                  <TextField
-                    type="file"
-                    label="Envie imagens"
-                    id="image"
-                    {...field}
-                    onChange={addImage}
-                  />
-                </FormControl>
+                <ImageInput
+                  images={images}
+                  setImages={setImages}
+                  field={field}
+                />
               )}
             />
-            <Box gap={1} display={'flex'}>
+            <Box
+              gap={1}
+              display="flex"
+              flexWrap="wrap"
+              maxHeight="10vh"
+              overflow="auto"
+            >
               {images &&
                 images.map((img, key) => (
                   <Chip
@@ -319,36 +315,26 @@ function ServicesCreateForm() {
           }
         />
         <SectionHeader label="Total" />
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-          }}
+        <Controller
+          name="price"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Total"
+              sx={{ width: '48%', mb: 2 }}
+              {...field}
+              value={formatCurrency(watch('price'))}
+            />
+          )}
+        />
+        <Button
+          id="btn-save"
+          type="submit"
+          variant="contained"
+          sx={buttonStyles}
         >
-          <Controller
-            name="price"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Total"
-                sx={{ minWidth: 300, mb: 2 }}
-                {...field}
-                value={formatCurrency(watch('price'))}
-              />
-            )}
-          />
-          <Button
-            id="btn-save"
-            type="submit"
-            variant="contained"
-            sx={buttonStyles}
-          >
-            Salvar
-          </Button>
-        </Box>
+          Salvar
+        </Button>
       </form>
     </Box>
   );

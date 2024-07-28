@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  Chip,
   FormControl,
   IconButton,
   InputLabel,
@@ -18,12 +19,13 @@ import { createLazyFileRoute } from '@tanstack/react-router';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
 import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
+import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { EditServiceSchema } from '../../../../../features/Services/schemas/index.ts';
 import {
   CreateServiceValidation,
@@ -42,6 +44,7 @@ import {
 function ServicesEditForm() {
   const { data: customers } = useGetAllCustomers();
   const { data: products } = useGetAllProducts();
+  const [images, setImages] = useState<File[]>([]);
 
   // TODO: Mudar dados mocados //
   const [serviceById, setServiceById] = useState<EditServiceValidation>({
@@ -173,15 +176,46 @@ function ServicesEditForm() {
             </Select>
           </FormControl>
 
-          <Controller
-            name="images"
-            control={control}
-            render={({ field }) => (
-              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
-                <TextField type="file" id="image" {...field} />
-              </FormControl>
-            )}
-          />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '20vw',
+              marginBottom: '1rem',
+            }}
+          >
+            <Controller
+              name="images"
+              control={control}
+              render={({ field }) => (
+                <ImageInput
+                  images={images}
+                  setImages={setImages}
+                  field={field}
+                />
+              )}
+            />
+            <Box
+              gap={1}
+              display="flex"
+              flexWrap="wrap"
+              maxHeight="10vh"
+              overflow="auto"
+            >
+              {images &&
+                images.map((img, key) => (
+                  <Chip
+                    key={key}
+                    label={img.name.slice(0, 6)}
+                    onDelete={() =>
+                      setImages((prev) =>
+                        prev.filter((_img, index) => key !== index),
+                      )
+                    }
+                  />
+                ))}
+            </Box>
+          </Box>
         </Box>
 
         <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -361,36 +395,27 @@ function ServicesEditForm() {
           }
         />
         <SectionHeader label="Total" />
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-end',
-          }}
+        <Controller
+          name="price"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Total"
+              sx={{ width: '48%', mb: 2 }}
+              {...field}
+              value={formatCurrency(watch('price'))}
+            />
+          )}
+        />
+
+        <Button
+          id="btn-save"
+          type="submit"
+          variant="contained"
+          sx={buttonStyles}
         >
-          <Controller
-            name="price"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Total"
-                sx={{ minWidth: 300, mb: 2 }}
-                {...field}
-                value={formatCurrency(watch('price'))}
-              />
-            )}
-          />
-          <Button
-            id="btn-save"
-            type="submit"
-            variant="contained"
-            sx={buttonStyles}
-          >
-            Salvar
-          </Button>
-        </Box>
+          Salvar
+        </Button>
       </form>
     </Box>
   );

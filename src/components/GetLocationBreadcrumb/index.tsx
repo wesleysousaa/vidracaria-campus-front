@@ -1,3 +1,4 @@
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Box, Breadcrumbs, Link, Typography } from '@mui/material';
 import useTranslate from '../../hooks/useTranslate';
 
@@ -14,7 +15,7 @@ function GetLocationBreadcrumb() {
   return (
     <Breadcrumbs
       aria-label="breadcrumb"
-      separator=">"
+      separator={<NavigateNextIcon fontSize="small" />}
       sx={{
         fontSize: '1rem',
         marginBottom: '5rem',

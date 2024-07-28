@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import { CreateProductSchema } from '../../../../../features/Products/schemas/index.ts';
 import { useCreateProduct } from '../../../../../features/Products/services/index.tsx';
 import { CreateProductValidation } from '../../../../../features/Products/types/index.ts';

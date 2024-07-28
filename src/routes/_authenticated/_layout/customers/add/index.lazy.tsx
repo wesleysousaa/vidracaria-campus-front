@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
 import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
 import { useCreateCustomer } from '../../../../../features/Customers/services/index.tsx';
