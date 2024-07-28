@@ -1,8 +1,8 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  Chip,
   FormControl,
   IconButton,
   InputLabel,
@@ -10,26 +10,28 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { createLazyFileRoute } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
-import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
-import {
-  boxStyles,
-  formStyles,
-  textFieldStyles,
-} from '../../../../../styles/index.ts';
+import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
+import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
+import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
+import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
+import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
 import {
   CreateServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
-import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
-import { useEffect, useState } from 'react';
-import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
-import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
-import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
+import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
+import {
+  boxStyles,
+  buttonStyles,
+  formStyles,
+  textFieldStyles,
+} from '../../../../../styles/index.ts';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -38,6 +40,7 @@ function ServicesCreateForm() {
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
   const [customerAddress, setCustomerAddress] = useState<AddressValidation>();
   const [product, setProduct] = useState<ProductInfo>();
+  const [images, setImages] = useState<File[]>([]);
 
   const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
     // create.mutate(data);
@@ -68,6 +71,15 @@ function ServicesCreateForm() {
       actualQuantity: amount,
       price: productSelected ? productSelected?.price : prod.price,
     };
+  };
+
+  const addImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileInput = event.target as HTMLInputElement;
+    const file = fileInput.files?.[0];
+
+    if (file) {
+      setImages([...images, file]);
+    }
   };
 
   useEffect(() => {
@@ -139,16 +151,42 @@ function ServicesCreateForm() {
               )}
             </Select>
           </FormControl>
-
-          <Controller
-            name="images"
-            control={control}
-            render={({ field }) => (
-              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
-                <TextField type="file" id="image" {...field} />
-              </FormControl>
-            )}
-          />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Controller
+              name="images"
+              control={control}
+              render={({ field }) => (
+                <FormControl sx={{ width: '100%', ...textFieldStyles }}>
+                  <TextField
+                    type="file"
+                    label="Envie imagens"
+                    id="image"
+                    {...field}
+                    onChange={addImage}
+                  />
+                </FormControl>
+              )}
+            />
+            <Box gap={1} display={'flex'}>
+              {images &&
+                images.map((img, key) => (
+                  <Chip
+                    key={key}
+                    label={img.name.slice(0, 6)}
+                    onDelete={() =>
+                      setImages((prev) =>
+                        prev.filter((_img, index) => key !== index),
+                      )
+                    }
+                  />
+                ))}
+            </Box>
+          </Box>
         </Box>
         <SectionHeader label="Produtos" />
 
@@ -306,10 +344,7 @@ function ServicesCreateForm() {
             id="btn-save"
             type="submit"
             variant="contained"
-            sx={{
-              display: 'flex',
-              alignSelf: 'center',
-            }}
+            sx={buttonStyles}
           >
             Salvar
           </Button>

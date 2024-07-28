@@ -1,7 +1,7 @@
 const useMask = () => {
   const phoneMask = '(##) # ####-####';
   const cpfMask = '###.###.###-##';
-
+  const cnpjMask = '##.###.###/####-##';
   const maskValue = (mask: string, value: string) => {
     let maskedValue = '';
     let valueIndex = 0;
@@ -54,6 +54,7 @@ const useMask = () => {
     phoneMask,
     handleDelete,
     handleInputChangeWithMask,
+    cnpjMask,
   };
 };
 

@@ -44,7 +44,6 @@ export default function StockForm({ onClose, open }: StockFormProps) {
   });
 
   const onSubmit: SubmitHandler<TransactionStock> = (data) => {
-    console.log(data);
     receiveProduct(data);
     onClose();
   };

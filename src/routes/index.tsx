@@ -1,12 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Alert,
-  Box,
-  Button,
-  FormControl,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Alert, Box, FormControl, TextField, Typography } from '@mui/material';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -90,16 +84,17 @@ export function Login() {
           )}
         />
 
-        <Button
+        <LoadingButton
           aria-label="login-button"
           type="submit"
           role="button"
+          loading={authUser.isPending}
           id="login-button"
           variant="contained"
           sx={loginButtonStyles}
         >
           acessar
-        </Button>
+        </LoadingButton>
         {authUser.error && (
           <Alert variant="filled" severity="error">
             Email ou senha inválidos!

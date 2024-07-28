@@ -1,9 +1,15 @@
 import { Box, Breadcrumbs, Link, Typography } from '@mui/material';
+import useTranslate from '../../hooks/useTranslate';
 
 function GetLocationBreadcrumb() {
   const locationArr = window.location.pathname
     .split('/')
     .filter((location) => location.length > 0);
+  const { translate } = useTranslate();
+
+  if (locationArr.length > 2) {
+    locationArr.pop();
+  }
 
   return (
     <Breadcrumbs
@@ -24,7 +30,9 @@ function GetLocationBreadcrumb() {
               fontSize: '1rem',
             }}
             color={'black'}
-          >{`${location[0].toUpperCase()}${location.slice(1, location.length)}`}</Typography>
+          >
+            {translate(location)}
+          </Typography>
         ) : (
           <Box key={key}>
             {location === 'edit' || location === 'add' ? (
@@ -34,14 +42,18 @@ function GetLocationBreadcrumb() {
                   fontSize: '1rem',
                 }}
                 color="grey"
-              >{`${location[0].toUpperCase()}${location.slice(1, location.length)}`}</Typography>
+              >
+                {translate(location)}
+              </Typography>
             ) : (
               <Link
                 key={key}
                 href={`/${location}`}
                 underline="hover"
                 color="grey"
-              >{`${location[0].toUpperCase()}${location.slice(1, location.length)}`}</Link>
+              >
+                {translate(location)}
+              </Link>
             )}
           </Box>
         ),
