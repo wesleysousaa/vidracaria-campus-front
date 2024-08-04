@@ -41,6 +41,9 @@ export default function TableProductInfo({
         header: 'Dimensões A x L x P',
         Cell: (options) => {
           const item = options.row.original;
+          if (!item.depth && !item.height && !item.width) {
+            return '-';
+          }
           return (
             <>
               {item.height} x {item.width} x {item.depth}

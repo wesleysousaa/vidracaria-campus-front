@@ -1,5 +1,5 @@
 export type Category = 'COMUM' | 'TEMPERADO' | 'DIVERSOS';
-export type UnitOfMeasure = 'CENTIMETRO' | 'METRO' | 'MILIMETRO';
+export type UnitOfMeasure = 'CENTIMETRO' | 'METRO' | 'MILIMETRO' | 'UNIDADE';
 
 export interface ProductBase {
   name: string;
@@ -9,10 +9,10 @@ export interface ProductBase {
 
 export interface ProductEditAndList extends ProductBase {
   id: string;
-  depth: number;
-  height: number;
-  price: number;
-  width: number;
+  depth?: number;
+  height?: number;
+  width?: number;
+  price?: number;
 }
 
 export interface EditProductValidation extends ProductEditAndList {}

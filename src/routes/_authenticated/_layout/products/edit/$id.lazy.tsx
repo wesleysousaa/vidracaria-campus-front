@@ -44,6 +44,7 @@ function ProducstUpdateForm() {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
     setValue,
   } = useForm<EditProductValidation>({
     resolver: yupResolver(EditProductSchema),
@@ -52,12 +53,15 @@ function ProducstUpdateForm() {
       name: '',
       category: 'COMUM',
       unitOfMeasure: 'CENTIMETRO',
-      depth: 0,
-      height: 0,
-      width: 0,
       price: 0,
     },
   });
+
+  useEffect(() => {
+    if (watch('category') === 'DIVERSOS') {
+      setValue('unitOfMeasure', 'UNIDADE');
+    }
+  }, [watch('category')]);
 
   useEffect(() => {
     if (product.data) {
@@ -65,9 +69,6 @@ function ProducstUpdateForm() {
       setValue('name', product.data.name || '');
       setValue('category', product.data.category || 'COMUM');
       setValue('unitOfMeasure', product.data.unitOfMeasure || 'CENTIMETRO');
-      setValue('depth', product.data.depth || 0);
-      setValue('height', product.data.height || 0);
-      setValue('width', product.data.width || 0);
       setValue('price', product.data.price || 1);
     }
   }, [product.data, setValue]);
@@ -115,6 +116,7 @@ function ProducstUpdateForm() {
                 >
                   <MenuItem value="COMUM">Comum</MenuItem>
                   <MenuItem value="TEMPERADO">Temperado</MenuItem>
+                  <MenuItem value="DIVERSOS">Diversos</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -136,96 +138,49 @@ function ProducstUpdateForm() {
                   placeholder="Digite a unidade de medida do produto"
                   {...field}
                 >
-                  <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
-                  <MenuItem value="METRO">Metro</MenuItem>
-                  <MenuItem value="MILIMETRO">Milímetro</MenuItem>
+                  {watch('category') === 'DIVERSOS' && (
+                    <MenuItem value="UNIDADE">Unidade</MenuItem>
+                  )}
+                  {watch('category') !== 'DIVERSOS' && (
+                    <MenuItem value="METRO">Metro</MenuItem>
+                  )}
+                  {watch('category') !== 'DIVERSOS' && (
+                    <MenuItem value="MILIMETRO">Milímetro</MenuItem>
+                  )}
+                  {watch('category') !== 'DIVERSOS' && (
+                    <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
+                  )}
                 </Select>
               </FormControl>
             )}
           />
         </Box>
-
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <Controller
-            name="depth"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                id="depth"
-                label="Profundidade"
-                placeholder="Digite a profundidade do produto"
-                error={!!errors.depth}
-                helperText={errors.depth?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink: !!field.value || field.value === 0,
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="height"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                id="height"
-                label="Altura"
-                placeholder="Digite a altura do produto"
-                error={!!errors.height}
-                helperText={errors.height?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink: !!field.value || field.value === 0,
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="width"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                id="width"
-                label="Largura"
-                placeholder="Digite a largura do produto"
-                error={!!errors.width}
-                helperText={errors.width?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink: !!field.value || field.value === 0,
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="price"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                id="price"
-                label="Preço"
-                placeholder="Digite o preço do produto"
-                {...field}
-                error={!!errors.price}
-                helperText={errors.price?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink:
-                    field.value !== undefined && field.value !== 0
-                      ? true
-                      : false,
-                }}
-              />
-            )}
-          />
-        </Box>
+        {watch('category') === 'DIVERSOS' && (
+          <Box sx={{ display: 'flex', gap: '1rem' }}>
+            <Controller
+              name="price"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  type="number"
+                  id="price"
+                  label="Preço"
+                  placeholder="Digite o preço do produto"
+                  {...field}
+                  error={!!errors.price}
+                  helperText={errors.price?.message}
+                  sx={textFieldStyles}
+                  InputLabelProps={{
+                    shrink:
+                      field.value !== undefined && field.value !== 0
+                        ? true
+                        : false,
+                  }}
+                />
+              )}
+            />
+          </Box>
+        )}
 
         <Button
           id="btn-save"

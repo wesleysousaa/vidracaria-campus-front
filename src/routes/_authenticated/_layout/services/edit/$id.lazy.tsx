@@ -112,7 +112,7 @@ function ServicesEditForm() {
         'price',
         Number(
           watch('products').reduce(
-            (acc, prod) => acc + prod.price * prod.actualQuantity,
+            (acc, prod) => acc + Number(prod.price) * prod.actualQuantity,
             0,
           ),
         ),
@@ -414,7 +414,7 @@ function ServicesEditForm() {
               label="Total"
               sx={{ width: '48%', mb: 2 }}
               {...field}
-              value={formatCurrency(watch('price'))}
+              value={formatCurrency(Number(watch('price')))}
             />
           )}
         />

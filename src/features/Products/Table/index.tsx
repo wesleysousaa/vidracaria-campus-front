@@ -42,18 +42,6 @@ export default function Table() {
         },
       },
       {
-        header: 'Dimensões A x L x P',
-        enableHiding: true,
-        Cell: (options) => {
-          const item = options.row.original;
-          return (
-            <>
-              {item.height} x {item.width} x {item.depth}
-            </>
-          );
-        },
-      },
-      {
         header: 'Quantidade Atual',
         enableHiding: true,
         Cell: (options) => {

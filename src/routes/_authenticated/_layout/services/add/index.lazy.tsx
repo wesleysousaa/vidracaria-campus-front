@@ -33,24 +33,26 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import { useCreateService } from '../../../../../features/Services/services/index.tsx';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
   const { data: products } = useGetAllProducts();
+  const create = useCreateService();
 
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
   const [customerAddress, setCustomerAddress] = useState<AddressValidation>();
   const [product, setProduct] = useState<ProductInfo>();
   const [images, setImages] = useState<File[]>([]);
 
-  const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
-    // create.mutate(data);
+  const onSubmit: SubmitHandler<CreateServiceValidation> = (data) => {
+    create.mutate({ ...data, files: images });
   };
 
   const {
     handleSubmit,
     control,
-    formState: { errors: _errors },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<CreateServiceValidation>({
@@ -61,6 +63,7 @@ function ServicesCreateForm() {
       products: [],
       status: 'ORCADO',
       images: [],
+      discount: 0,
     },
   });
 
@@ -70,22 +73,28 @@ function ServicesCreateForm() {
     return {
       ...prod,
       actualQuantity: amount,
-      price: productSelected ? productSelected?.price : prod.price,
+      price: productSelected ? productSelected?.price : Number(prod.price),
     };
   };
 
-  useEffect(() => {
-    if (watch('products'))
-      setValue(
-        'price',
-        Number(
-          watch('products').reduce(
-            (acc, prod) => acc + prod.price * prod.actualQuantity,
-            0,
-          ),
+  const calcTotal = () => {
+    return (
+      Number(
+        watch('products').reduce(
+          (acc, prod) => acc + Number(prod?.price) * prod.actualQuantity,
+          0,
         ),
-      );
+      ) - Number(watch('discount') ?? 0)
+    );
+  };
+
+  useEffect(() => {
+    if (watch('products')) setValue('price', calcTotal());
   }, [watch('products')]);
+
+  useEffect(() => {
+    setValue('price', calcTotal());
+  }, [watch('discount')]);
 
   useEffect(() => {
     if (watch('client') && watch('client') !== '')
@@ -187,7 +196,7 @@ function ServicesCreateForm() {
         <SectionHeader label="Produtos" />
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <FormControl variant="outlined" sx={{ flex: 1 }}>
+          <FormControl variant="outlined" sx={{ flex: 1, minWidth: 160 }}>
             <InputLabel id="select-product-label">Produto</InputLabel>
             <Select
               labelId="select-product-label"
@@ -202,10 +211,11 @@ function ServicesCreateForm() {
                     id: e.target.value as string,
                     name: prodSelected.name,
                     actualQuantity: 1,
-                    depth: prodSelected.depth,
-                    height: prodSelected.height,
-                    price: prodSelected.price,
-                    width: prodSelected.width,
+                    depth: prodSelected?.depth,
+                    height: prodSelected?.height,
+                    price: prodSelected?.price,
+                    width: prodSelected?.width,
+                    category: prodSelected.category,
                   });
               }}
             >
@@ -262,6 +272,7 @@ function ServicesCreateForm() {
                   }}
                 />
               </FormControl>
+
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="depthTxt"
@@ -277,6 +288,23 @@ function ServicesCreateForm() {
                       setProduct({
                         ...product,
                         depth: Number(e.target.value) ?? 0,
+                      });
+                  }}
+                />
+              </FormControl>
+
+              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+                <TextField
+                  id="priceTxt"
+                  defaultValue={product && product.price}
+                  value={product && product.price}
+                  label="Valor"
+                  type="number"
+                  onChange={(e) => {
+                    product &&
+                      setProduct({
+                        ...product,
+                        price: Number(e.target.value) ?? 0,
                       });
                   }}
                 />
@@ -326,14 +354,26 @@ function ServicesCreateForm() {
         />
         <SectionHeader label="Total" />
         <Controller
+          name="discount"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Desconto"
+              sx={{ minWidth: 160, mb: 2 }}
+              {...field}
+            />
+          )}
+        />
+        <Controller
           name="price"
           control={control}
           render={({ field }) => (
             <TextField
               label="Total"
-              sx={{ width: '48%', mb: 2 }}
+              disabled
+              sx={{ minWidth: 160, mb: 2 }}
               {...field}
-              value={formatCurrency(watch('price'))}
+              value={formatCurrency(watch('price') ?? 0)}
             />
           )}
         />

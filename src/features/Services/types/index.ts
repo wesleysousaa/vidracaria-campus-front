@@ -8,34 +8,39 @@ export type Status =
 
 export interface ServiceValidation {
   client: string;
-  price: number;
+  price?: number;
   status: Status;
   products: ProductInfo[];
-  images?: { file: File[] }[];
+  discount?: number;
+  images?: string[];
 }
 
 export interface ServiceValidationTable {
   client: string;
   price: number;
   status: Status;
-  images?: { file: File[] }[];
+  images?: string[];
   id: string;
   deliveryForecast: string;
 }
 
-export interface CreateServiceValidation extends ServiceValidation {}
+export interface CreateServiceValidation extends ServiceValidation {
+  files?: File[];
+}
+
 export interface EditServiceValidation extends ServiceValidation {
   id: string;
   deliveryForecast: string;
+  files?: File[];
 }
 
 export interface ProductInfo {
   id: string;
   name: string;
-  depth: number;
-  height: number;
-  price: number;
-  width: number;
+  depth?: number;
+  height?: number;
+  price?: number;
+  width?: number;
   actualQuantity: number;
   category?: Category;
 }

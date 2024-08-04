@@ -1,50 +1,18 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import api, { config } from '../../../services';
-import { Status } from '../types';
+import { CreateServiceValidation, ServiceValidation } from '../types';
+import { useNavigate } from '@tanstack/react-router';
 
 const useGetAllServices = () => {
-  // return useQuery<ServiceValidation[]>({
-  //   queryKey: ['/all-services'],
-  //   queryFn: async () => {
-  //     const res = await api.get('/service', config);
-  //     return res.data;
-  //   },
-  //   staleTime: Infinity,
-  // });
-  return {
-    data: [
-      {
-        id: '1',
-        client: 'Cliente 1',
-        deliveryForecast: '2021-10-10',
-        price: 100,
-        status: 'ORCADO' as Status,
-      },
-      {
-        id: '2',
-        client: 'Cliente 2',
-        deliveryForecast: '2021-10-10',
-        price: 200,
-        status: 'CONTRATADO_A_VISTA' as Status,
-      },
-      {
-        id: '3',
-        client: 'Cliente 3',
-        deliveryForecast: '2021-10-10',
-        price: 300,
-        status: 'CONTRATADO_A_PRAZO' as Status,
-      },
-      {
-        id: '4',
-        client: 'Cliente 4',
-        deliveryForecast: '2021-10-10',
-        price: 400,
-        status: 'FINALIZADO' as Status,
-      },
-    ],
-    isLoading: false,
-  };
+  return useQuery<ServiceValidation[]>({
+    queryKey: ['/all-services'],
+    queryFn: async () => {
+      const res = await api.get('/budget', config);
+      return res.data;
+    },
+    staleTime: Infinity,
+  });
 };
 
 const useDeleteServiceById = () => {
@@ -52,7 +20,7 @@ const useDeleteServiceById = () => {
 
   return useMutation({
     mutationFn: (id: string) => {
-      return api.delete(`/service/${id}`, config).then((res) => res.data);
+      return api.delete(`/budget/${id}`, config).then((res) => res.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-services'] });
@@ -63,4 +31,61 @@ const useDeleteServiceById = () => {
   });
 };
 
-export { useDeleteServiceById, useGetAllServices };
+const useCreateService = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async (service: CreateServiceValidation) => {
+      const formData = new FormData();
+      let urls = [];
+
+      if (service.files && service.files.length > 0) {
+        service.files.forEach((file) => {
+          formData.append('image', file);
+        });
+        urls = await api
+          .post('/image', formData, config)
+          .then((res) => res.data);
+      }
+      const serviceToCreate = {
+        idCustomer: service.client,
+        price: service.price,
+        status: service.status,
+        discount: service.discount,
+        images: urls,
+        paymentMethod: 'DINHEIRO',
+        items: service.products.map((product) => {
+          return {
+            idProduct: product.id,
+            quantity: product.actualQuantity,
+            category: product.category,
+            height: product.height ?? 0,
+            width: product.width ?? 0,
+            depth: product.depth ?? 0,
+            name: product.name,
+          };
+        }),
+      };
+      console.log(serviceToCreate);
+
+      return api
+        .post('/budget', serviceToCreate, config)
+        .then((res) => res.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/all-services'] });
+      navigate({ to: '/services' });
+      enqueueSnackbar('Serviço salvo com sucesso!', {
+        variant: 'success',
+      });
+    },
+    onError: () => {
+      enqueueSnackbar('Erro ao salvar o Serviço!', {
+        variant: 'error',
+      });
+    },
+  });
+};
+
+export { useDeleteServiceById, useGetAllServices, useCreateService };

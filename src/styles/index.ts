@@ -49,7 +49,7 @@ export const formStyles: CSSProperties = {
   borderRadius: '.5rem',
   flexDirection: 'column',
   margin: '1em',
-  width: '50vw',
+  width: '70vw',
 };
 
 export const modalStyles: CSSProperties = {
