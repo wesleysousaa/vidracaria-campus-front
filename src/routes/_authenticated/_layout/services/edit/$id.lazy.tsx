@@ -152,6 +152,7 @@ function ServicesEditForm() {
                 id="select-client"
                 label="Cliente"
                 {...field}
+                value={field.value || serviceById.client}
               >
                 {customers?.map(
                   (customer) =>
@@ -174,8 +175,7 @@ function ServicesEditForm() {
               id="address"
               label="Endereço"
               placeholder="Digite a categoria do produto"
-              value={customerAddress?.address}
-              defaultValue={customerAddress?.address}
+              value={customerAddress?.address || ''}
               disabled={!customerAddress}
             >
               {customerAddress && (
@@ -250,6 +250,7 @@ function ServicesEditForm() {
                   id="select-product"
                   label="Status"
                   {...field}
+                  value={field.value || serviceById.status}
                 >
                   <MenuItem value={'ORCADO'} key={'ORCADO'}>
                     Orçado
@@ -299,6 +300,7 @@ function ServicesEditForm() {
                     width: prodSelected.width,
                   });
               }}
+              value={product?.id || ''}
             >
               {products?.map(
                 (product) =>
@@ -317,8 +319,7 @@ function ServicesEditForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="heightTxt"
-                  value={product && product.height}
-                  defaultValue={product && product.height}
+                  value={product?.height || ''}
                   label="Altura (cm)"
                   type="number"
                   InputLabelProps={{
@@ -337,8 +338,7 @@ function ServicesEditForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
-                  defaultValue={product && product.width}
-                  value={product && product.width}
+                  value={product?.width || ''}
                   label="Largura (cm)"
                   type="number"
                   InputLabelProps={{
@@ -357,8 +357,7 @@ function ServicesEditForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="depthTxt"
-                  defaultValue={product && product.depth}
-                  value={product && product.depth}
+                  value={product?.depth || ''}
                   label="Espessura (cm)"
                   type="number"
                   InputLabelProps={{
@@ -426,6 +425,7 @@ function ServicesEditForm() {
               label="Desconto em R$"
               sx={{ minWidth: 160, mb: 2 }}
               {...field}
+              value={field.value || ''}
             />
           )}
         />

@@ -54,7 +54,7 @@ function ServicesCreateForm() {
     useForm<CreateServiceValidation>({
       resolver: yupResolver(CreateServiceSchema),
       defaultValues: {
-        client: customers && customers[0].id,
+        client: customers && customers.length > 0 ? customers[0].id : '',
         price: 0,
         products: [],
         status: 'ORCADO',
@@ -117,6 +117,10 @@ function ServicesCreateForm() {
                 id="select-client"
                 label="Cliente"
                 {...field}
+                value={
+                  field.value ||
+                  (customers && customers.length > 0 ? customers[0].id : '')
+                }
               >
                 {customers?.map(
                   (customer) =>
@@ -139,8 +143,7 @@ function ServicesCreateForm() {
               id="address"
               label="Endereço"
               placeholder="Digite a categoria do produto"
-              value={customerAddress?.address}
-              defaultValue={customerAddress?.address}
+              value={customerAddress?.address || ''}
               disabled={!customerAddress}
             >
               {customerAddress && (
@@ -216,6 +219,7 @@ function ServicesCreateForm() {
                     category: prodSelected.category,
                   });
               }}
+              value={product?.id || ''}
             >
               {products?.map(
                 (product) =>
@@ -234,8 +238,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="heightTxt"
-                  value={product && product.height}
-                  defaultValue={product && product.height}
+                  value={product?.height || ''}
                   label="Altura (cm)"
                   type="number"
                   InputLabelProps={{
@@ -254,8 +257,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
-                  defaultValue={product && product.width}
-                  value={product && product.width}
+                  value={product?.width || ''}
                   label="Largura (cm)"
                   type="number"
                   InputLabelProps={{
@@ -274,8 +276,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="depthTxt"
-                  defaultValue={product && product.depth}
-                  value={product && product.depth}
+                  value={product?.depth || ''}
                   label="Espessura (cm)"
                   type="number"
                   InputLabelProps={{
@@ -294,8 +295,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="priceTxt"
-                  defaultValue={product && product.price}
-                  value={product && product.price}
+                  value={product?.price || ''}
                   label="Valor"
                   type="number"
                   onChange={(e) => {
@@ -360,6 +360,7 @@ function ServicesCreateForm() {
               label="Desconto em R$"
               sx={{ minWidth: 160, mb: 2 }}
               {...field}
+              value={field.value || ''}
             />
           )}
         />
