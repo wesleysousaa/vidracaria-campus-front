@@ -21,10 +21,12 @@ import { AddressValidation } from '../../../../../features/Customers/types/index
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
 import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
+import { useCreateService } from '../../../../../features/Services/services/index.tsx';
 import {
   CreateServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
+import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
 import {
@@ -33,7 +35,6 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
-import { useCreateService } from '../../../../../features/Services/services/index.tsx';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -49,23 +50,18 @@ function ServicesCreateForm() {
     create.mutate({ ...data, files: images });
   };
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm<CreateServiceValidation>({
-    resolver: yupResolver(CreateServiceSchema),
-    defaultValues: {
-      client: customers && customers[0].id,
-      price: 0,
-      products: [],
-      status: 'ORCADO',
-      images: [],
-      discount: 0,
-    },
-  });
+  const { handleSubmit, control, setValue, watch } =
+    useForm<CreateServiceValidation>({
+      resolver: yupResolver(CreateServiceSchema),
+      defaultValues: {
+        client: customers && customers[0].id,
+        price: 0,
+        products: [],
+        status: 'ORCADO',
+        images: [],
+        discount: 0,
+      },
+    });
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
     const productSelected = products?.find((prodS) => prodS.id === prod.id);
@@ -77,23 +73,25 @@ function ServicesCreateForm() {
     };
   };
 
-  const calcTotal = () => {
-    return (
-      Number(
-        watch('products').reduce(
-          (acc, prod) => acc + Number(prod?.price) * prod.actualQuantity,
-          0,
-        ),
-      ) - Number(watch('discount') ?? 0)
-    );
-  };
-
   useEffect(() => {
-    if (watch('products')) setValue('price', calcTotal());
+    if (watch('products'))
+      setValue(
+        'price',
+        calcTotal({
+          products: watch('products'),
+          discount: watch('discount') ?? 0,
+        }),
+      );
   }, [watch('products')]);
 
   useEffect(() => {
-    setValue('price', calcTotal());
+    setValue(
+      'price',
+      calcTotal({
+        products: watch('products'),
+        discount: watch('discount') ?? 0,
+      }),
+    );
   }, [watch('discount')]);
 
   useEffect(() => {
@@ -358,7 +356,8 @@ function ServicesCreateForm() {
           control={control}
           render={({ field }) => (
             <TextField
-              label="Desconto"
+              type="number"
+              label="Desconto em R$"
               sx={{ minWidth: 160, mb: 2 }}
               {...field}
             />

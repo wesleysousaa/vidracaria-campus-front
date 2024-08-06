@@ -32,6 +32,7 @@ import {
   EditServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
+import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
 import {
@@ -72,7 +73,16 @@ function ServicesEditForm() {
     watch,
   } = useForm<EditServiceValidation>({
     resolver: yupResolver(EditServiceSchema),
-    defaultValues: serviceById,
+    defaultValues: {
+      client: serviceById.client,
+      deliveryForecast: serviceById.deliveryForecast,
+      id: serviceById.id,
+      price: serviceById.price ?? 0,
+      products: serviceById.products,
+      status: serviceById.status,
+      images: serviceById.images,
+      discount: 0,
+    },
   });
 
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
@@ -85,9 +95,22 @@ function ServicesEditForm() {
     dayjs(new Date()),
     dayjs(new Date()),
   ]);
+
   const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
     // create.mutate(data);
   };
+
+  useEffect(() => {
+    if (products) {
+      setValue(
+        'price',
+        calcTotal({
+          products: watch('products'),
+          discount: watch('discount') ?? 0,
+        }),
+      );
+    }
+  }, [products, watch('products'), watch('discount')]);
 
   useEffect(() => {
     setValue(
@@ -105,19 +128,6 @@ function ServicesEditForm() {
       price: productSelected ? productSelected?.price : prod.price,
     };
   };
-
-  useEffect(() => {
-    if (watch('products'))
-      setValue(
-        'price',
-        Number(
-          watch('products').reduce(
-            (acc, prod) => acc + Number(prod.price) * prod.actualQuantity,
-            0,
-          ),
-        ),
-      );
-  }, [watch('products')]);
 
   useEffect(() => {
     if (watch('client') && watch('client') !== '')
@@ -264,8 +274,8 @@ function ServicesEditForm() {
             />
           </FormControl>
         </Box>
-        <SectionHeader label="Produtos" />
 
+        <SectionHeader label="Produtos" />
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <FormControl variant="outlined" sx={{ flex: 1 }}>
             <InputLabel id="select-product-label">Produto</InputLabel>
@@ -282,6 +292,7 @@ function ServicesEditForm() {
                     id: e.target.value as string,
                     name: prodSelected.name,
                     actualQuantity: 1,
+                    category: prodSelected.category,
                     depth: prodSelected.depth,
                     height: prodSelected.height,
                     price: prodSelected.price,
@@ -407,14 +418,27 @@ function ServicesEditForm() {
         />
         <SectionHeader label="Total" />
         <Controller
+          name="discount"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              type="number"
+              label="Desconto em R$"
+              sx={{ minWidth: 160, mb: 2 }}
+              {...field}
+            />
+          )}
+        />
+        <Controller
           name="price"
           control={control}
           render={({ field }) => (
             <TextField
               label="Total"
-              sx={{ width: '48%', mb: 2 }}
+              disabled
+              sx={{ minWidth: 160, mb: 2 }}
               {...field}
-              value={formatCurrency(Number(watch('price')))}
+              value={formatCurrency(watch('price') ?? 0)}
             />
           )}
         />
