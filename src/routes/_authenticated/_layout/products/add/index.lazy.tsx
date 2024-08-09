@@ -14,12 +14,14 @@ import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import { CreateProductSchema } from '../../../../../features/Products/schemas/index.ts';
 import { useCreateProduct } from '../../../../../features/Products/services/index.tsx';
 import { CreateProductValidation } from '../../../../../features/Products/types/index.ts';
+import { GlassVariants } from '../../../../../features/Products/types/index.ts';
 import {
   boxStyles,
   buttonStyles,
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import { useEffect } from 'react';
 
 function ProductsCreateForm() {
   const create = useCreateProduct();
@@ -32,6 +34,8 @@ function ProductsCreateForm() {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<CreateProductValidation>({
     resolver: yupResolver(CreateProductSchema),
     defaultValues: {
@@ -40,6 +44,15 @@ function ProductsCreateForm() {
       unitOfMeasure: 'CENTIMETRO',
     },
   });
+
+  useEffect(() => {
+    if (watch('category') === 'DIVERSOS') {
+      setValue('unitOfMeasure', 'UNIDADE');
+    }
+    if (watch('category') !== 'COMUM') {
+      setValue('type', undefined);
+    }
+  }, [watch('category')]);
 
   return (
     <Box sx={boxStyles}>
@@ -90,7 +103,7 @@ function ProductsCreateForm() {
             name="unitOfMeasure"
             control={control}
             render={({ field }) => (
-              <FormControl sx={{ width: '50%', ...textFieldStyles }}>
+              <FormControl sx={textFieldStyles}>
                 <InputLabel htmlFor="unitOfMeasure">
                   Unidade de Medida
                 </InputLabel>
@@ -98,19 +111,52 @@ function ProductsCreateForm() {
                   type="text"
                   id="unitOfMeasure"
                   label="Unidade de Medida"
-                  error={!!errors.category}
+                  error={!!errors.unitOfMeasure}
                   placeholder="Digite a unidade de medida do produto"
                   {...field}
                 >
-                  <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
-                  <MenuItem value="METRO">Metro</MenuItem>
-                  <MenuItem value="MILIMETRO">Milímetro</MenuItem>
+                  {watch('category') === 'DIVERSOS' && (
+                    <MenuItem value="UNIDADE">Unidade</MenuItem>
+                  )}
+                  {watch('category') !== 'DIVERSOS' && (
+                    <MenuItem value="METRO">Metro</MenuItem>
+                  )}
+                  {watch('category') !== 'DIVERSOS' && (
+                    <MenuItem value="MILIMETRO">Milímetro</MenuItem>
+                  )}
+                  {watch('category') !== 'DIVERSOS' && (
+                    <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
+                  )}
                 </Select>
               </FormControl>
             )}
           />
         </Box>
-
+        {watch('category') === 'COMUM' && (
+          <Controller
+            name="type"
+            control={control}
+            render={({ field }) => (
+              <FormControl sx={textFieldStyles}>
+                <InputLabel htmlFor="variant">Variação</InputLabel>
+                <Select
+                  type="text"
+                  id="variant"
+                  label="Variação"
+                  error={!!errors.type}
+                  placeholder="Digite a variação do produto"
+                  {...field}
+                >
+                  {GlassVariants.map((variant) => (
+                    <MenuItem value={variant.toUpperCase()} key={variant}>
+                      {variant}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        )}
         <Button
           id="btn-save"
           type="submit"

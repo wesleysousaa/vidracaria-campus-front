@@ -17,7 +17,10 @@ import {
   useGetProductById,
   useUpdateProduct,
 } from '../../../../../features/Products/services/index.tsx';
-import { EditProductValidation } from '../../../../../features/Products/types/index.ts';
+import {
+  EditProductValidation,
+  GlassVariants,
+} from '../../../../../features/Products/types/index.ts';
 import {
   boxStyles,
   buttonStyles,
@@ -54,12 +57,16 @@ function ProducstUpdateForm() {
       category: 'COMUM',
       unitOfMeasure: 'CENTIMETRO',
       price: 0,
+      type: 'CANELADO',
     },
   });
 
   useEffect(() => {
     if (watch('category') === 'DIVERSOS') {
       setValue('unitOfMeasure', 'UNIDADE');
+    }
+    if (watch('category') !== 'COMUM') {
+      setValue('type', undefined);
     }
   }, [watch('category')]);
 
@@ -70,6 +77,7 @@ function ProducstUpdateForm() {
       setValue('category', product.data.category || 'COMUM');
       setValue('unitOfMeasure', product.data.unitOfMeasure || 'CENTIMETRO');
       setValue('price', product.data.price || 1);
+      setValue('type', product.data.type || 'CANELADO');
     }
   }, [product.data, setValue]);
 
@@ -180,6 +188,32 @@ function ProducstUpdateForm() {
               )}
             />
           </Box>
+        )}
+
+        {watch('category') === 'COMUM' && (
+          <Controller
+            name="type"
+            control={control}
+            render={({ field }) => (
+              <FormControl sx={textFieldStyles}>
+                <InputLabel htmlFor="variant">Variação</InputLabel>
+                <Select
+                  type="text"
+                  id="variant"
+                  label="Variação"
+                  error={!!errors.type}
+                  placeholder="Digite a variação do produto"
+                  {...field}
+                >
+                  {GlassVariants.map((variant) => (
+                    <MenuItem value={variant.toUpperCase()} key={variant}>
+                      {variant}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
         )}
 
         <Button

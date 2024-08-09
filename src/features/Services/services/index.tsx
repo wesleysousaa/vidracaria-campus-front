@@ -1,14 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import api, { config } from '../../../services';
-import { CreateServiceValidation, ServiceValidation } from '../types';
+import { CreateServiceValidation, ServiceValidationTable } from '../types';
 import { useNavigate } from '@tanstack/react-router';
 
 const useGetAllServices = () => {
-  return useQuery<ServiceValidation[]>({
+  return useQuery<ServiceValidationTable[]>({
     queryKey: ['/all-services'],
     queryFn: async () => {
-      const res = await api.get('/budget', config);
+      const res = await api.get('/budget/listBudgets', config);
       return res.data;
     },
     staleTime: Infinity,

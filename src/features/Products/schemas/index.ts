@@ -11,6 +11,12 @@ export const EditProductSchema = Yup.object().shape({
     .oneOf(['COMUM', 'TEMPERADO', 'DIVERSOS'])
     .required('Campo obrigatório'),
   price: Yup.number(),
+  type: Yup.string()
+    .oneOf(['CANELADO', 'INCOLOR', 'FUME', 'ESPELHO'])
+    .test('is-required-if-common', 'Campo obrigatório', function (value) {
+      const { category } = this.parent;
+      return category !== 'COMUM' || (category === 'COMUM' && !!value);
+    }),
 });
 
 export const CreateProductSchema = Yup.object({
@@ -21,4 +27,10 @@ export const CreateProductSchema = Yup.object({
   category: Yup.string()
     .oneOf(['COMUM', 'TEMPERADO', 'DIVERSOS'])
     .required('Campo obrigatório'),
+  type: Yup.string()
+    .oneOf(['CANELADO', 'INCOLOR', 'FUME', 'ESPELHO'])
+    .test('is-required-if-common', 'Campo obrigatório', function (value) {
+      const { category } = this.parent;
+      return category !== 'COMUM' || (category === 'COMUM' && !!value);
+    }),
 });

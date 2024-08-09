@@ -26,6 +26,14 @@ export default function Table() {
         enableHiding: true,
       },
       {
+        accessorKey: 'type',
+        header: 'Variação',
+        enableHiding: true,
+        Cell: (options) => {
+          return <>{options.row.original.type ?? '-'}</>;
+        },
+      },
+      {
         accessorKey: 'unitOfMeasure',
         header: 'Unidade de Medida',
         enableHiding: true,
@@ -45,7 +53,7 @@ export default function Table() {
         header: 'Quantidade Atual',
         enableHiding: true,
         Cell: (options) => {
-          return <>{options.row.original.actualQuantity}</>;
+          return <>{options.row.original.actualQuantity ?? '-'}</>;
         },
       },
       {

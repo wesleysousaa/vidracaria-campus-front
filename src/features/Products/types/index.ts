@@ -5,7 +5,12 @@ export interface ProductBase {
   name: string;
   unitOfMeasure: UnitOfMeasure;
   category: Category;
+  type?: GlassVariant;
 }
+
+export type GlassVariant = 'CANELADO' | 'INCOLOR' | 'FUME' | 'ESPELHO';
+
+export const GlassVariants = ['Canelado', 'Incolor', 'Fume', 'Espelho'];
 
 export interface ProductEditAndList extends ProductBase {
   id: string;

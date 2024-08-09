@@ -10,13 +10,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
-import { DateRange } from '@mui/x-date-pickers-pro/models/range';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { createLazyFileRoute } from '@tanstack/react-router';
-import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PageHeader from '../../../../../components/PageHeader/index.tsx';
@@ -47,7 +41,7 @@ function ServicesEditForm() {
   const { data: products } = useGetAllProducts();
   const [images, setImages] = useState<File[]>([]);
 
-  // TODO: Mudar dados mocados //
+  // TODO: Mudar dados mocados
   const [serviceById, setServiceById] = useState<EditServiceValidation>({
     client: 'd50704f2-ec43-4ffd-930f-e69e539d20f2',
     deliveryForecast: '',
@@ -63,7 +57,6 @@ function ServicesEditForm() {
       setServiceById({ ...serviceById, products: [products[0], products[1]] });
     }
   }, [products]);
-  // TODO: Mudar dados mocados //
 
   const {
     handleSubmit,
@@ -91,10 +84,6 @@ function ServicesEditForm() {
   >(customers?.find((cust) => cust.id === watch('client'))?.address);
 
   const [product, setProduct] = useState<ProductInfo>();
-  const [date, setDate] = useState<DateRange<Dayjs>>([
-    dayjs(new Date()),
-    dayjs(new Date()),
-  ]);
 
   const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
     // create.mutate(data);
@@ -111,13 +100,6 @@ function ServicesEditForm() {
       );
     }
   }, [products, watch('products'), watch('discount')]);
-
-  useEffect(() => {
-    setValue(
-      'deliveryForecast',
-      `${date[0]?.toDate().toISOString()} | ${date[1]?.toDate().toISOString()}`,
-    );
-  }, [date]);
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
     const productSelected = products?.find((prodS) => prodS.id === prod.id);
@@ -158,7 +140,7 @@ function ServicesEditForm() {
                   (customer) =>
                     customer && (
                       <MenuItem value={customer.id} key={customer.id}>
-                        {customer.name} - {customer.address?.address}
+                        {customer.name}
                       </MenuItem>
                     ),
                 )}
@@ -229,18 +211,23 @@ function ServicesEditForm() {
         </Box>
 
         <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateRangePicker']}>
-              <DateRangePicker
-                localeText={{ start: 'Min. Entrega', end: 'Max. Entrega' }}
-                value={date}
-                onChange={(value) => setDate(value)}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
+          <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  type="date"
+                  id="date"
+                  label="Previsão ed entrega"
+                  {...field}
+                />
+              )}
+            />
+          </FormControl>
 
           <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
-            <InputLabel id="select-product-label">Produto</InputLabel>
+            <InputLabel id="select-product-label">Status</InputLabel>
             <Controller
               name="status"
               control={control}

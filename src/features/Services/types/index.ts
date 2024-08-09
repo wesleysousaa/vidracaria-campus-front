@@ -16,7 +16,7 @@ export interface ServiceValidation {
 }
 
 export interface ServiceValidationTable {
-  client: string;
+  ownerName: string;
   price: number;
   status: Status;
   images?: string[];

@@ -117,16 +117,13 @@ function ServicesCreateForm() {
                 id="select-client"
                 label="Cliente"
                 {...field}
-                value={
-                  field.value ||
-                  (customers && customers.length > 0 ? customers[0].id : '')
-                }
+                value={field.value}
               >
                 {customers?.map(
                   (customer) =>
                     customer && (
                       <MenuItem value={customer.id} key={customer.id}>
-                        {customer.name} - {customer.address?.address}
+                        {customer.name}
                       </MenuItem>
                     ),
                 )}

@@ -24,7 +24,7 @@ export default function Table() {
     () => [
       {
         id: 'client',
-        accessorKey: 'client',
+        accessorKey: 'ownerName',
         header: 'Cliente',
         enableHiding: true,
       },
