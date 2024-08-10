@@ -48,6 +48,8 @@ function ProductsCreateForm() {
   useEffect(() => {
     if (watch('category') === 'DIVERSOS') {
       setValue('unitOfMeasure', 'UNIDADE');
+    } else {
+      setValue('unitOfMeasure', 'METRO');
     }
     if (watch('category') !== 'COMUM') {
       setValue('type', undefined);
@@ -120,12 +122,6 @@ function ProductsCreateForm() {
                   )}
                   {watch('category') !== 'DIVERSOS' && (
                     <MenuItem value="METRO">Metro</MenuItem>
-                  )}
-                  {watch('category') !== 'DIVERSOS' && (
-                    <MenuItem value="MILIMETRO">Milímetro</MenuItem>
-                  )}
-                  {watch('category') !== 'DIVERSOS' && (
-                    <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
                   )}
                 </Select>
               </FormControl>

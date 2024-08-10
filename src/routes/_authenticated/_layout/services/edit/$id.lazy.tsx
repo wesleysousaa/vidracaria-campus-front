@@ -16,13 +16,11 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
 import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
 import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { EditServiceSchema } from '../../../../../features/Services/schemas/index.ts';
 import {
-  CreateServiceValidation,
   EditServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
@@ -35,28 +33,53 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import {
+  DepthsCommon,
+  DepthsTemperated,
+} from '../../../../../features/Dashboard/types/index.ts';
+import { useGetServiceById } from '../../../../../features/Services/services/index.tsx';
+import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 
 function ServicesEditForm() {
-  const { data: customers } = useGetAllCustomers();
+  const { id } = Route.useParams();
   const { data: products } = useGetAllProducts();
   const [images, setImages] = useState<File[]>([]);
+  const { data: service } = useGetServiceById(id);
 
-  // TODO: Mudar dados mocados
-  const [serviceById, setServiceById] = useState<EditServiceValidation>({
-    client: 'd50704f2-ec43-4ffd-930f-e69e539d20f2',
-    deliveryForecast: '',
-    id: '1',
-    price: 100,
-    products: products ? [products[0], products[1]] : [],
-    status: 'ORCADO',
-    images: [],
-  });
+  const { calculateTotal } = useBudgetItem();
+  const [product, setProduct] = useState<ProductInfo>();
+  const { AddCircleOutlineRoundedIcon } = useGetIcons();
+
+  const unitOfMeasures =
+    product && product.category === 'TEMPERADO'
+      ? DepthsTemperated
+      : DepthsCommon;
+  const onSubmit: SubmitHandler<EditServiceValidation> = (_data) => {
+    // create.mutate(data);
+  };
 
   useEffect(() => {
-    if (products) {
-      setServiceById({ ...serviceById, products: [products[0], products[1]] });
+    if (service) {
+      setValue(
+        'deliveryForecast',
+        service?.deliveryForecast || Date.now().toString(),
+      );
+      setValue('discount', service?.discount);
+      setValue('images', service?.images);
+      setValue('ownerName', service?.ownerName);
+      setValue('total', service?.total);
+      setValue('status', service?.status);
     }
-  }, [products]);
+  }, [service]);
+
+  useEffect(() => {
+    if (product) {
+      setProduct({
+        ...product,
+        price: calculateTotal(product),
+      });
+    }
+  }, [product]);
 
   const {
     handleSubmit,
@@ -67,34 +90,22 @@ function ServicesEditForm() {
   } = useForm<EditServiceValidation>({
     resolver: yupResolver(EditServiceSchema),
     defaultValues: {
-      client: serviceById.client,
-      deliveryForecast: serviceById.deliveryForecast,
-      id: serviceById.id,
-      price: serviceById.price ?? 0,
-      products: serviceById.products,
-      status: serviceById.status,
-      images: serviceById.images,
+      ownerName: service?.ownerName,
+      deliveryForecast: service?.deliveryForecast || Date.now().toString(),
+      id: service?.id,
+      price: service?.price ?? 0,
+      status: service?.status,
+      images: service?.images,
       discount: 0,
     },
   });
 
-  const { AddCircleOutlineRoundedIcon } = useGetIcons();
-  const [customerAddress, setCustomerAddress] = useState<
-    AddressValidation | undefined
-  >(customers?.find((cust) => cust.id === watch('client'))?.address);
-
-  const [product, setProduct] = useState<ProductInfo>();
-
-  const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
-    // create.mutate(data);
-  };
-
   useEffect(() => {
-    if (products) {
+    if (products && watch('products')) {
       setValue(
-        'price',
+        'total',
         calcTotal({
-          products: watch('products'),
+          products: watch('products') || [],
           discount: watch('discount') ?? 0,
         }),
       );
@@ -102,21 +113,13 @@ function ServicesEditForm() {
   }, [products, watch('products'), watch('discount')]);
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
-    const productSelected = products?.find((prodS) => prodS.id === prod.id);
     const amount = newAmount > 0 ? newAmount : 1;
     return {
       ...prod,
       actualQuantity: amount,
-      price: productSelected ? productSelected?.price : prod.price,
+      price: prod.price,
     };
   };
-
-  useEffect(() => {
-    if (watch('client') && watch('client') !== '')
-      setCustomerAddress(
-        customers?.find((customer) => customer.id === watch('client'))?.address,
-      );
-  }, [watch('client')]);
 
   return (
     <Box sx={boxStyles}>
@@ -124,48 +127,25 @@ function ServicesEditForm() {
         <PageHeader title="Editar Serviço" backTo="/services" />
         <SectionHeader label="Informações" />
         <Controller
-          name="client"
+          name="ownerName"
           control={control}
           render={({ field }) => (
             <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel id="select-client-label">Cliente</InputLabel>
-              <Select
-                labelId="select-client-label"
-                id="select-client"
-                label="Cliente"
-                {...field}
-                value={field.value || serviceById.client}
-              >
-                {customers?.map(
-                  (customer) =>
-                    customer && (
-                      <MenuItem value={customer.id} key={customer.id}>
-                        {customer.name}
-                      </MenuItem>
-                    ),
-                )}
-              </Select>
+              <TextField disabled {...field} />
             </FormControl>
           )}
         />
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <FormControl sx={textFieldStyles}>
-            <InputLabel htmlFor="address">Endereço</InputLabel>
-            <Select
+            <TextField
               type="text"
               id="address"
               label="Endereço"
               placeholder="Digite a categoria do produto"
-              value={customerAddress?.address || ''}
-              disabled={!customerAddress}
-            >
-              {customerAddress && (
-                <MenuItem value={customerAddress?.address}>
-                  {`${customerAddress?.address} - ${customerAddress?.city}`}
-                </MenuItem>
-              )}
-            </Select>
+              value={`${service?.address?.address} - ${service?.address?.city}`}
+              disabled
+            />
           </FormControl>
 
           <Box
@@ -213,19 +193,18 @@ function ServicesEditForm() {
         <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
             <Controller
-              name="status"
+              name="deliveryForecast"
               control={control}
               render={({ field }) => (
                 <TextField
                   type="date"
                   id="date"
-                  label="Previsão ed entrega"
+                  label="Previsão de entrega"
                   {...field}
                 />
               )}
             />
           </FormControl>
-
           <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
             <InputLabel id="select-product-label">Status</InputLabel>
             <Controller
@@ -237,7 +216,7 @@ function ServicesEditForm() {
                   id="select-product"
                   label="Status"
                   {...field}
-                  value={field.value || serviceById.status}
+                  defaultValue={service?.status}
                 >
                   <MenuItem value={'ORCADO'} key={'ORCADO'}>
                     Orçado
@@ -289,16 +268,11 @@ function ServicesEditForm() {
               }}
               value={product?.id || ''}
             >
-              {products?.map(
-                (product) =>
-                  !watch('products').find(
-                    (prodd) => prodd.id === product.id,
-                  ) && (
-                    <MenuItem value={product.id} key={product.id}>
-                      {product.name} - {product.category}
-                    </MenuItem>
-                  ),
-              )}
+              {products?.map((product) => (
+                <MenuItem value={product.id} key={product.id}>
+                  {product.name} - {product.category}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           {product?.category !== 'DIVERSOS' && (
@@ -306,8 +280,10 @@ function ServicesEditForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="heightTxt"
-                  value={product?.height || ''}
-                  label="Altura (cm)"
+                  value={
+                    Number(product?.height) === 0 ? 0 : Number(product?.height)
+                  }
+                  label="Altura (M)"
                   type="number"
                   InputLabelProps={{
                     shrink:
@@ -317,7 +293,9 @@ function ServicesEditForm() {
                     product &&
                       setProduct({
                         ...product,
-                        height: Number(e.target.value) ?? 0,
+                        height: e.target.value
+                          ? Number(e.target.value)
+                          : undefined,
                       });
                   }}
                 />
@@ -325,8 +303,10 @@ function ServicesEditForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
-                  value={product?.width || ''}
-                  label="Largura (cm)"
+                  value={
+                    Number(product?.width) === 0 ? 0 : Number(product?.width)
+                  }
+                  label="Largura (M)"
                   type="number"
                   InputLabelProps={{
                     shrink: product && (!!product.width || product.width === 0),
@@ -335,26 +315,47 @@ function ServicesEditForm() {
                     product &&
                       setProduct({
                         ...product,
-                        width: Number(e.target.value) ?? 0,
+                        width: e.target.value
+                          ? Number(e.target.value)
+                          : undefined,
                       });
                   }}
                 />
               </FormControl>
 
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-                <TextField
-                  id="depthTxt"
-                  value={product?.depth || ''}
-                  label="Espessura (cm)"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: product && (!!product.depth || product.depth === 0),
-                  }}
+              <FormControl variant="outlined" sx={{ width: 130 }}>
+                <InputLabel id="select-depth-label">Espessura</InputLabel>
+                <Select
+                  id="select-depth-label"
+                  labelId="select-depth-label"
+                  label={'Espessura'}
                   onChange={(e) => {
                     product &&
                       setProduct({
                         ...product,
                         depth: Number(e.target.value) ?? 0,
+                      });
+                  }}
+                >
+                  {unitOfMeasures.map((unit) => (
+                    <MenuItem value={unit} key={unit}>
+                      {unit}mm
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+                <TextField
+                  id="priceTxt"
+                  value={product?.price || ''}
+                  label="Valor"
+                  type="number"
+                  onChange={(e) => {
+                    product &&
+                      setProduct({
+                        ...product,
+                        price: Number(e.target.value) ?? 0,
                       });
                   }}
                 />
@@ -364,7 +365,7 @@ function ServicesEditForm() {
           <IconButton
             onClick={() => {
               if (product) {
-                setValue('products', [...watch('products'), product]);
+                setValue('products', [...(watch('products') || []), product]);
                 setProduct(undefined);
               }
             }}
@@ -374,11 +375,11 @@ function ServicesEditForm() {
         </Box>
 
         <TableProductInfo
-          data={watch('products') ? watch('products') : []}
+          data={watch('products') ? watch('products') || [] : []}
           onDecrementDispatch={(id) =>
             setValue(
               'products',
-              watch('products').map((prod) =>
+              (watch('products') || []).map((prod) =>
                 prod.id === id
                   ? updateProdQtd(prod, prod.actualQuantity - 1)
                   : prod,
@@ -388,7 +389,7 @@ function ServicesEditForm() {
           onIncrementDispatch={(id) =>
             setValue(
               'products',
-              watch('products').map((prod) =>
+              (watch('products') || []).map((prod) =>
                 prod.id === id
                   ? updateProdQtd(prod, prod.actualQuantity + 1)
                   : prod,
@@ -398,7 +399,7 @@ function ServicesEditForm() {
           onDeleteDispatch={(id) =>
             setValue(
               'products',
-              watch('products').filter((prod) => prod.id !== id),
+              (watch('products') || []).filter((prod) => prod.id !== id),
             )
           }
         />

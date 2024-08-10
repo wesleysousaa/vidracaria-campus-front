@@ -1,4 +1,5 @@
-import { Category } from '../../Products/types';
+import { AddressValidation } from '../../Customers/types';
+import { Category, GlassVariant } from '../../Products/types';
 
 export type Status =
   | 'ORCADO'
@@ -16,22 +17,23 @@ export interface ServiceValidation {
 }
 
 export interface ServiceValidationTable {
-  ownerName: string;
-  price: number;
+  ownerName?: string;
+  price?: number;
   status: Status;
   images?: string[];
-  id: string;
-  deliveryForecast: string;
+  id?: string;
+  deliveryForecast?: string;
 }
 
 export interface CreateServiceValidation extends ServiceValidation {
   files?: File[];
 }
 
-export interface EditServiceValidation extends ServiceValidation {
-  id: string;
-  deliveryForecast: string;
-  files?: File[];
+export interface EditServiceValidation extends ServiceValidationTable {
+  address?: AddressValidation;
+  discount?: number;
+  products?: ProductInfo[];
+  total?: number;
 }
 
 export interface ProductInfo {
@@ -43,4 +45,5 @@ export interface ProductInfo {
   width?: number;
   actualQuantity: number;
   category?: Category;
+  type?: GlassVariant;
 }

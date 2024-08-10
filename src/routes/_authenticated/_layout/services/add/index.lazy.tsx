@@ -35,6 +35,11 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import {
+  DepthsCommon,
+  DepthsTemperated,
+} from '../../../../../features/Dashboard/types/index.ts';
+import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -45,10 +50,25 @@ function ServicesCreateForm() {
   const [customerAddress, setCustomerAddress] = useState<AddressValidation>();
   const [product, setProduct] = useState<ProductInfo>();
   const [images, setImages] = useState<File[]>([]);
+  const { calculateTotal } = useBudgetItem();
+
+  const unitOfMeasures =
+    product && product.category === 'TEMPERADO'
+      ? DepthsTemperated
+      : DepthsCommon;
 
   const onSubmit: SubmitHandler<CreateServiceValidation> = (data) => {
     create.mutate({ ...data, files: images });
   };
+
+  useEffect(() => {
+    if (product) {
+      setProduct({
+        ...product,
+        price: calculateTotal(product),
+      });
+    }
+  }, [product]);
 
   const { handleSubmit, control, setValue, watch } =
     useForm<CreateServiceValidation>({
@@ -64,12 +84,12 @@ function ServicesCreateForm() {
     });
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
-    const productSelected = products?.find((prodS) => prodS.id === prod.id);
     const amount = newAmount > 0 ? newAmount : 1;
+
     return {
       ...prod,
       actualQuantity: amount,
-      price: productSelected ? productSelected?.price : Number(prod.price),
+      price: prod.price,
     };
   };
 
@@ -214,20 +234,16 @@ function ServicesCreateForm() {
                     price: prodSelected?.price,
                     width: prodSelected?.width,
                     category: prodSelected.category,
+                    type: prodSelected.type,
                   });
               }}
               value={product?.id || ''}
             >
-              {products?.map(
-                (product) =>
-                  !watch('products').find(
-                    (prodd) => prodd.id === product.id,
-                  ) && (
-                    <MenuItem value={product.id} key={product.id}>
-                      {product.name} - {product.category}
-                    </MenuItem>
-                  ),
-              )}
+              {products?.map((product) => (
+                <MenuItem value={product.id} key={product.id}>
+                  {product.name} - {product.category}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           {product?.category !== 'DIVERSOS' && (
@@ -235,8 +251,10 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="heightTxt"
-                  value={product?.height || ''}
-                  label="Altura (cm)"
+                  value={
+                    Number(product?.height) === 0 ? 0 : Number(product?.height)
+                  }
+                  label="Altura (M)"
                   type="number"
                   InputLabelProps={{
                     shrink:
@@ -246,7 +264,9 @@ function ServicesCreateForm() {
                     product &&
                       setProduct({
                         ...product,
-                        height: Number(e.target.value) ?? 0,
+                        height: e.target.value
+                          ? Number(e.target.value)
+                          : undefined,
                       });
                   }}
                 />
@@ -254,8 +274,10 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
-                  value={product?.width || ''}
-                  label="Largura (cm)"
+                  value={
+                    Number(product?.width) === 0 ? 0 : Number(product?.width)
+                  }
+                  label="Largura (M)"
                   type="number"
                   InputLabelProps={{
                     shrink: product && (!!product.width || product.width === 0),
@@ -264,21 +286,20 @@ function ServicesCreateForm() {
                     product &&
                       setProduct({
                         ...product,
-                        width: Number(e.target.value) ?? 0,
+                        width: e.target.value
+                          ? Number(e.target.value)
+                          : undefined,
                       });
                   }}
                 />
               </FormControl>
 
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-                <TextField
-                  id="depthTxt"
-                  value={product?.depth || ''}
-                  label="Espessura (cm)"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: product && (!!product.depth || product.depth === 0),
-                  }}
+              <FormControl variant="outlined" sx={{ width: 130 }}>
+                <InputLabel id="select-depth-label">Espessura</InputLabel>
+                <Select
+                  id="select-depth-label"
+                  labelId="select-depth-label"
+                  label={'Espessura'}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -286,23 +307,13 @@ function ServicesCreateForm() {
                         depth: Number(e.target.value) ?? 0,
                       });
                   }}
-                />
-              </FormControl>
-
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-                <TextField
-                  id="priceTxt"
-                  value={product?.price || ''}
-                  label="Valor"
-                  type="number"
-                  onChange={(e) => {
-                    product &&
-                      setProduct({
-                        ...product,
-                        price: Number(e.target.value) ?? 0,
-                      });
-                  }}
-                />
+                >
+                  {unitOfMeasures.map((unit) => (
+                    <MenuItem value={unit} key={unit}>
+                      {unit}mm
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
             </>
           )}

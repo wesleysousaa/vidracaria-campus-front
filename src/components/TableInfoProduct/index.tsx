@@ -30,6 +30,10 @@ export default function TableProductInfo({
         header: 'Produto',
       },
       {
+        accessorKey: 'type',
+        header: 'Variante',
+      },
+      {
         accessorKey: 'actualQuantity',
         header: 'Quantidade',
 

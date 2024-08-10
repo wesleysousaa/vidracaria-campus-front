@@ -2,6 +2,7 @@ const useMask = () => {
   const phoneMask = '(##) # ####-####';
   const cpfMask = '###.###.###-##';
   const cnpjMask = '##.###.###/####-##';
+
   const maskValue = (mask: string, value: string) => {
     let maskedValue = '';
     let valueIndex = 0;
@@ -47,6 +48,21 @@ const useMask = () => {
     }
   };
 
+  const realFormater = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const arrDateToDate = (date: number[]) => {
+    return new Date(date[0], date[1] - 1, date[2]).toISOString().split('T')[0];
+  };
+
+  const addPercent = (value: number) => {
+    return String(`${value} %`);
+  };
+
   return {
     maskValue,
     unmaskValue,
@@ -55,6 +71,9 @@ const useMask = () => {
     handleDelete,
     handleInputChangeWithMask,
     cnpjMask,
+    realFormater,
+    arrDateToDate,
+    addPercent,
   };
 };
 

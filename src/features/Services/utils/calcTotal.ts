@@ -13,5 +13,6 @@ export const calcTotal = ({ products, discount }: calcTotalProps) => {
       }
       return 0;
     }, 0) - discount;
+
   return total;
 };

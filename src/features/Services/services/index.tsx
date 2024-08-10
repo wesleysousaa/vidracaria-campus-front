@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import api, { config } from '../../../services';
-import { CreateServiceValidation, ServiceValidationTable } from '../types';
+import {
+  CreateServiceValidation,
+  EditServiceValidation,
+  ServiceValidationTable,
+} from '../types';
 import { useNavigate } from '@tanstack/react-router';
 
 const useGetAllServices = () => {
@@ -64,6 +68,7 @@ const useCreateService = () => {
             width: product.width ?? 0,
             depth: product.depth ?? 0,
             name: product.name,
+            type: product.type,
           };
         }),
       };
@@ -88,4 +93,21 @@ const useCreateService = () => {
   });
 };
 
-export { useDeleteServiceById, useGetAllServices, useCreateService };
+const useGetServiceById = (id?: string) => {
+  return useQuery<EditServiceValidation>({
+    queryKey: ['/service', id],
+    queryFn: async () => {
+      const res = await api.get(`/budget/${id}`, config);
+      return res.data;
+    },
+    enabled: id !== undefined,
+    staleTime: 600000,
+  });
+};
+
+export {
+  useDeleteServiceById,
+  useGetAllServices,
+  useCreateService,
+  useGetServiceById,
+};

@@ -24,6 +24,7 @@ export interface EditProductValidation extends ProductEditAndList {}
 
 export interface ProductValidation extends ProductEditAndList {
   actualQuantity: number;
+  type: GlassVariant;
 }
 
 export interface CreateProductValidation extends ProductBase {}

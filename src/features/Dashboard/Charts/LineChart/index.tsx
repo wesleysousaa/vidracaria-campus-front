@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useEffect, useRef } from 'react';
 
 interface propsLineChart {
-  data: any[];
+  data: { date: string; month: string; value: number }[];
   title: string;
 }
 
@@ -13,7 +13,7 @@ export default function LineChart(props: propsLineChart) {
   useEffect(() => {
     if (chartRef.current) {
       const config = {
-        data: props.data.sort((a, b) => a.date - b.date),
+        data: props.data,
         xField: 'date',
         yField: 'value',
         seriesField: 'month',
