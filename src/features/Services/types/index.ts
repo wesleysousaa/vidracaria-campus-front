@@ -57,6 +57,11 @@ export interface BudgetItem {
   total: number;
 }
 
+export interface Image {
+  id: string;
+  url: string;
+}
+
 export interface GetProductsByService {
   idBudget: string;
   items: BudgetItem[];

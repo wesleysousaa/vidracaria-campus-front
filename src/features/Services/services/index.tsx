@@ -6,6 +6,7 @@ import {
   CreateServiceValidation,
   EditServiceValidation,
   GetProductsByService,
+  Image,
   ServiceValidationTable,
 } from '../types';
 
@@ -115,10 +116,23 @@ const useGetProducstByServiceId = (id?: string) => {
   });
 };
 
+const useGetImagesByServiceId = (id?: string) => {
+  return useQuery<Image[]>({
+    queryKey: ['/services-images', id],
+    queryFn: async () => {
+      const res = await api.get(`/budget/imagesByBudgetId/${id}`, config);
+      return res.data;
+    },
+    enabled: id !== undefined,
+    staleTime: 600000,
+  });
+};
+
 export {
   useCreateService,
   useDeleteServiceById,
   useGetAllServices,
+  useGetImagesByServiceId,
   useGetProducstByServiceId,
   useGetServiceById,
 };

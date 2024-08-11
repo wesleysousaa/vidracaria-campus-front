@@ -17,6 +17,7 @@ import { useMemo } from 'react';
 import ReturnButton from '../../../../../components/ReturnButton';
 import { AddressValidation } from '../../../../../features/Customers/types';
 import {
+  useGetImagesByServiceId,
   useGetProducstByServiceId,
   useGetServiceById,
 } from '../../../../../features/Services/services';
@@ -29,13 +30,14 @@ function ServicesInfo() {
   const { id } = Route.useParams();
   const { data, isLoading } = useGetServiceById(id);
   const { data: products } = useGetProducstByServiceId(data?.id);
+  const { data: images } = useGetImagesByServiceId(data?.id);
 
   const columns = useMemo(
     () => [
       { id: 'name', label: 'Produto' },
       { id: 'actualQuantity', label: 'Quantidade' },
       { id: 'dimensions', label: 'Dimensões A x L x P' },
-      { id: 'price', label: 'Preço' },
+      { id: 'Total', label: 'Total' },
     ],
     [],
   );
@@ -84,10 +86,8 @@ function ServicesInfo() {
                   }}
                 />
               )}
-
-              <Carousel />
+              {images && images.length > 0 && <Carousel images={images} />}
             </Box>
-
             <Divider
               sx={{
                 width: '70vw',
