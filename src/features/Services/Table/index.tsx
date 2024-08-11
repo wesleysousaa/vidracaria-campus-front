@@ -33,7 +33,9 @@ export default function Table() {
         accessorKey: 'deliveryForecast',
         header: 'Previsão de Entrega',
         enableHiding: true,
-        Cell: ({ row }) => <>{row.original.deliveryForecast}</>,
+        Cell: ({ row }) => (
+          <>{row.original.deliveryForecast ?? 'Não informado'}</>
+        ),
       },
       {
         id: 'total',
