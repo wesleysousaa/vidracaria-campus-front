@@ -258,16 +258,6 @@ function ServicesEditForm() {
                   id="select-product"
                   label="Status"
                   {...field}
-                  value={
-                    [
-                      'ORCADO',
-                      'CONTRATADO_A_VISTA',
-                      'CONTRATADO_A_PRAZO',
-                      'FINALIZADO',
-                    ].includes(service?.status ?? '')
-                      ? service?.status ?? ''
-                      : ''
-                  }
                 >
                   <MenuItem value={'ORCADO'} key={'ORCADO'}>
                     Orçado
