@@ -46,3 +46,18 @@ export interface ProductInfo {
   category?: Category;
   type?: GlassVariant;
 }
+
+export interface BudgetItem {
+  quantity: number;
+  category: Category;
+  height: number;
+  width: number;
+  depth: number;
+  name: string;
+  total: number;
+}
+
+export interface GetProductsByService {
+  idBudget: string;
+  items: BudgetItem[];
+}

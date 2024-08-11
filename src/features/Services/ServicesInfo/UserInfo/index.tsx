@@ -1,13 +1,14 @@
 import { Avatar, Box, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
+import { AddressValidation } from '../../../Customers/types';
 import { Status } from '../../types';
 import { converterStatus } from '../../utils/converterStatus';
 
 interface UserInfoProps {
   data: {
     client: string;
-    deliveryForecast: string;
-    address: string;
+    deliveryForecast?: string;
+    address: AddressValidation;
     status: Status;
   };
 }
@@ -28,7 +29,7 @@ export default function UserInfo({ data }: UserInfoProps) {
           fontWeight: 'bold',
         }}
       >
-        USER
+        Cliente
       </Avatar>
       <Box
         sx={{
@@ -39,9 +40,9 @@ export default function UserInfo({ data }: UserInfoProps) {
       >
         <Typography variant="h4">{data.client}</Typography>
         <Typography variant="h6">
-          Previsão de entrega: {data.deliveryForecast}
+          Previsão de entrega: {data.deliveryForecast ?? 'Não informado'}
         </Typography>
-        <Typography variant="h6">Endereço: {data.address}</Typography>
+        <Typography variant="h6">Endereço: {data.address.address}</Typography>
         <Box
           sx={{
             bgcolor: green[500],

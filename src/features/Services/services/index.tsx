@@ -5,6 +5,7 @@ import api, { config } from '../../../services';
 import {
   CreateServiceValidation,
   EditServiceValidation,
+  GetProductsByService,
   ServiceValidationTable,
 } from '../types';
 
@@ -102,9 +103,22 @@ const useGetServiceById = (id?: string) => {
   });
 };
 
+const useGetProducstByServiceId = (id?: string) => {
+  return useQuery<GetProductsByService>({
+    queryKey: ['/services-products', id],
+    queryFn: async () => {
+      const res = await api.get(`/budget/productsByBudgetId/${id}`, config);
+      return res.data;
+    },
+    enabled: id !== undefined,
+    staleTime: 600000,
+  });
+};
+
 export {
   useCreateService,
   useDeleteServiceById,
   useGetAllServices,
+  useGetProducstByServiceId,
   useGetServiceById,
 };

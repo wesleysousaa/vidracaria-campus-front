@@ -15,130 +15,20 @@ import { green, red } from '@mui/material/colors';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useMemo } from 'react';
 import ReturnButton from '../../../../../components/ReturnButton';
+import { AddressValidation } from '../../../../../features/Customers/types';
+import {
+  useGetProducstByServiceId,
+  useGetServiceById,
+} from '../../../../../features/Services/services';
 import Carousel from '../../../../../features/Services/ServicesInfo/Carousel';
 import UserInfo from '../../../../../features/Services/ServicesInfo/UserInfo';
-import { ProductInfo, Status } from '../../../../../features/Services/types';
+import { BudgetItem } from '../../../../../features/Services/types';
 import { boxStyles, formStyles } from '../../../../../styles';
-
-const useGetServiceById = (id: string) => {
-  return {
-    data: {
-      id: id,
-      address: 'Rua 1, 123',
-      client: 'Cliente 1',
-      deliveryForecast: '2022-01-01',
-      price: 1000,
-      status: 'ORCADO' as Status,
-      products: [
-        {
-          id: '1',
-          name: 'Produto 1',
-          actualQuantity: 1,
-          height: 1,
-          width: 1,
-          depth: 1,
-          weight: 1,
-          price: 100,
-        },
-        {
-          id: '2',
-          name: 'Produto 2',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 3',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 3',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 3',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 4',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 3',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 3',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 3',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-        {
-          id: '3',
-          name: 'Produto 3',
-          actualQuantity: 2,
-          height: 2,
-          width: 2,
-          depth: 2,
-          weight: 2,
-          price: 200,
-        },
-      ],
-    },
-    isLoading: false,
-  };
-};
 
 function ServicesInfo() {
   const { id } = Route.useParams();
   const { data, isLoading } = useGetServiceById(id);
+  const { data: products } = useGetProducstByServiceId(data?.id);
 
   const columns = useMemo(
     () => [
@@ -149,10 +39,6 @@ function ServicesInfo() {
     ],
     [],
   );
-
-  const getTotal = useMemo(() => {
-    return data.products.reduce((acc, product) => acc + product.price, 0);
-  }, [data.products]);
 
   return (
     <Box sx={boxStyles}>
@@ -188,7 +74,17 @@ function ServicesInfo() {
                 justifyContent: 'space-between',
               }}
             >
-              <UserInfo data={data} />
+              {data && (
+                <UserInfo
+                  data={{
+                    client: data.ownerName,
+                    deliveryForecast: data.deliveryForecast,
+                    address: data.address as AddressValidation,
+                    status: data.status,
+                  }}
+                />
+              )}
+
               <Carousel />
             </Box>
 
@@ -215,23 +111,24 @@ function ServicesInfo() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.products.map((product: ProductInfo) => (
-                    <TableRow key={product.id}>
-                      <TableCell>{product.name}</TableCell>
-                      <TableCell>{product.actualQuantity}</TableCell>
-                      <TableCell>
-                        {product.height} x {product.width} x {product.depth}
-                      </TableCell>
-                      <TableCell>
-                        {product.price
-                          ? product.price.toLocaleString('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            })
-                          : 'Não informado'}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {products &&
+                    products.items.map((product: BudgetItem) => (
+                      <TableRow key={product.name}>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell>{product.quantity}</TableCell>
+                        <TableCell>
+                          {product.height} x {product.width} x {product.depth}
+                        </TableCell>
+                        <TableCell>
+                          {product.total
+                            ? product.total.toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                              })
+                            : 'Não informado'}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -246,7 +143,7 @@ function ServicesInfo() {
         >
           <Avatar
             sx={{
-              bgcolor: getTotal > 0 ? green[500] : red[500],
+              bgcolor: data?.total && data?.total > 0 ? green[500] : red[500],
               minWidth: 150,
               minHeight: 150,
               fontSize: '1.5rem',
@@ -254,7 +151,7 @@ function ServicesInfo() {
               fontWeight: 'bold',
             }}
           >
-            {getTotal.toLocaleString('pt-BR', {
+            {data?.total?.toLocaleString('pt-BR', {
               style: 'currency',
               currency: 'BRL',
             })}

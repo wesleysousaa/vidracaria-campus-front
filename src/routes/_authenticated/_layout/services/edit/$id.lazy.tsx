@@ -202,6 +202,8 @@ function ServicesEditForm() {
                   id="date"
                   label="Previsão de entrega"
                   {...field}
+                  value={field.value || formattedDate}
+                  onChange={(e) => field.onChange(e.target.value)}
                 />
               )}
             />
