@@ -9,16 +9,15 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
+
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import {
-  DepthsCommon,
-  DepthsTemperated,
-} from '../../../../../features/Dashboard/types/index.ts';
+import { DepthsCommon } from '../../../../../features/Dashboard/types/index.ts';
 import dayjs from 'dayjs';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
 import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
@@ -51,7 +50,7 @@ function ServicesEditForm() {
   const [images, setImages] = useState<File[]>([]);
 
   const { data: products } = useGetAllProducts();
-  const { data: service, isLoading } = useGetServiceById(id);
+  const { data: service } = useGetServiceById(id);
   const putService = usePutServiceById();
   const { data: productsPersisted } = useGetProducstByServiceId(id);
   const { data: imagesPersisted } = useGetImagesByServiceId(id);
@@ -59,11 +58,6 @@ function ServicesEditForm() {
   const [product, setProduct] = useState<ProductInfo>();
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
   const [persistedImagesState, setPersitedImagesState] = useState<any[]>([]);
-
-  const unitOfMeasures =
-    product && product.category === 'TEMPERADO'
-      ? DepthsTemperated
-      : DepthsCommon;
 
   const onSubmit: SubmitHandler<EditServiceValidation> = (data) => {
     putService.mutate({
@@ -209,12 +203,6 @@ function ServicesEditForm() {
                     key={key}
                     label={'Imagem salva ' + img.id}
                     onDelete={() => {
-                      console.log(
-                        persistedImagesState?.filter(
-                          (imgP) => imgP.id !== img.id,
-                        ),
-                      );
-
                       setPersitedImagesState(
                         persistedImagesState?.filter(
                           (imgP) => imgP.id !== img.id,
@@ -258,7 +246,6 @@ function ServicesEditForm() {
                     }}
                     onChange={(e) => {
                       field.onChange(e.target.value);
-                      console.log(e.target.value);
                     }}
                   />
                 </>
@@ -326,6 +313,7 @@ function ServicesEditForm() {
                     price: prodSelected.price,
                     width: prodSelected.width,
                     idProduct: prodSelected.idProduct,
+                    rowId: uuidv4(),
                   });
               }}
               value={product?.id || ''}
@@ -391,6 +379,7 @@ function ServicesEditForm() {
                   id="select-depth-label"
                   labelId="select-depth-label"
                   label={'Espessura'}
+                  value={product ? product.depth : DepthsCommon[0]}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -399,7 +388,7 @@ function ServicesEditForm() {
                       });
                   }}
                 >
-                  {unitOfMeasures.map((unit) => (
+                  {DepthsCommon.map((unit) => (
                     <MenuItem value={unit} key={unit}>
                       {unit}mm
                     </MenuItem>
@@ -428,7 +417,7 @@ function ServicesEditForm() {
             setValue(
               'products',
               (watch('products') || []).map((prod) =>
-                prod.id === id
+                prod.rowId === id
                   ? updateProdQtd(prod, prod.actualQuantity - 1)
                   : prod,
               ),
@@ -438,7 +427,7 @@ function ServicesEditForm() {
             setValue(
               'products',
               (watch('products') || []).map((prod) =>
-                prod.id === id
+                prod.rowId === id
                   ? updateProdQtd(prod, prod.actualQuantity + 1)
                   : prod,
               ),
@@ -447,7 +436,7 @@ function ServicesEditForm() {
           onDeleteDispatch={(id) =>
             setValue(
               'products',
-              (watch('products') || []).filter((prod) => prod.id !== id),
+              (watch('products') || []).filter((prod) => prod.rowId !== id),
             )
           }
         />
@@ -484,7 +473,7 @@ function ServicesEditForm() {
           type="submit"
           variant="contained"
           sx={buttonStyles}
-          loading={isLoading}
+          loading={putService.isPending}
         >
           Salvar
         </LoadingButton>

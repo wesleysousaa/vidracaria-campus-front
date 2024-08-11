@@ -1,4 +1,5 @@
 import { BudgetItem, ProductInfo } from '../types';
+import { v4 as uuidv4 } from 'uuid';
 
 export function useBudgetItem() {
   const price2mmComum = 200;
@@ -22,16 +23,17 @@ export function useBudgetItem() {
 
   const budgetItemsToEditTable = (bdItems: BudgetItem[]): ProductInfo[] =>
     bdItems.map((item) => ({
-      id: item.id,
+      id: item.id || '',
       idProduct: item.idProduct,
       actualQuantity: item.quantity,
       name: item.name,
       category: item.category,
       depth: item.depth,
       height: item.height,
-      price: item.total,
+      price: item.unitPrice,
       type: item.type || 'CANELADO',
       width: item.width,
+      rowId: uuidv4(),
     }));
 
   const calculateTotal = (item: ProductInfo): number => {

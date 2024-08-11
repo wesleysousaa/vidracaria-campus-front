@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
-  Button,
   Chip,
   FormControl,
   IconButton,
@@ -10,6 +9,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -18,10 +18,7 @@ import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
 import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
-import {
-  DepthsCommon,
-  DepthsTemperated,
-} from '../../../../../features/Dashboard/types/index.ts';
+import { DepthsCommon } from '../../../../../features/Dashboard/types/index.ts';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
 import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
@@ -40,6 +37,7 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import { LoadingButton } from '@mui/lab';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -52,23 +50,9 @@ function ServicesCreateForm() {
   const [images, setImages] = useState<File[]>([]);
   const { calculateTotal } = useBudgetItem();
 
-  const unitOfMeasures =
-    product && product.category === 'TEMPERADO'
-      ? DepthsTemperated
-      : DepthsCommon;
-
   const onSubmit: SubmitHandler<CreateServiceValidation> = (data) => {
     create.mutate({ ...data, files: images });
   };
-
-  useEffect(() => {
-    if (product) {
-      setProduct({
-        ...product,
-        price: calculateTotal(product),
-      });
-    }
-  }, [product]);
 
   const { handleSubmit, control, setValue, watch } =
     useForm<CreateServiceValidation>({
@@ -228,6 +212,7 @@ function ServicesCreateForm() {
                     width: prodSelected?.width,
                     category: prodSelected.category,
                     type: prodSelected.type,
+                    rowId: uuidv4(),
                   });
               }}
               value={product?.id || ''}
@@ -293,6 +278,7 @@ function ServicesCreateForm() {
                   id="select-depth-label"
                   labelId="select-depth-label"
                   label={'Espessura'}
+                  value={product ? product.depth : DepthsCommon[0]}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -301,7 +287,7 @@ function ServicesCreateForm() {
                       });
                   }}
                 >
-                  {unitOfMeasures.map((unit) => (
+                  {DepthsCommon.map((unit) => (
                     <MenuItem value={unit} key={unit}>
                       {unit}mm
                     </MenuItem>
@@ -313,7 +299,13 @@ function ServicesCreateForm() {
           <IconButton
             onClick={() => {
               if (product) {
-                setValue('products', [...watch('products'), product]);
+                setValue('products', [
+                  ...watch('products'),
+                  {
+                    ...product,
+                    price: calculateTotal(product),
+                  },
+                ]);
                 setProduct(undefined);
               }
             }}
@@ -378,14 +370,15 @@ function ServicesCreateForm() {
             />
           )}
         />
-        <Button
+        <LoadingButton
           id="btn-save"
           type="submit"
           variant="contained"
           sx={buttonStyles}
+          loading={create.isPending}
         >
           Salvar
-        </Button>
+        </LoadingButton>
       </form>
     </Box>
   );

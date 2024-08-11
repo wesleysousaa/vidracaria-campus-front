@@ -79,17 +79,17 @@ export default function TableProductInfo({
           return (
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               <IconButton
-                onClick={() => onIncrementDispatch(options.row.original.id)}
+                onClick={() => onIncrementDispatch(options.row.original.rowId)}
               >
                 <AddOutlinedIcon />
               </IconButton>
               <IconButton
-                onClick={() => onDeleteDispatch(options.row.original.id)}
+                onClick={() => onDeleteDispatch(options.row.original.rowId)}
               >
                 <DeleteIcon color="error" />
               </IconButton>
               <IconButton
-                onClick={() => onDecrementDispatch(options.row.original.id)}
+                onClick={() => onDecrementDispatch(options.row.original.rowId)}
               >
                 <RemoveOutlinedIcon />
               </IconButton>

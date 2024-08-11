@@ -46,6 +46,7 @@ export interface ProductInfo {
   actualQuantity: number;
   category?: Category;
   type?: GlassVariant;
+  rowId?: string;
 }
 
 export interface BudgetItem {
@@ -59,6 +60,7 @@ export interface BudgetItem {
   type?: GlassVariant;
   id?: string;
   idProduct?: string;
+  unitPrice?: number;
 }
 
 export interface Image {

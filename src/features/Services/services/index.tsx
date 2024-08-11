@@ -86,7 +86,10 @@ const usePutServiceById = () => {
         .then((res) => res.data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/put-service'] });
+      queryClient.invalidateQueries({ queryKey: ['/service'] });
+      queryClient.invalidateQueries({ queryKey: ['/services-products'] });
+      queryClient.invalidateQueries({ queryKey: ['/all-service'] });
+      queryClient.invalidateQueries({ queryKey: ['/services-images'] });
       enqueueSnackbar('Serviço editado com sucesso!', {
         variant: 'success',
       });
