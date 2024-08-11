@@ -13,8 +13,8 @@ import { converterStatus } from '../utils/converterStatus';
 
 export default function Table() {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetAllServices();
-  const deleteServices = useDeleteServiceById();
+  const { data, isFetching } = useGetAllServices();
+  const { mutate: deleteServices, isPending } = useDeleteServiceById();
 
   const handleClick = (id: string) => {
     navigate({ to: '/services/info/$id', params: { id } });
@@ -78,7 +78,7 @@ export default function Table() {
   );
 
   const handleDelete = (id: string) => {
-    deleteServices.mutate(id);
+    deleteServices(id);
   };
 
   const table = useMaterialReactTable({
@@ -92,7 +92,7 @@ export default function Table() {
       },
     },
     state: {
-      isLoading,
+      isLoading: isFetching || isPending,
     },
   });
   return (

@@ -11,8 +11,8 @@ import { useDeleteProductById, useGetAllProducts } from '../services';
 import { ProductValidation } from '../types';
 
 export default function Table() {
-  const { data, isLoading } = useGetAllProducts();
-  const deleteProducts = useDeleteProductById();
+  const { data, isFetching } = useGetAllProducts();
+  const { mutate: deleteProducts, isPending } = useDeleteProductById();
   const [open, setOpen] = useState(false);
   const [currentProduct, setCurrenProduct] = useState<
     ProductValidation | undefined
@@ -93,7 +93,7 @@ export default function Table() {
   );
 
   const handleDelete = (id: string) => {
-    deleteProducts.mutate(id);
+    deleteProducts(id);
   };
 
   const handleClick = (product: ProductValidation) => {
@@ -112,7 +112,7 @@ export default function Table() {
       },
     },
     state: {
-      isLoading,
+      isLoading: isFetching || isPending,
     },
   });
   return (
