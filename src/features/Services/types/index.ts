@@ -29,9 +29,9 @@ export interface CreateServiceValidation extends ServiceValidation {
 }
 
 export interface EditServiceValidation extends ServiceValidation {
-  id?: string;
-  deliveryForecast?: string;
+  deliveryForecast?: string | null;
   ownerName?: string;
+  id: string;
   address?: AddressValidation;
 }
 
@@ -41,7 +41,7 @@ export interface ProductInfo {
   height?: number;
   price?: number;
   width?: number;
-  id?: string;
+  id: string;
   idProduct?: string;
   actualQuantity: number;
   category?: Category;

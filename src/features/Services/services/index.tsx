@@ -42,17 +42,33 @@ const usePutServiceById = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: (data: EditServiceValidation) => {
+    mutationFn: async (params: {
+      data: EditServiceValidation;
+      imagesPersistedArr: Image[];
+    }) => {
+      const formData = new FormData();
+      let urls = [];
+
+      if (params.data.files && params.data.files.length > 0) {
+        params.data.files.forEach((file) => {
+          formData.append('image', file);
+        });
+        urls = await api
+          .post('/image', formData, config)
+          .then((res) => res.data);
+      }
       const dataConverted = {
-        id: data.id,
-        status: data.status,
+        id: params.data.id,
+        status: params.data.status,
         paymentMethod: 'DINHEIRO',
-        // TODO: Adicionar
-        // deliveryForecast: data.deliveryForecast,
-        discount: data.discount,
+        deliveryForecast: params.data.deliveryForecast,
+        discount: params.data.discount,
         downPayment: 0,
-        imgs: [],
-        items: data.products.map((item) => ({
+        imgs: [
+          ...params.imagesPersistedArr,
+          ...urls.map((image: string) => ({ url: image, id: '' })),
+        ],
+        items: params.data.products.map((item) => ({
           id: item.id,
           quantity: item.actualQuantity,
           price: item.price,
@@ -65,9 +81,8 @@ const usePutServiceById = () => {
           type: item.type,
         })),
       };
-
       return api
-        .put(`/budget/${data.id}`, dataConverted, config)
+        .put(`/budget/${params.data.id}`, dataConverted, config)
         .then((res) => res.data);
     },
     onSuccess: () => {

@@ -27,7 +27,6 @@ import {
   useGetServiceById,
   useGetProducstByServiceId,
   useGetImagesByServiceId,
-  useDeleteImageById,
   usePutServiceById,
 } from '../../../../../features/Services/services/index.tsx';
 import {
@@ -55,11 +54,11 @@ function ServicesEditForm() {
   const { data: service, isLoading } = useGetServiceById(id);
   const putService = usePutServiceById();
   const { data: productsPersisted } = useGetProducstByServiceId(id);
-  const { data: imagesPersisted, refetch } = useGetImagesByServiceId(id);
-  const deleteImage = useDeleteImageById();
+  const { data: imagesPersisted } = useGetImagesByServiceId(id);
   const { calculateTotal, budgetItemsToEditTable } = useBudgetItem();
   const [product, setProduct] = useState<ProductInfo>();
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
+  const [persistedImagesState, setPersitedImagesState] = useState<any[]>([]);
 
   const unitOfMeasures =
     product && product.category === 'TEMPERADO'
@@ -68,10 +67,14 @@ function ServicesEditForm() {
 
   const onSubmit: SubmitHandler<EditServiceValidation> = (data) => {
     putService.mutate({
-      ...data,
-      deliveryForecast: data.deliveryForecast
-        ? data.deliveryForecast.split('-').reverse().join('-')
-        : undefined,
+      data: {
+        ...data,
+        files: images,
+        deliveryForecast: data.deliveryForecast
+          ? data.deliveryForecast.split('-').reverse().join('-')
+          : undefined,
+      },
+      imagesPersistedArr: persistedImagesState,
     });
   };
 
@@ -102,14 +105,14 @@ function ServicesEditForm() {
     defaultValues: {
       deliveryForecast: service?.deliveryForecast || Date.now().toString(),
       total: service?.total ?? 0,
-      id: service?.id,
       address: service?.address,
       ownerName: service?.ownerName,
-      status: service?.status,
+      status: 'ORCADO',
       images: service?.images,
       discount: 0,
       products: service?.products,
       files: [],
+      id: service?.id,
     },
   });
 
@@ -124,6 +127,12 @@ function ServicesEditForm() {
       );
     }
   }, [products, watch('products'), watch('discount')]);
+
+  useEffect(() => {
+    if (imagesPersisted) {
+      setPersitedImagesState(imagesPersisted);
+    }
+  }, [imagesPersisted]);
 
   useEffect(() => {
     setValue(
@@ -194,14 +203,23 @@ function ServicesEditForm() {
               maxHeight="10vh"
               overflow="auto"
             >
-              {imagesPersisted &&
-                imagesPersisted.map((img, key) => (
+              {persistedImagesState &&
+                persistedImagesState.map((img, key) => (
                   <Chip
                     key={key}
-                    label={'Imagem salva ' + (key + 1)}
-                    onDelete={async () => {
-                      await deleteImage.mutateAsync(img.url);
-                      refetch();
+                    label={'Imagem salva ' + img.id}
+                    onDelete={() => {
+                      console.log(
+                        persistedImagesState?.filter(
+                          (imgP) => imgP.id !== img.id,
+                        ),
+                      );
+
+                      setPersitedImagesState(
+                        persistedImagesState?.filter(
+                          (imgP) => imgP.id !== img.id,
+                        ),
+                      );
                     }}
                   />
                 ))}
@@ -258,6 +276,8 @@ function ServicesEditForm() {
                   id="select-product"
                   label="Status"
                   {...field}
+                  value={watch('status')}
+                  defaultValue={watch('status')}
                 >
                   <MenuItem value={'ORCADO'} key={'ORCADO'}>
                     Orçado
