@@ -36,14 +36,14 @@ export default function Table() {
         Cell: ({ row }) => <>{row.original.deliveryForecast}</>,
       },
       {
-        id: 'price',
-        accessorKey: 'price',
-        header: 'Preço',
+        id: 'total',
+        accessorKey: 'total',
+        header: 'Total',
         enableHiding: true,
         Cell: ({ row }) => (
           <>
-            {row.original.price
-              ? row.original.price.toLocaleString('pt-BR', {
+            {row.original.total
+              ? row.original.total.toLocaleString('pt-BR', {
                   style: 'currency',
                   currency: 'BRL',
                 })

@@ -2,7 +2,6 @@ import * as Yup from 'yup';
 import { Status } from '../types';
 
 export const EditServiceSchema = Yup.object().shape({
-  price: Yup.number().optional(),
   status: Yup.mixed<Status>().required('Campo obrigatório'),
   discount: Yup.number().optional(),
   products: Yup.array()
@@ -26,8 +25,8 @@ export const EditServiceSchema = Yup.object().shape({
 });
 
 export const CreateServiceSchema = Yup.object().shape({
+  total: Yup.number().optional(),
   client: Yup.string().required('Campo obrigatório'),
-  price: Yup.number(),
   discount: Yup.number(),
   status: Yup.mixed<Status>().required('Campo obrigatório'),
   products: Yup.array()

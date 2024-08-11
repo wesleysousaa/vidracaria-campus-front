@@ -8,32 +8,31 @@ export type Status =
   | 'FINALIZADO';
 
 export interface ServiceValidation {
-  client: string;
-  price?: number;
   status: Status;
   products: ProductInfo[];
   discount?: number;
   images?: string[];
+  files?: File[];
+  total?: number;
 }
 
 export interface ServiceValidationTable {
   ownerName?: string;
-  price?: number;
+  total?: number;
   status: Status;
-  images?: string[];
   id?: string;
   deliveryForecast?: string;
 }
 
 export interface CreateServiceValidation extends ServiceValidation {
-  files?: File[];
+  client: string;
 }
 
-export interface EditServiceValidation extends ServiceValidationTable {
-  address?: AddressValidation;
-  discount?: number;
-  products?: ProductInfo[];
-  total?: number;
+export interface EditServiceValidation extends ServiceValidation {
+  id: string;
+  deliveryForecast?: string;
+  ownerName: string;
+  address: AddressValidation;
 }
 
 export interface ProductInfo {

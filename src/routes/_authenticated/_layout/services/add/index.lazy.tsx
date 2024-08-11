@@ -18,6 +18,10 @@ import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
 import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
+import {
+  DepthsCommon,
+  DepthsTemperated,
+} from '../../../../../features/Dashboard/types/index.ts';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
 import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
@@ -26,6 +30,7 @@ import {
   CreateServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
+import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
@@ -35,11 +40,6 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
-import {
-  DepthsCommon,
-  DepthsTemperated,
-} from '../../../../../features/Dashboard/types/index.ts';
-import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -75,7 +75,7 @@ function ServicesCreateForm() {
       resolver: yupResolver(CreateServiceSchema),
       defaultValues: {
         client: customers && customers.length > 0 ? customers[0].id : '',
-        price: 0,
+        total: 0,
         products: [],
         status: 'ORCADO',
         images: [],
@@ -96,7 +96,7 @@ function ServicesCreateForm() {
   useEffect(() => {
     if (watch('products'))
       setValue(
-        'price',
+        'total',
         calcTotal({
           products: watch('products'),
           discount: watch('discount') ?? 0,
@@ -106,7 +106,7 @@ function ServicesCreateForm() {
 
   useEffect(() => {
     setValue(
-      'price',
+      'total',
       calcTotal({
         products: watch('products'),
         discount: watch('discount') ?? 0,
@@ -154,21 +154,14 @@ function ServicesCreateForm() {
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <FormControl sx={textFieldStyles}>
-            <InputLabel htmlFor="address">Endereço</InputLabel>
-            <Select
+            <TextField
               type="text"
               id="address"
               label="Endereço"
-              placeholder="Digite a categoria do produto"
-              value={customerAddress?.address || ''}
-              disabled={!customerAddress}
-            >
-              {customerAddress && (
-                <MenuItem value={customerAddress?.address}>
-                  {`${customerAddress?.address} - ${customerAddress?.city}`}
-                </MenuItem>
-              )}
-            </Select>
+              placeholder="Digite o endereço completo"
+              value={`${customerAddress?.address || ''}, ${customerAddress?.number || ''}, ${customerAddress?.city || ''}, ${customerAddress?.state || ''}, ${customerAddress?.zipCode || ''} - ${customerAddress?.landmark || ''}`}
+              disabled
+            />
           </FormControl>
           <Box
             sx={{
@@ -373,7 +366,7 @@ function ServicesCreateForm() {
           )}
         />
         <Controller
-          name="price"
+          name="total"
           control={control}
           render={({ field }) => (
             <TextField
@@ -381,7 +374,7 @@ function ServicesCreateForm() {
               disabled
               sx={{ minWidth: 160, mb: 2 }}
               {...field}
-              value={formatCurrency(watch('price') ?? 0)}
+              value={formatCurrency(watch('total') ?? 0)}
             />
           )}
         />

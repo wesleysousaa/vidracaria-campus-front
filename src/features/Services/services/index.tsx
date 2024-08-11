@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { enqueueSnackbar } from 'notistack';
 import api, { config } from '../../../services';
 import {
@@ -6,7 +7,6 @@ import {
   EditServiceValidation,
   ServiceValidationTable,
 } from '../types';
-import { useNavigate } from '@tanstack/react-router';
 
 const useGetAllServices = () => {
   return useQuery<ServiceValidationTable[]>({
@@ -54,7 +54,6 @@ const useCreateService = () => {
       }
       const serviceToCreate = {
         idCustomer: service.client,
-        price: service.price,
         status: service.status,
         discount: service.discount,
         images: urls,
@@ -72,8 +71,6 @@ const useCreateService = () => {
           };
         }),
       };
-      console.log(serviceToCreate);
-
       return api
         .post('/budget', serviceToCreate, config)
         .then((res) => res.data);
@@ -106,8 +103,8 @@ const useGetServiceById = (id?: string) => {
 };
 
 export {
+  useCreateService,
   useDeleteServiceById,
   useGetAllServices,
-  useCreateService,
   useGetServiceById,
 };

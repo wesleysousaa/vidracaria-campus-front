@@ -16,14 +16,19 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
+import {
+  DepthsCommon,
+  DepthsTemperated,
+} from '../../../../../features/Dashboard/types/index.ts';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
 import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { EditServiceSchema } from '../../../../../features/Services/schemas/index.ts';
+import { useGetServiceById } from '../../../../../features/Services/services/index.tsx';
 import {
   EditServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
+import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
@@ -33,12 +38,6 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
-import {
-  DepthsCommon,
-  DepthsTemperated,
-} from '../../../../../features/Dashboard/types/index.ts';
-import { useGetServiceById } from '../../../../../features/Services/services/index.tsx';
-import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 
 function ServicesEditForm() {
   const { id } = Route.useParams();
@@ -90,11 +89,13 @@ function ServicesEditForm() {
   } = useForm<EditServiceValidation>({
     resolver: yupResolver(EditServiceSchema),
     defaultValues: {
-      ownerName: service?.ownerName,
       deliveryForecast: service?.deliveryForecast || Date.now().toString(),
+      total: service?.total ?? 0,
       id: service?.id,
-      price: service?.price ?? 0,
+      address: service?.address,
+      ownerName: service?.ownerName,
       status: service?.status,
+      products: service?.products,
       images: service?.images,
       discount: 0,
     },
@@ -142,8 +143,8 @@ function ServicesEditForm() {
               type="text"
               id="address"
               label="Endereço"
-              placeholder="Digite a categoria do produto"
-              value={`${service?.address?.address} - ${service?.address?.city}`}
+              placeholder="Digite o endereço completo"
+              value={`${service?.address.address || ''}, ${service?.address.number || ''}, ${service?.address.city || ''}, ${service?.address.state || ''}, ${service?.address.zipCode || ''} - ${service?.address.landmark || ''}`}
               disabled
             />
           </FormControl>
@@ -216,7 +217,16 @@ function ServicesEditForm() {
                   id="select-product"
                   label="Status"
                   {...field}
-                  defaultValue={service?.status}
+                  value={
+                    [
+                      'ORCADO',
+                      'CONTRATADO_A_VISTA',
+                      'CONTRATADO_A_PRAZO',
+                      'FINALIZADO',
+                    ].includes(service?.status ?? '')
+                      ? service?.status ?? ''
+                      : ''
+                  }
                 >
                   <MenuItem value={'ORCADO'} key={'ORCADO'}>
                     Orçado
@@ -418,7 +428,7 @@ function ServicesEditForm() {
           )}
         />
         <Controller
-          name="price"
+          name="total"
           control={control}
           render={({ field }) => (
             <TextField
@@ -426,7 +436,7 @@ function ServicesEditForm() {
               disabled
               sx={{ minWidth: 160, mb: 2 }}
               {...field}
-              value={formatCurrency(watch('price') ?? 0)}
+              value={formatCurrency(watch('total') ?? 0)}
             />
           )}
         />
