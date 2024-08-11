@@ -1,4 +1,4 @@
-import { ProductInfo } from '../types';
+import { BudgetItem, ProductInfo } from '../types';
 
 export function useBudgetItem() {
   const price2mmComum = 200;
@@ -19,6 +19,20 @@ export function useBudgetItem() {
   const constant2 = 3.84;
   const margemVendedorComum = 2.1;
   const margemVendedorTemperado = 1.95;
+
+  const budgetItemsToEditTable = (bdItems: BudgetItem[]): ProductInfo[] =>
+    bdItems.map((item) => ({
+      id: item.id,
+      idProduct: item.idProduct,
+      actualQuantity: item.quantity,
+      name: item.name,
+      category: item.category,
+      depth: item.depth,
+      height: item.height,
+      price: item.total,
+      type: item.type || 'CANELADO',
+      width: item.width,
+    }));
 
   const calculateTotal = (item: ProductInfo): number => {
     if (item.category === 'DIVERSOS') {
@@ -101,5 +115,6 @@ export function useBudgetItem() {
 
   return {
     calculateTotal,
+    budgetItemsToEditTable,
   };
 }

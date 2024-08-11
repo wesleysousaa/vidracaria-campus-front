@@ -29,19 +29,20 @@ export interface CreateServiceValidation extends ServiceValidation {
 }
 
 export interface EditServiceValidation extends ServiceValidation {
-  id: string;
+  id?: string;
   deliveryForecast?: string;
-  ownerName: string;
-  address: AddressValidation;
+  ownerName?: string;
+  address?: AddressValidation;
 }
 
 export interface ProductInfo {
-  id: string;
   name: string;
   depth?: number;
   height?: number;
   price?: number;
   width?: number;
+  id?: string;
+  idProduct?: string;
   actualQuantity: number;
   category?: Category;
   type?: GlassVariant;
@@ -55,6 +56,9 @@ export interface BudgetItem {
   depth: number;
   name: string;
   total: number;
+  type?: GlassVariant;
+  id?: string;
+  idProduct?: string;
 }
 
 export interface Image {

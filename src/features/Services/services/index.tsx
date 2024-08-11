@@ -37,6 +37,65 @@ const useDeleteServiceById = () => {
   });
 };
 
+const usePutServiceById = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: (data: EditServiceValidation) => {
+      const dataConverted = {
+        id: data.id,
+        status: data.status,
+        paymentMethod: 'DINHEIRO',
+        // TODO: Adicionar
+        // deliveryForecast: data.deliveryForecast,
+        discount: data.discount,
+        downPayment: 0,
+        imgs: [],
+        items: data.products.map((item) => ({
+          id: item.id,
+          quantity: item.actualQuantity,
+          price: item.price,
+          name: item.name,
+          idProduct: item.idProduct,
+          height: item.height,
+          width: item.width,
+          depth: item.depth,
+          category: item.category,
+          type: item.type,
+        })),
+      };
+
+      return api
+        .put(`/budget/${data.id}`, dataConverted, config)
+        .then((res) => res.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/put-service'] });
+      enqueueSnackbar('Serviço editado com sucesso!', {
+        variant: 'success',
+      });
+      navigate({ to: '/services' });
+    },
+  });
+};
+
+const useDeleteImageById = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (path: string) => {
+      return api.delete(`/image?url=${path}`, config).then((res) => res.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/delete-image-by-id'] });
+      enqueueSnackbar('Serviço deletado com sucesso!', {
+        variant: 'success',
+      });
+    },
+  });
+};
+
 const useCreateService = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -135,4 +194,6 @@ export {
   useGetImagesByServiceId,
   useGetProducstByServiceId,
   useGetServiceById,
+  useDeleteImageById,
+  usePutServiceById,
 };

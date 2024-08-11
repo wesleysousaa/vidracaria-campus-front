@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 import { Status } from '../types';
 
 export const EditServiceSchema = Yup.object().shape({
-  id: Yup.string().optional(),
-  deliveryForecast: Yup.string().optional(),
+  id: Yup.string(),
+  deliveryForecast: Yup.string().optional().nullable(),
   status: Yup.mixed<Status>().required('Campo obrigatório'),
   discount: Yup.number().optional(),
   products: Yup.array()

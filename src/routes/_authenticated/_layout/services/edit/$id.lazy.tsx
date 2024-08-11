@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
-  Button,
   Chip,
   FormControl,
   IconButton,
@@ -20,10 +19,17 @@ import {
   DepthsCommon,
   DepthsTemperated,
 } from '../../../../../features/Dashboard/types/index.ts';
+import dayjs from 'dayjs';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
 import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { EditServiceSchema } from '../../../../../features/Services/schemas/index.ts';
-import { useGetServiceById } from '../../../../../features/Services/services/index.tsx';
+import {
+  useGetServiceById,
+  useGetProducstByServiceId,
+  useGetImagesByServiceId,
+  useDeleteImageById,
+  usePutServiceById,
+} from '../../../../../features/Services/services/index.tsx';
 import {
   EditServiceValidation,
   ProductInfo,
@@ -38,14 +44,20 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import { FormatAddress } from '../../../../../features/Services/utils/address.ts';
+import { LoadingButton } from '@mui/lab';
 
 function ServicesEditForm() {
   const { id } = Route.useParams();
-  const { data: products } = useGetAllProducts();
   const [images, setImages] = useState<File[]>([]);
-  const { data: service } = useGetServiceById(id);
 
-  const { calculateTotal } = useBudgetItem();
+  const { data: products } = useGetAllProducts();
+  const { data: service, isLoading } = useGetServiceById(id);
+  const putService = usePutServiceById();
+  const { data: productsPersisted } = useGetProducstByServiceId(id);
+  const { data: imagesPersisted, refetch } = useGetImagesByServiceId(id);
+  const deleteImage = useDeleteImageById();
+  const { calculateTotal, budgetItemsToEditTable } = useBudgetItem();
   const [product, setProduct] = useState<ProductInfo>();
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
 
@@ -53,32 +65,31 @@ function ServicesEditForm() {
     product && product.category === 'TEMPERADO'
       ? DepthsTemperated
       : DepthsCommon;
-  const onSubmit: SubmitHandler<EditServiceValidation> = (_data) => {
-    // create.mutate(data);
+
+  const onSubmit: SubmitHandler<EditServiceValidation> = (data) => {
+    putService.mutate({
+      ...data,
+      deliveryForecast: data.deliveryForecast
+        ? data.deliveryForecast.split('-').reverse().join('-')
+        : undefined,
+    });
   };
 
   useEffect(() => {
     if (service) {
-      setValue(
-        'deliveryForecast',
-        service?.deliveryForecast || Date.now().toString(),
-      );
+      setValue('deliveryForecast', service.deliveryForecast);
       setValue('discount', service?.discount);
       setValue('images', service?.images);
       setValue('ownerName', service?.ownerName);
       setValue('total', service?.total);
       setValue('status', service?.status);
+      setValue('id', service?.id);
+      setValue(
+        'products',
+        budgetItemsToEditTable(productsPersisted?.items || []),
+      );
     }
   }, [service]);
-
-  useEffect(() => {
-    if (product) {
-      setProduct({
-        ...product,
-        price: calculateTotal(product),
-      });
-    }
-  }, [product]);
 
   const {
     handleSubmit,
@@ -95,9 +106,10 @@ function ServicesEditForm() {
       address: service?.address,
       ownerName: service?.ownerName,
       status: service?.status,
-      products: service?.products,
       images: service?.images,
       discount: 0,
+      products: service?.products,
+      files: [],
     },
   });
 
@@ -112,6 +124,13 @@ function ServicesEditForm() {
       );
     }
   }, [products, watch('products'), watch('discount')]);
+
+  useEffect(() => {
+    setValue(
+      'products',
+      budgetItemsToEditTable(productsPersisted?.items || []),
+    );
+  }, [productsPersisted]);
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
     const amount = newAmount > 0 ? newAmount : 1;
@@ -144,7 +163,7 @@ function ServicesEditForm() {
               id="address"
               label="Endereço"
               placeholder="Digite o endereço completo"
-              value={`${service?.address.address || ''}, ${service?.address.number || ''}, ${service?.address.city || ''}, ${service?.address.state || ''}, ${service?.address.zipCode || ''} - ${service?.address.landmark || ''}`}
+              value={FormatAddress(service?.address)}
               disabled
             />
           </FormControl>
@@ -175,6 +194,17 @@ function ServicesEditForm() {
               maxHeight="10vh"
               overflow="auto"
             >
+              {imagesPersisted &&
+                imagesPersisted.map((img, key) => (
+                  <Chip
+                    key={key}
+                    label={'Imagem salva ' + (key + 1)}
+                    onDelete={async () => {
+                      await deleteImage.mutateAsync(img.url);
+                      refetch();
+                    }}
+                  />
+                ))}
               {images &&
                 images.map((img, key) => (
                   <Chip
@@ -190,21 +220,30 @@ function ServicesEditForm() {
             </Box>
           </Box>
         </Box>
-
         <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
             <Controller
               name="deliveryForecast"
               control={control}
               render={({ field }) => (
-                <TextField
-                  type="date"
-                  id="date"
-                  label="Previsão de entrega"
-                  {...field}
-                  value={field.value || formattedDate}
-                  onChange={(e) => field.onChange(e.target.value)}
-                />
+                <>
+                  <TextField
+                    type="date"
+                    id="date"
+                    label="Previsão de entrega"
+                    {...field}
+                    defaultValue={
+                      field.value ? dayjs(field.value) : dayjs(new Date())
+                    }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      console.log(e.target.value);
+                    }}
+                  />
+                </>
               )}
             />
           </FormControl>
@@ -276,6 +315,7 @@ function ServicesEditForm() {
                     height: prodSelected.height,
                     price: prodSelected.price,
                     width: prodSelected.width,
+                    idProduct: prodSelected.idProduct,
                   });
               }}
               value={product?.id || ''}
@@ -356,28 +396,15 @@ function ServicesEditForm() {
                   ))}
                 </Select>
               </FormControl>
-
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-                <TextField
-                  id="priceTxt"
-                  value={product?.price || ''}
-                  label="Valor"
-                  type="number"
-                  onChange={(e) => {
-                    product &&
-                      setProduct({
-                        ...product,
-                        price: Number(e.target.value) ?? 0,
-                      });
-                  }}
-                />
-              </FormControl>
             </>
           )}
           <IconButton
             onClick={() => {
               if (product) {
-                setValue('products', [...(watch('products') || []), product]);
+                setValue('products', [
+                  ...watch('products'),
+                  { ...product, price: calculateTotal(product) },
+                ]);
                 setProduct(undefined);
               }
             }}
@@ -385,7 +412,6 @@ function ServicesEditForm() {
             <AddCircleOutlineRoundedIcon />
           </IconButton>
         </Box>
-
         <TableProductInfo
           data={watch('products') ? watch('products') || [] : []}
           onDecrementDispatch={(id) =>
@@ -443,14 +469,15 @@ function ServicesEditForm() {
           )}
         />
 
-        <Button
+        <LoadingButton
           id="btn-save"
           type="submit"
           variant="contained"
           sx={buttonStyles}
+          loading={isLoading}
         >
           Salvar
-        </Button>
+        </LoadingButton>
       </form>
     </Box>
   );
