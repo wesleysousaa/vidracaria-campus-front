@@ -53,9 +53,7 @@ export default function Carousel({ images }: CarrosuelProps) {
                   overflow: 'hidden',
                   width: '100%',
                 }}
-                src={
-                  'https://drive.google.com/file/d/1AtaO2v0_NQ-f7998Y9je1H7_f3zsO_Ya/view?pli=1'
-                }
+                src={step.url}
                 alt="Imagem do serviço"
               />
             ) : null}
