@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
@@ -44,6 +45,8 @@ import {
   textFieldStyles,
 } from '../../../../../styles/index.ts';
 
+dayjs.extend(customParseFormat);
+
 function ServicesEditForm() {
   const { id } = Route.useParams();
   const [images, setImages] = useState<File[]>([]);
@@ -64,7 +67,7 @@ function ServicesEditForm() {
         ...data,
         files: images,
         deliveryForecast: data.deliveryForecast
-          ? data.deliveryForecast.split('-').reverse().join('-')
+          ? dayjs(data.deliveryForecast).format('DD-MM-YYYY')
           : undefined,
       },
       imagesPersistedArr: persistedImagesState,
@@ -73,7 +76,11 @@ function ServicesEditForm() {
 
   useEffect(() => {
     if (service) {
-      setValue('deliveryForecast', service.deliveryForecast);
+      const formattedDate = dayjs(
+        service.deliveryForecast,
+        'DD-MM-YYYY',
+      ).format('YYYY-MM-DD');
+      setValue('deliveryForecast', formattedDate);
       setValue('discount', service?.discount);
       setValue('images', service?.images);
       setValue('ownerName', service?.ownerName);
@@ -96,7 +103,6 @@ function ServicesEditForm() {
   } = useForm<EditServiceValidation>({
     resolver: yupResolver(EditServiceSchema),
     defaultValues: {
-      deliveryForecast: service?.deliveryForecast || Date.now().toString(),
       total: service?.total ?? 0,
       address: service?.address,
       ownerName: service?.ownerName,
@@ -230,23 +236,24 @@ function ServicesEditForm() {
               name="deliveryForecast"
               control={control}
               render={({ field }) => (
-                <>
-                  <TextField
-                    type="date"
-                    id="date"
-                    label="Previsão de entrega"
-                    {...field}
-                    defaultValue={
-                      field.value ? dayjs(field.value) : dayjs(new Date())
-                    }
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    onChange={(e) => {
-                      field.onChange(e.target.value);
-                    }}
-                  />
-                </>
+                <TextField
+                  type="date"
+                  id="date"
+                  label="Previsão de entrega"
+                  {...field}
+                  value={
+                    field.value
+                      ? dayjs(field.value, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                      : dayjs().format('YYYY-MM-DD')
+                  }
+                  onChange={(e) => {
+                    const formattedDate = dayjs(
+                      e.target.value,
+                      'YYYY-MM-DD',
+                    ).format('YYYY-MM-DD');
+                    field.onChange(formattedDate);
+                  }}
+                />
               )}
             />
           </FormControl>
@@ -262,7 +269,6 @@ function ServicesEditForm() {
                   label="Status"
                   {...field}
                   value={watch('status')}
-                  defaultValue={watch('status')}
                 >
                   <MenuItem value={'ORCADO'} key={'ORCADO'}>
                     Orçado
@@ -483,5 +489,5 @@ function ServicesEditForm() {
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/services/edit/$id',
 )({
-  component: () => <ServicesEditForm />,
+  component: ServicesEditForm,
 });
