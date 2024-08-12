@@ -1,3 +1,4 @@
+import { Box, IconButton } from '@mui/material';
 import {
   MaterialReactTable,
   MRT_ColumnDef,
@@ -5,7 +6,6 @@ import {
 } from 'material-react-table';
 import { useMemo } from 'react';
 import { ProductInfo } from '../../features/Services/types';
-import { Box, IconButton } from '@mui/material';
 import useGetIcons from '../../hooks/useGetIcons';
 
 interface TableProductInfoProps {
@@ -30,6 +30,10 @@ export default function TableProductInfo({
         header: 'Produto',
       },
       {
+        accessorKey: 'type',
+        header: 'Variante',
+      },
+      {
         accessorKey: 'actualQuantity',
         header: 'Quantidade',
 
@@ -41,6 +45,9 @@ export default function TableProductInfo({
         header: 'Dimensões A x L x P',
         Cell: (options) => {
           const item = options.row.original;
+          if (!item.depth && !item.height && !item.width) {
+            return '-';
+          }
           return (
             <>
               {item.height} x {item.width} x {item.depth}
@@ -72,17 +79,23 @@ export default function TableProductInfo({
           return (
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               <IconButton
-                onClick={() => onIncrementDispatch(options.row.original.id)}
+                onClick={() =>
+                  onIncrementDispatch(options.row.original.rowId as string)
+                }
               >
                 <AddOutlinedIcon />
               </IconButton>
               <IconButton
-                onClick={() => onDeleteDispatch(options.row.original.id)}
+                onClick={() =>
+                  onDeleteDispatch(options.row.original.rowId as string)
+                }
               >
                 <DeleteIcon color="error" />
               </IconButton>
               <IconButton
-                onClick={() => onDecrementDispatch(options.row.original.id)}
+                onClick={() =>
+                  onDecrementDispatch(options.row.original.rowId as string)
+                }
               >
                 <RemoveOutlinedIcon />
               </IconButton>

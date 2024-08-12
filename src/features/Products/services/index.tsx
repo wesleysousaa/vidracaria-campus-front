@@ -65,7 +65,7 @@ const useGetAllProducts = () => {
   return useQuery<ProductValidation[]>({
     queryKey: ['/all-products'],
     queryFn: async () => {
-      const res = await api.get('/product/productsWithQuantity', config);
+      const res = await api.get('/product/allProductsToList', config);
       return res.data;
     },
     staleTime: Infinity,

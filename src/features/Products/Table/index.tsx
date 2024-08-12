@@ -11,8 +11,8 @@ import { useDeleteProductById, useGetAllProducts } from '../services';
 import { ProductValidation } from '../types';
 
 export default function Table() {
-  const { data, isLoading } = useGetAllProducts();
-  const deleteProducts = useDeleteProductById();
+  const { data, isFetching } = useGetAllProducts();
+  const { mutate: deleteProducts, isPending } = useDeleteProductById();
   const [open, setOpen] = useState(false);
   const [currentProduct, setCurrenProduct] = useState<
     ProductValidation | undefined
@@ -24,6 +24,14 @@ export default function Table() {
         accessorKey: 'name',
         header: 'Nome',
         enableHiding: true,
+      },
+      {
+        accessorKey: 'type',
+        header: 'Variação',
+        enableHiding: true,
+        Cell: (options) => {
+          return <>{options.row.original.type ?? '-'}</>;
+        },
       },
       {
         accessorKey: 'unitOfMeasure',
@@ -42,22 +50,10 @@ export default function Table() {
         },
       },
       {
-        header: 'Dimensões A x L x P',
-        enableHiding: true,
-        Cell: (options) => {
-          const item = options.row.original;
-          return (
-            <>
-              {item.height} x {item.width} x {item.depth}
-            </>
-          );
-        },
-      },
-      {
         header: 'Quantidade Atual',
         enableHiding: true,
         Cell: (options) => {
-          return <>{options.row.original.actualQuantity}</>;
+          return <>{options.row.original.actualQuantity ?? '-'}</>;
         },
       },
       {
@@ -97,7 +93,7 @@ export default function Table() {
   );
 
   const handleDelete = (id: string) => {
-    deleteProducts.mutate(id);
+    deleteProducts(id);
   };
 
   const handleClick = (product: ProductValidation) => {
@@ -116,7 +112,7 @@ export default function Table() {
       },
     },
     state: {
-      isLoading,
+      isLoading: isFetching || isPending,
     },
   });
   return (

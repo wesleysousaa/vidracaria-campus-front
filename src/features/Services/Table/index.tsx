@@ -13,8 +13,8 @@ import { converterStatus } from '../utils/converterStatus';
 
 export default function Table() {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetAllServices();
-  const deleteServices = useDeleteServiceById();
+  const { data, isFetching } = useGetAllServices();
+  const { mutate: deleteServices, isPending } = useDeleteServiceById();
 
   const handleClick = (id: string) => {
     navigate({ to: '/services/info/$id', params: { id } });
@@ -24,7 +24,7 @@ export default function Table() {
     () => [
       {
         id: 'client',
-        accessorKey: 'client',
+        accessorKey: 'ownerName',
         header: 'Cliente',
         enableHiding: true,
       },
@@ -33,17 +33,19 @@ export default function Table() {
         accessorKey: 'deliveryForecast',
         header: 'Previsão de Entrega',
         enableHiding: true,
-        Cell: ({ row }) => <>{row.original.deliveryForecast}</>,
+        Cell: ({ row }) => (
+          <>{row.original.deliveryForecast ?? 'Não informado'}</>
+        ),
       },
       {
-        id: 'price',
-        accessorKey: 'price',
-        header: 'Preço',
+        id: 'total',
+        accessorKey: 'total',
+        header: 'Total',
         enableHiding: true,
         Cell: ({ row }) => (
           <>
-            {row.original.price
-              ? row.original.price.toLocaleString('pt-BR', {
+            {row.original.total
+              ? row.original.total.toLocaleString('pt-BR', {
                   style: 'currency',
                   currency: 'BRL',
                 })
@@ -76,7 +78,7 @@ export default function Table() {
   );
 
   const handleDelete = (id: string) => {
-    deleteServices.mutate(id);
+    deleteServices(id);
   };
 
   const table = useMaterialReactTable({
@@ -90,7 +92,7 @@ export default function Table() {
       },
     },
     state: {
-      isLoading,
+      isLoading: isFetching || isPending,
     },
   });
   return (

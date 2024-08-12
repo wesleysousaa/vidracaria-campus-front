@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
-  Button,
   Chip,
   FormControl,
   IconButton,
@@ -10,20 +9,26 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
 import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
 import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
+import { DepthsCommon } from '../../../../../features/Dashboard/types/index.ts';
 import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
+import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
 import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
+import { useCreateService } from '../../../../../features/Services/services/index.tsx';
 import {
   CreateServiceValidation,
   ProductInfo,
 } from '../../../../../features/Services/types/index.ts';
+import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
+import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
 import {
@@ -32,68 +37,66 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
+import { LoadingButton } from '@mui/lab';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
   const { data: products } = useGetAllProducts();
+  const create = useCreateService();
 
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
   const [customerAddress, setCustomerAddress] = useState<AddressValidation>();
   const [product, setProduct] = useState<ProductInfo>();
   const [images, setImages] = useState<File[]>([]);
+  const { calculateTotal } = useBudgetItem();
 
-  const onSubmit: SubmitHandler<CreateServiceValidation> = (_data) => {
-    // create.mutate(data);
+  const onSubmit: SubmitHandler<CreateServiceValidation> = (data) => {
+    create.mutate({ ...data, files: images });
   };
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors: _errors },
-    setValue,
-    watch,
-  } = useForm<CreateServiceValidation>({
-    resolver: yupResolver(CreateServiceSchema),
-    defaultValues: {
-      client: customers && customers[0].id,
-      price: 0,
-      products: [],
-      status: 'ORCADO',
-      images: [],
-    },
-  });
+  const { handleSubmit, control, setValue, watch } =
+    useForm<CreateServiceValidation>({
+      resolver: yupResolver(CreateServiceSchema),
+      defaultValues: {
+        client: customers && customers.length > 0 ? customers[0].id : '',
+        total: 0,
+        products: [],
+        status: 'ORCADO',
+        images: [],
+        discount: 0,
+      },
+    });
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
-    const productSelected = products?.find((prodS) => prodS.id === prod.id);
     const amount = newAmount > 0 ? newAmount : 1;
+
     return {
       ...prod,
       actualQuantity: amount,
-      price: productSelected ? productSelected?.price : prod.price,
+      price: prod.price,
     };
-  };
-
-  const addImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileInput = event.target as HTMLInputElement;
-    const file = fileInput.files?.[0];
-
-    if (file) {
-      setImages([...images, file]);
-    }
   };
 
   useEffect(() => {
     if (watch('products'))
       setValue(
-        'price',
-        Number(
-          watch('products').reduce(
-            (acc, prod) => acc + prod.price * prod.actualQuantity,
-            0,
-          ),
-        ),
+        'total',
+        calcTotal({
+          products: watch('products'),
+          discount: watch('discount') ?? 0,
+        }),
       );
   }, [watch('products')]);
+
+  useEffect(() => {
+    setValue(
+      'total',
+      calcTotal({
+        products: watch('products'),
+        discount: watch('discount') ?? 0,
+      }),
+    );
+  }, [watch('discount')]);
 
   useEffect(() => {
     if (watch('client') && watch('client') !== '')
@@ -118,12 +121,13 @@ function ServicesCreateForm() {
                 id="select-client"
                 label="Cliente"
                 {...field}
+                value={field.value}
               >
                 {customers?.map(
                   (customer) =>
                     customer && (
                       <MenuItem value={customer.id} key={customer.id}>
-                        {customer.name} - {customer.address?.address}
+                        {customer.name}
                       </MenuItem>
                     ),
                 )}
@@ -134,45 +138,41 @@ function ServicesCreateForm() {
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <FormControl sx={textFieldStyles}>
-            <InputLabel htmlFor="address">Endereço</InputLabel>
-            <Select
+            <TextField
               type="text"
               id="address"
               label="Endereço"
-              placeholder="Digite a categoria do produto"
-              value={customerAddress?.address}
-              defaultValue={customerAddress?.address}
-              disabled={!customerAddress}
-            >
-              {customerAddress && (
-                <MenuItem value={customerAddress?.address}>
-                  {`${customerAddress?.address} - ${customerAddress?.city}`}
-                </MenuItem>
-              )}
-            </Select>
+              placeholder="Digite o endereço completo"
+              value={`${customerAddress?.address || ''}, ${customerAddress?.number || ''}, ${customerAddress?.city || ''}, ${customerAddress?.state || ''}, ${customerAddress?.zipCode || ''} - ${customerAddress?.landmark || ''}`}
+              disabled
+            />
           </FormControl>
           <Box
             sx={{
               display: 'flex',
               flexDirection: 'column',
+              width: '20vw',
+              marginBottom: '1rem',
             }}
           >
             <Controller
               name="images"
               control={control}
               render={({ field }) => (
-                <FormControl sx={{ width: '100%', ...textFieldStyles }}>
-                  <TextField
-                    type="file"
-                    label="Envie imagens"
-                    id="image"
-                    {...field}
-                    onChange={addImage}
-                  />
-                </FormControl>
+                <ImageInput
+                  images={images}
+                  setImages={setImages}
+                  field={field}
+                />
               )}
             />
-            <Box gap={1} display={'flex'}>
+            <Box
+              gap={1}
+              display="flex"
+              flexWrap="wrap"
+              maxHeight="10vh"
+              overflow="auto"
+            >
               {images &&
                 images.map((img, key) => (
                   <Chip
@@ -191,7 +191,7 @@ function ServicesCreateForm() {
         <SectionHeader label="Produtos" />
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <FormControl variant="outlined" sx={{ flex: 1 }}>
+          <FormControl variant="outlined" sx={{ flex: 1, minWidth: 160 }}>
             <InputLabel id="select-product-label">Produto</InputLabel>
             <Select
               labelId="select-product-label"
@@ -206,23 +206,22 @@ function ServicesCreateForm() {
                     id: e.target.value as string,
                     name: prodSelected.name,
                     actualQuantity: 1,
-                    depth: prodSelected.depth,
-                    height: prodSelected.height,
-                    price: prodSelected.price,
-                    width: prodSelected.width,
+                    depth: prodSelected?.depth,
+                    height: prodSelected?.height,
+                    price: prodSelected?.price,
+                    width: prodSelected?.width,
+                    category: prodSelected.category,
+                    type: prodSelected.type,
+                    rowId: uuidv4(),
                   });
               }}
+              value={product?.id || ''}
             >
-              {products?.map(
-                (product) =>
-                  !watch('products').find(
-                    (prodd) => prodd.id === product.id,
-                  ) && (
-                    <MenuItem value={product.id} key={product.id}>
-                      {product.name} - {product.category}
-                    </MenuItem>
-                  ),
-              )}
+              {products?.map((product) => (
+                <MenuItem value={product.id} key={product.id}>
+                  {product.name} - {product.category}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           {product?.category !== 'DIVERSOS' && (
@@ -230,15 +229,22 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="heightTxt"
-                  value={product && product.height}
-                  defaultValue={product && product.height}
-                  label="Altura (cm)"
+                  value={
+                    Number(product?.height) === 0 ? 0 : Number(product?.height)
+                  }
+                  label="Altura (M)"
                   type="number"
+                  InputLabelProps={{
+                    shrink:
+                      product && (!!product.height || product.height === 0),
+                  }}
                   onChange={(e) => {
                     product &&
                       setProduct({
                         ...product,
-                        height: Number(e.target.value) ?? 0,
+                        height: e.target.value
+                          ? Number(e.target.value)
+                          : undefined,
                       });
                   }}
                 />
@@ -246,26 +252,33 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
-                  defaultValue={product && product.width}
-                  value={product && product.width}
-                  label="Largura (cm)"
+                  value={
+                    Number(product?.width) === 0 ? 0 : Number(product?.width)
+                  }
+                  label="Largura (M)"
                   type="number"
+                  InputLabelProps={{
+                    shrink: product && (!!product.width || product.width === 0),
+                  }}
                   onChange={(e) => {
                     product &&
                       setProduct({
                         ...product,
-                        width: Number(e.target.value) ?? 0,
+                        width: e.target.value
+                          ? Number(e.target.value)
+                          : undefined,
                       });
                   }}
                 />
               </FormControl>
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
-                <TextField
-                  id="depthTxt"
-                  defaultValue={product && product.depth}
-                  value={product && product.depth}
-                  label="Espessura (cm)"
-                  type="number"
+
+              <FormControl variant="outlined" sx={{ width: 130 }}>
+                <InputLabel id="select-depth-label">Espessura</InputLabel>
+                <Select
+                  id="select-depth-label"
+                  labelId="select-depth-label"
+                  label={'Espessura'}
+                  value={product ? product.depth : DepthsCommon[0]}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -273,14 +286,26 @@ function ServicesCreateForm() {
                         depth: Number(e.target.value) ?? 0,
                       });
                   }}
-                />
+                >
+                  {DepthsCommon.map((unit) => (
+                    <MenuItem value={unit} key={unit}>
+                      {unit}mm
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
             </>
           )}
           <IconButton
             onClick={() => {
               if (product) {
-                setValue('products', [...watch('products'), product]);
+                setValue('products', [
+                  ...watch('products'),
+                  {
+                    ...product,
+                    price: calculateTotal(product),
+                  },
+                ]);
                 setProduct(undefined);
               }
             }}
@@ -319,36 +344,41 @@ function ServicesCreateForm() {
           }
         />
         <SectionHeader label="Total" />
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-          }}
+        <Controller
+          name="discount"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              type="number"
+              label="Desconto em R$"
+              sx={{ minWidth: 160, mb: 2 }}
+              {...field}
+              value={field.value || ''}
+            />
+          )}
+        />
+        <Controller
+          name="total"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Total"
+              disabled
+              sx={{ minWidth: 160, mb: 2 }}
+              {...field}
+              value={formatCurrency(watch('total') ?? 0)}
+            />
+          )}
+        />
+        <LoadingButton
+          id="btn-save"
+          type="submit"
+          variant="contained"
+          sx={buttonStyles}
+          loading={create.isPending}
         >
-          <Controller
-            name="price"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                label="Total"
-                sx={{ minWidth: 300, mb: 2 }}
-                {...field}
-                value={formatCurrency(watch('price'))}
-              />
-            )}
-          />
-          <Button
-            id="btn-save"
-            type="submit"
-            variant="contained"
-            sx={buttonStyles}
-          >
-            Salvar
-          </Button>
-        </Box>
+          Salvar
+        </LoadingButton>
       </form>
     </Box>
   );

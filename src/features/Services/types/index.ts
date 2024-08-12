@@ -1,4 +1,5 @@
-import { Category } from '../../Products/types';
+import { AddressValidation } from '../../Customers/types';
+import { Category, GlassVariant } from '../../Products/types';
 
 export type Status =
   | 'ORCADO'
@@ -7,35 +8,67 @@ export type Status =
   | 'FINALIZADO';
 
 export interface ServiceValidation {
-  client: string;
-  price: number;
   status: Status;
   products: ProductInfo[];
-  images?: { file: File[] }[];
+  discount?: number;
+  images?: string[];
+  files?: File[];
+  total?: number;
 }
 
 export interface ServiceValidationTable {
-  client: string;
-  price: number;
+  ownerName?: string;
+  total?: number;
   status: Status;
-  images?: { file: File[] }[];
-  id: string;
-  deliveryForecast: string;
+  id?: string;
+  deliveryForecast?: string;
 }
 
-export interface CreateServiceValidation extends ServiceValidation {}
+export interface CreateServiceValidation extends ServiceValidation {
+  client: string;
+}
+
 export interface EditServiceValidation extends ServiceValidation {
+  deliveryForecast?: string | null;
+  ownerName: string;
   id: string;
-  deliveryForecast: string;
+  address?: AddressValidation;
 }
 
 export interface ProductInfo {
-  id: string;
   name: string;
-  depth: number;
-  height: number;
-  price: number;
-  width: number;
+  depth?: number;
+  height?: number;
+  price?: number;
+  width?: number;
+  id: string;
+  idProduct?: string;
   actualQuantity: number;
   category?: Category;
+  type?: GlassVariant;
+  rowId?: string;
+}
+
+export interface BudgetItem {
+  quantity: number;
+  category: Category;
+  height: number;
+  width: number;
+  depth: number;
+  name: string;
+  total: number;
+  type?: GlassVariant;
+  id?: string;
+  idProduct?: string;
+  unitPrice?: number;
+}
+
+export interface Image {
+  id: string;
+  url: string;
+}
+
+export interface GetProductsByService {
+  idBudget: string;
+  items: BudgetItem[];
 }

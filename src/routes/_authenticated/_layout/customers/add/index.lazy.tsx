@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import useGetState from '../../../../../features/Customers/hooks/useGetState.tsx';
 import { ClientSchema } from '../../../../../features/Customers/schemas/index.ts';
 import { useCreateCustomer } from '../../../../../features/Customers/services/index.tsx';
@@ -298,15 +298,15 @@ function CustomerCreateForm() {
             />
           )}
         />
-
-        <Button
+        <LoadingButton
           id="btn-save"
           type="submit"
           variant="contained"
           sx={buttonStyles}
+          loading={createCustomer.isPending}
         >
           Salvar
-        </Button>
+        </LoadingButton>
       </form>
     </Box>
   );

@@ -5,23 +5,32 @@ export const EditProductSchema = Yup.object().shape({
   id: Yup.string().required('Campo obrigatório'),
   name: Yup.string().required('Campo obrigatório'),
   unitOfMeasure: Yup.mixed<UnitOfMeasure>()
-    .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
+    .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO', 'UNIDADE'])
     .required('Campo obrigatório'),
   category: Yup.mixed<Category>()
-    .oneOf(['COMUM', 'TEMPERADO'])
+    .oneOf(['COMUM', 'TEMPERADO', 'DIVERSOS'])
     .required('Campo obrigatório'),
-  height: Yup.number().required('Campo obrigatório'),
-  width: Yup.number().required('Campo obrigatório'),
-  depth: Yup.number().required('Campo obrigatório'),
-  price: Yup.number().required('Campo obrigatório'),
+  price: Yup.number(),
+  type: Yup.string()
+    .oneOf(['CANELADO', 'INCOLOR', 'FUME', 'ESPELHO'])
+    .test('is-required-if-common', 'Campo obrigatório', function (value) {
+      const { category } = this.parent;
+      return category !== 'COMUM' || (category === 'COMUM' && !!value);
+    }),
 });
 
 export const CreateProductSchema = Yup.object({
   name: Yup.string().required('Campo obrigatório'),
   unitOfMeasure: Yup.string()
-    .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO'])
+    .oneOf(['CENTIMETRO', 'METRO', 'MILIMETRO', 'UNIDADE'])
     .required('Campo obrigatório'),
   category: Yup.string()
     .oneOf(['COMUM', 'TEMPERADO', 'DIVERSOS'])
     .required('Campo obrigatório'),
+  type: Yup.string()
+    .oneOf(['CANELADO', 'INCOLOR', 'FUME', 'ESPELHO'])
+    .test('is-required-if-common', 'Campo obrigatório', function (value) {
+      const { category } = this.parent;
+      return category !== 'COMUM' || (category === 'COMUM' && !!value);
+    }),
 });

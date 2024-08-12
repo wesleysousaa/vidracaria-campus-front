@@ -6,14 +6,14 @@ import {
 } from 'material-react-table';
 import { useMemo, useState } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
+import useMask from '../../../hooks/useMask';
 import CustomerInfoForm from '../CustomerInfoForm';
 import { useDeleteCustomerById, useGetAllCustomers } from '../services';
 import { CustomerValidation } from '../types';
-import useMask from '../../../hooks/useMask';
 
 export default function Table() {
-  const { data, isLoading } = useGetAllCustomers();
-  const deleteCustomer = useDeleteCustomerById();
+  const { data, isFetching } = useGetAllCustomers();
+  const { mutate: deleteCustomer, isPending } = useDeleteCustomerById();
   const [open, setOpen] = useState(false);
   const [currentCustomer, setCurrentCustomer] = useState<
     CustomerValidation | undefined
@@ -83,7 +83,7 @@ export default function Table() {
   };
 
   const handleDelete = (idItem: string) => {
-    deleteCustomer.mutate(idItem);
+    deleteCustomer(idItem);
   };
 
   const table = useMaterialReactTable({
@@ -93,7 +93,7 @@ export default function Table() {
     enableGlobalFilter: true,
     enableDensityToggle: false,
     state: {
-      isLoading,
+      isLoading: isFetching || isPending,
     },
   });
 

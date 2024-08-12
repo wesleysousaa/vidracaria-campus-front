@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -11,13 +11,16 @@ import {
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/PageHeader.tsx';
+import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import { EditProductSchema } from '../../../../../features/Products/schemas/index.ts';
 import {
   useGetProductById,
   useUpdateProduct,
 } from '../../../../../features/Products/services/index.tsx';
-import { EditProductValidation } from '../../../../../features/Products/types/index.ts';
+import {
+  EditProductValidation,
+  GlassVariants,
+} from '../../../../../features/Products/types/index.ts';
 import {
   boxStyles,
   buttonStyles,
@@ -34,16 +37,17 @@ export const Route = createLazyFileRoute(
 function ProducstUpdateForm() {
   const { id } = Route.useParams();
   const product = useGetProductById(id);
-  const updateCustomer = useUpdateProduct();
+  const updateProduct = useUpdateProduct();
 
   const onSubmit: SubmitHandler<EditProductValidation> = async (data) => {
-    updateCustomer.mutate(data);
+    updateProduct.mutate(data);
   };
 
   const {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
     setValue,
   } = useForm<EditProductValidation>({
     resolver: yupResolver(EditProductSchema),
@@ -52,12 +56,21 @@ function ProducstUpdateForm() {
       name: '',
       category: 'COMUM',
       unitOfMeasure: 'CENTIMETRO',
-      depth: 0,
-      height: 0,
-      width: 0,
       price: 0,
+      type: 'CANELADO',
     },
   });
+
+  useEffect(() => {
+    if (watch('category') === 'DIVERSOS') {
+      setValue('unitOfMeasure', 'UNIDADE');
+    } else {
+      setValue('unitOfMeasure', 'METRO');
+    }
+    if (watch('category') !== 'COMUM') {
+      setValue('type', undefined);
+    }
+  }, [watch('category')]);
 
   useEffect(() => {
     if (product.data) {
@@ -65,10 +78,8 @@ function ProducstUpdateForm() {
       setValue('name', product.data.name || '');
       setValue('category', product.data.category || 'COMUM');
       setValue('unitOfMeasure', product.data.unitOfMeasure || 'CENTIMETRO');
-      setValue('depth', product.data.depth || 0);
-      setValue('height', product.data.height || 0);
-      setValue('width', product.data.width || 0);
       setValue('price', product.data.price || 1);
+      setValue('type', product.data.type || 'CANELADO');
     }
   }, [product.data, setValue]);
 
@@ -115,6 +126,7 @@ function ProducstUpdateForm() {
                 >
                   <MenuItem value="COMUM">Comum</MenuItem>
                   <MenuItem value="TEMPERADO">Temperado</MenuItem>
+                  <MenuItem value="DIVERSOS">Diversos</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -136,105 +148,79 @@ function ProducstUpdateForm() {
                   placeholder="Digite a unidade de medida do produto"
                   {...field}
                 >
-                  <MenuItem value="CENTIMETRO">Centímetro</MenuItem>
-                  <MenuItem value="METRO">Metro</MenuItem>
-                  <MenuItem value="MILIMETRO">Milímetro</MenuItem>
+                  {watch('category') === 'DIVERSOS' && (
+                    <MenuItem value="UNIDADE">Unidade</MenuItem>
+                  )}
+                  {watch('category') !== 'DIVERSOS' && (
+                    <MenuItem value="METRO">Metro</MenuItem>
+                  )}
                 </Select>
               </FormControl>
             )}
           />
         </Box>
+        {watch('category') === 'DIVERSOS' && (
+          <Box sx={{ display: 'flex', gap: '1rem' }}>
+            <Controller
+              name="price"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  type="number"
+                  id="price"
+                  label="Preço"
+                  placeholder="Digite o preço do produto"
+                  {...field}
+                  error={!!errors.price}
+                  helperText={errors.price?.message}
+                  sx={textFieldStyles}
+                  InputLabelProps={{
+                    shrink:
+                      field.value !== undefined && field.value !== 0
+                        ? true
+                        : false,
+                  }}
+                />
+              )}
+            />
+          </Box>
+        )}
 
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
+        {watch('category') === 'COMUM' && (
           <Controller
-            name="depth"
+            name="type"
             control={control}
             render={({ field }) => (
-              <TextField
-                type="number"
-                id="depth"
-                label="Profundidade"
-                placeholder="Digite a profundidade do produto"
-                error={!!errors.depth}
-                helperText={errors.depth?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink: !!field.value || field.value === 0,
-                }}
-                {...field}
-              />
+              <FormControl sx={textFieldStyles}>
+                <InputLabel htmlFor="variant">Variação</InputLabel>
+                <Select
+                  type="text"
+                  id="variant"
+                  label="Variação"
+                  error={!!errors.type}
+                  placeholder="Digite a variação do produto"
+                  {...field}
+                >
+                  {GlassVariants.map((variant) => (
+                    <MenuItem value={variant.toUpperCase()} key={variant}>
+                      {variant}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
           />
-          <Controller
-            name="height"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                id="height"
-                label="Altura"
-                placeholder="Digite a altura do produto"
-                error={!!errors.height}
-                helperText={errors.height?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink: !!field.value || field.value === 0,
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="width"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                id="width"
-                label="Largura"
-                placeholder="Digite a largura do produto"
-                error={!!errors.width}
-                helperText={errors.width?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink: !!field.value || field.value === 0,
-                }}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name="price"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                id="price"
-                label="Preço"
-                placeholder="Digite o preço do produto"
-                {...field}
-                error={!!errors.price}
-                helperText={errors.price?.message}
-                sx={textFieldStyles}
-                InputLabelProps={{
-                  shrink:
-                    field.value !== undefined && field.value !== 0
-                      ? true
-                      : false,
-                }}
-              />
-            )}
-          />
-        </Box>
+        )}
 
-        <Button
+        <LoadingButton
           id="btn-save"
           type="submit"
           variant="contained"
           sx={buttonStyles}
+          loading={updateProduct.isPending}
         >
           Salvar
-        </Button>
+        </LoadingButton>
       </form>
     </Box>
   );
