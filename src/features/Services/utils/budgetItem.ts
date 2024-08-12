@@ -1,5 +1,5 @@
-import { BudgetItem, ProductInfo } from '../types';
 import { v4 as uuidv4 } from 'uuid';
+import { BudgetItem, ProductInfo } from '../types';
 
 export function useBudgetItem() {
   const price2mmComum = 200;
@@ -31,7 +31,7 @@ export function useBudgetItem() {
       depth: item.depth,
       height: item.height,
       price: item.unitPrice,
-      type: item.type || 'CANELADO',
+      type: item.type,
       width: item.width,
       rowId: uuidv4(),
     }));

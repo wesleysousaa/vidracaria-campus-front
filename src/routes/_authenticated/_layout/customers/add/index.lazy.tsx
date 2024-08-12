@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -298,15 +298,15 @@ function CustomerCreateForm() {
             />
           )}
         />
-
-        <Button
+        <LoadingButton
           id="btn-save"
           type="submit"
           variant="contained"
           sx={buttonStyles}
+          loading={createCustomer.isPending}
         >
           Salvar
-        </Button>
+        </LoadingButton>
       </form>
     </Box>
   );

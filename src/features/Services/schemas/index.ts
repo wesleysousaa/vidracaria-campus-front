@@ -5,6 +5,7 @@ export const EditServiceSchema = Yup.object().shape({
   id: Yup.string().required(),
   deliveryForecast: Yup.string().optional().nullable(),
   status: Yup.mixed<Status>().required('Campo obrigatório'),
+  ownerName: Yup.string().required('Campo obrigatório'),
   discount: Yup.number().optional(),
   products: Yup.array()
     .required('Campo obrigatório')

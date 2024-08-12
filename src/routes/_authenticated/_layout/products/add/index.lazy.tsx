@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -9,19 +9,21 @@ import {
   TextField,
 } from '@mui/material';
 import { createLazyFileRoute } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PageHeader from '../../../../../components/PageHeader/index.tsx';
 import { CreateProductSchema } from '../../../../../features/Products/schemas/index.ts';
 import { useCreateProduct } from '../../../../../features/Products/services/index.tsx';
-import { CreateProductValidation } from '../../../../../features/Products/types/index.ts';
-import { GlassVariants } from '../../../../../features/Products/types/index.ts';
+import {
+  CreateProductValidation,
+  GlassVariants,
+} from '../../../../../features/Products/types/index.ts';
 import {
   boxStyles,
   buttonStyles,
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
-import { useEffect } from 'react';
 
 function ProductsCreateForm() {
   const create = useCreateProduct();
@@ -153,14 +155,15 @@ function ProductsCreateForm() {
             )}
           />
         )}
-        <Button
+        <LoadingButton
           id="btn-save"
           type="submit"
           variant="contained"
           sx={buttonStyles}
+          loading={create.isPending}
         >
           Salvar
-        </Button>
+        </LoadingButton>
       </form>
     </Box>
   );

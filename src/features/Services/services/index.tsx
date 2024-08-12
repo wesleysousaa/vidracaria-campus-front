@@ -88,7 +88,7 @@ const usePutServiceById = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/service'] });
       queryClient.invalidateQueries({ queryKey: ['/services-products'] });
-      queryClient.invalidateQueries({ queryKey: ['/all-service'] });
+      queryClient.invalidateQueries({ queryKey: ['/all-services'] });
       queryClient.invalidateQueries({ queryKey: ['/services-images'] });
       enqueueSnackbar('Serviço editado com sucesso!', {
         variant: 'success',
@@ -207,11 +207,11 @@ const useGetImagesByServiceId = (id?: string) => {
 
 export {
   useCreateService,
+  useDeleteImageById,
   useDeleteServiceById,
   useGetAllServices,
   useGetImagesByServiceId,
   useGetProducstByServiceId,
   useGetServiceById,
-  useDeleteImageById,
   usePutServiceById,
 };

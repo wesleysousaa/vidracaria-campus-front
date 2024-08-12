@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -37,10 +37,10 @@ export const Route = createLazyFileRoute(
 function ProducstUpdateForm() {
   const { id } = Route.useParams();
   const product = useGetProductById(id);
-  const updateCustomer = useUpdateProduct();
+  const updateProduct = useUpdateProduct();
 
   const onSubmit: SubmitHandler<EditProductValidation> = async (data) => {
-    updateCustomer.mutate(data);
+    updateProduct.mutate(data);
   };
 
   const {
@@ -212,14 +212,15 @@ function ProducstUpdateForm() {
           />
         )}
 
-        <Button
+        <LoadingButton
           id="btn-save"
           type="submit"
           variant="contained"
           sx={buttonStyles}
+          loading={updateProduct.isPending}
         >
           Salvar
-        </Button>
+        </LoadingButton>
       </form>
     </Box>
   );

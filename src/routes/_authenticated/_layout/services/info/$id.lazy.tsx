@@ -80,7 +80,7 @@ function ServicesInfo() {
                 <UserInfo
                   data={{
                     client: data.ownerName,
-                    deliveryForecast: data.deliveryForecast,
+                    deliveryForecast: data.deliveryForecast ?? 'Não informado',
                     address: data.address as AddressValidation,
                     status: data.status,
                   }}

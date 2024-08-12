@@ -30,7 +30,7 @@ export interface CreateServiceValidation extends ServiceValidation {
 
 export interface EditServiceValidation extends ServiceValidation {
   deliveryForecast?: string | null;
-  ownerName?: string;
+  ownerName: string;
   id: string;
   address?: AddressValidation;
 }

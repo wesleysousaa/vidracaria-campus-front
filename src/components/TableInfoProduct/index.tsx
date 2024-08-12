@@ -1,3 +1,4 @@
+import { Box, IconButton } from '@mui/material';
 import {
   MaterialReactTable,
   MRT_ColumnDef,
@@ -5,7 +6,6 @@ import {
 } from 'material-react-table';
 import { useMemo } from 'react';
 import { ProductInfo } from '../../features/Services/types';
-import { Box, IconButton } from '@mui/material';
 import useGetIcons from '../../hooks/useGetIcons';
 
 interface TableProductInfoProps {
@@ -79,17 +79,23 @@ export default function TableProductInfo({
           return (
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               <IconButton
-                onClick={() => onIncrementDispatch(options.row.original.rowId)}
+                onClick={() =>
+                  onIncrementDispatch(options.row.original.rowId as string)
+                }
               >
                 <AddOutlinedIcon />
               </IconButton>
               <IconButton
-                onClick={() => onDeleteDispatch(options.row.original.rowId)}
+                onClick={() =>
+                  onDeleteDispatch(options.row.original.rowId as string)
+                }
               >
                 <DeleteIcon color="error" />
               </IconButton>
               <IconButton
-                onClick={() => onDecrementDispatch(options.row.original.rowId)}
+                onClick={() =>
+                  onDecrementDispatch(options.row.original.rowId as string)
+                }
               >
                 <RemoveOutlinedIcon />
               </IconButton>
