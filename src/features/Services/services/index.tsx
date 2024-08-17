@@ -30,6 +30,7 @@ const useDeleteServiceById = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-services'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
       enqueueSnackbar('Serviço deletado com sucesso!', {
         variant: 'success',
       });
@@ -90,6 +91,7 @@ const usePutServiceById = () => {
       queryClient.invalidateQueries({ queryKey: ['/services-products'] });
       queryClient.invalidateQueries({ queryKey: ['/all-services'] });
       queryClient.invalidateQueries({ queryKey: ['/services-images'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
       enqueueSnackbar('Serviço editado com sucesso!', {
         variant: 'success',
       });
@@ -107,6 +109,7 @@ const useDeleteImageById = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/delete-image-by-id'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
       enqueueSnackbar('Serviço deletado com sucesso!', {
         variant: 'success',
       });
@@ -156,6 +159,8 @@ const useCreateService = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-services'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
+
       navigate({ to: '/services' });
       enqueueSnackbar('Serviço salvo com sucesso!', {
         variant: 'success',

@@ -11,10 +11,10 @@ import { boxCards, mainStyles } from '../../../../features/Dashboard/styles';
 import useMask from '../../../../hooks/useMask';
 
 function Dashboard() {
-  const { data, isLoading } = useChartsCounters();
+  const { data, isFetching } = useChartsCounters();
   const { realFormater, arrDateToDate, addPercent } = useMask();
 
-  if (isLoading) return <Loader open />;
+  if (isFetching) return <Loader open />;
 
   return (
     <Box sx={mainStyles} component={'main'}>
