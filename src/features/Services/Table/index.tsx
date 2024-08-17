@@ -93,6 +93,12 @@ export default function Table() {
     },
     state: {
       isLoading: isFetching || isPending,
+      sorting: [
+        {
+          id: 'deliveryForecast',
+          desc: true,
+        },
+      ],
     },
   });
   return (
