@@ -383,7 +383,7 @@ function ServicesEditForm() {
                   id="select-depth-label"
                   labelId="select-depth-label"
                   label={'Espessura'}
-                  value={product ? product.depth : DepthsCommon[0]}
+                  value={product ? product.depth : ''}
                   onChange={(e) => {
                     product &&
                       setProduct({

@@ -3,11 +3,13 @@ import {
   Box,
   Chip,
   FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { createLazyFileRoute } from '@tanstack/react-router';
@@ -54,22 +56,26 @@ function ServicesCreateForm() {
     create.mutate({ ...data, files: images });
   };
 
-  const { handleSubmit, control, setValue, watch } =
-    useForm<CreateServiceValidation>({
-      resolver: yupResolver(CreateServiceSchema),
-      defaultValues: {
-        client: customers && customers.length > 0 ? customers[0].id : '',
-        total: 0,
-        products: [],
-        status: 'ORCADO',
-        images: [],
-        discount: 0,
-      },
-    });
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<CreateServiceValidation>({
+    resolver: yupResolver(CreateServiceSchema),
+    defaultValues: {
+      client: undefined,
+      total: 0,
+      products: [],
+      status: 'ORCADO',
+      images: [],
+      discount: 0,
+    },
+  });
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
     const amount = newAmount > 0 ? newAmount : 1;
-
     return {
       ...prod,
       actualQuantity: amount,
@@ -114,8 +120,17 @@ function ServicesCreateForm() {
           name="client"
           control={control}
           render={({ field }) => (
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel id="select-client-label">Cliente</InputLabel>
+            <FormControl
+              error={errors.client !== undefined}
+              variant="outlined"
+              sx={{ minWidth: 120 }}
+            >
+              <InputLabel
+                error={errors.client !== undefined}
+                id="select-client-label"
+              >
+                Cliente
+              </InputLabel>
               <Select
                 labelId="select-client-label"
                 id="select-client"
@@ -132,12 +147,13 @@ function ServicesCreateForm() {
                     ),
                 )}
               </Select>
+              <FormHelperText>{errors.client?.message}</FormHelperText>
             </FormControl>
           )}
         />
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <FormControl sx={textFieldStyles}>
+          <FormControl sx={textFieldStyles} error={errors.client !== undefined}>
             <TextField
               type="text"
               id="address"
@@ -278,7 +294,7 @@ function ServicesCreateForm() {
                   id="select-depth-label"
                   labelId="select-depth-label"
                   label={'Espessura'}
-                  value={product ? product.depth : DepthsCommon[0]}
+                  value={product ? product.depth : ''}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -315,12 +331,12 @@ function ServicesCreateForm() {
         </Box>
 
         <TableProductInfo
-          data={watch('products') ? watch('products') : []}
+          data={watch('products') ? watch('products') || [] : []}
           onDecrementDispatch={(id) =>
             setValue(
               'products',
-              watch('products').map((prod) =>
-                prod.id === id
+              (watch('products') || []).map((prod) =>
+                prod.rowId === id
                   ? updateProdQtd(prod, prod.actualQuantity - 1)
                   : prod,
               ),
@@ -329,8 +345,8 @@ function ServicesCreateForm() {
           onIncrementDispatch={(id) =>
             setValue(
               'products',
-              watch('products').map((prod) =>
-                prod.id === id
+              (watch('products') || []).map((prod) =>
+                prod.rowId === id
                   ? updateProdQtd(prod, prod.actualQuantity + 1)
                   : prod,
               ),
@@ -339,7 +355,7 @@ function ServicesCreateForm() {
           onDeleteDispatch={(id) =>
             setValue(
               'products',
-              watch('products').filter((prod) => prod.id !== id),
+              (watch('products') || []).filter((prod) => prod.rowId !== id),
             )
           }
         />

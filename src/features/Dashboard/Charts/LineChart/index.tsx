@@ -1,6 +1,9 @@
-import { Line } from '@antv/g2plot';
 import { Box, Typography } from '@mui/material';
-import { useEffect, useRef } from 'react';
+import {
+  LineChart as LineChartImported,
+  LineChartProps,
+} from '@opd/g2plot-react';
+import useMask from '../../../../hooks/useMask';
 
 interface propsLineChart {
   data: { date: string; month: string; value: number }[];
@@ -8,53 +11,62 @@ interface propsLineChart {
 }
 
 export default function LineChart(props: propsLineChart) {
-  const chartRef = useRef(null);
-
-  useEffect(() => {
-    if (chartRef.current) {
-      const config = {
-        data: props.data,
-        xField: 'date',
-        yField: 'value',
-        seriesField: 'month',
-        yAxis: {
-          grid: {
-            line: {
-              style: {
-                lineWidth: 1,
-              },
-            },
+  const { realFormater } = useMask();
+  const config: LineChartProps = {
+    data: props.data,
+    xField: 'date',
+    yField: 'value',
+    seriesField: 'value',
+    autoFit: true,
+    tooltip: {
+      showTitle: true,
+      fields: ['value'],
+      formatter: (info) => ({
+        name: 'Faturamento',
+        value: realFormater.format(info.value),
+      }),
+      title: (info) =>
+        `${info.split('-').reverse().join('/')} - ${props.data.find((data) => data.date === info)?.month}`,
+    },
+    yAxis: {
+      grid: {
+        line: {
+          style: {
+            lineWidth: 1,
           },
         },
-        smooth: true,
-        point: {
-          shape: 'circle',
-          size: 2,
-          style: () => {
-            return {
-              fillOpacity: 1,
-              stroke: 'transparent',
-            };
-          },
-        },
-        xAxis: {
-          type: 'cat',
-          label: {
-            autoRotate: false,
-          },
-        },
-        interactions: [{ type: 'marker-active' }, { type: 'brush' }],
-      };
+      },
+    },
+    smooth: true,
+    point: {
+      shape: 'circle',
+      size: 4,
+      style: () => {
+        return {
+          fillOpacity: 1,
+          stroke: 'transparent',
+        };
+      },
+    },
+    xAxis: {
+      type: 'cat',
+      animate: true,
+      title: {
+        text: 'Mês de faturamento',
+      },
+      label: {
+        formatter: (date) =>
+          props.data.find((data) => data.date === date)?.month,
+        autoRotate: false,
+      },
+    },
 
-      const chart = new Line(chartRef.current, config);
-
-      chart.render();
-
-      return () => {
-        chart.destroy();
-      };
-    }
-  }, [props.data, props.title]);
+    padding: 'auto',
+    interactions: [
+      { type: 'marker-active', enable: true },
+      { type: 'brush', enable: true },
+    ],
+  };
 
   return (
     <Box
@@ -67,7 +79,7 @@ export default function LineChart(props: propsLineChart) {
       <Typography variant="h6" textAlign={'center'}>
         {props.title}
       </Typography>
-      <div ref={chartRef}></div>
+      <LineChartImported {...config} />
     </Box>
   );
 }
