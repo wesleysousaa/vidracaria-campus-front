@@ -97,7 +97,7 @@ function ServicesEditForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors: _errors },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<EditServiceValidation>({
@@ -158,7 +158,12 @@ function ServicesEditForm() {
           control={control}
           render={({ field }) => (
             <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <TextField disabled {...field} />
+              <TextField
+                disabled
+                {...field}
+                error={errors.ownerName !== undefined}
+                helperText={errors.ownerName?.message}
+              />
             </FormControl>
           )}
         />
@@ -172,6 +177,8 @@ function ServicesEditForm() {
               placeholder="Digite o endereço completo"
               value={FormatAddress(service?.address)}
               disabled
+              error={errors.address !== undefined}
+              helperText={errors?.address?.address?.message}
             />
           </FormControl>
 
