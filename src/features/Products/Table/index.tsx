@@ -115,6 +115,7 @@ export default function Table() {
       isLoading: isFetching || isPending,
     },
   });
+
   return (
     <>
       <ProducstInfoForm

@@ -91,8 +91,7 @@ export default function Table() {
         width: '100%',
       },
     },
-    state: {
-      isLoading: isFetching || isPending,
+    initialState: {
       sorting: [
         {
           id: 'deliveryForecast',
@@ -100,10 +99,14 @@ export default function Table() {
         },
       ],
     },
+    state: {
+      isLoading: isFetching || isPending,
+    },
   });
+
   return (
     <Box>
-      <MaterialReactTable table={table} />
+      <MaterialReactTable table={table} />{' '}
     </Box>
   );
 }
