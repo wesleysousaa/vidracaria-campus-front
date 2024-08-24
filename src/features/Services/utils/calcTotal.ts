@@ -6,6 +6,7 @@ interface calcTotalProps {
 }
 
 export const calcTotal = ({ products, discount }: calcTotalProps) => {
+  console.log(discount);
   const total =
     products.reduce((acc, prod) => {
       if (prod.price) {

@@ -13,6 +13,7 @@ import {
 import { createLazyFileRoute } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
@@ -141,7 +142,7 @@ function ServicesEditForm() {
   }, [productsPersisted]);
 
   const handleAddProduct = () => {
-    const errors = [];
+    let errors: string[] = [];
     if (product) {
       checkProduct(product, errors);
 
