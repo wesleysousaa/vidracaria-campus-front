@@ -108,17 +108,16 @@ function ServicesCreateForm() {
 
   useEffect(() => {
     let discount = watch('discount');
-    let products = watch('products');
-    if (products && discount) {
+    if (watch('products')) {
       setValue(
         'total',
         calcTotal({
-          products: watch('products'),
-          discount: discount > 0 ? discount : 0,
+          products: watch('products') || [],
+          discount: discount ? discount : 0,
         }),
       );
     }
-  }, [watch('products'), watch('discount')]);
+  }, [products, watch('products'), watch('discount')]);
 
   useEffect(() => {
     if (watch('client') && watch('client') !== '')
