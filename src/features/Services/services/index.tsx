@@ -64,6 +64,7 @@ const usePutServiceById = () => {
         paymentMethod: 'DINHEIRO',
         deliveryForecast: params.data.deliveryForecast,
         discount: params.data.discount,
+        description: params.data.description,
         downPayment: 0,
         imgs: [
           ...params.imagesPersistedArr,
@@ -139,6 +140,7 @@ const useCreateService = () => {
         status: service.status,
         discount: service.discount,
         images: urls,
+        description: service.description,
         paymentMethod: 'DINHEIRO',
         items: service.products.map((product) => {
           return {

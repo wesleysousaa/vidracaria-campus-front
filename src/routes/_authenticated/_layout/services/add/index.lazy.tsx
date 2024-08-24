@@ -366,6 +366,24 @@ function ServicesCreateForm() {
           }
         />
 
+        <SectionHeader label="Observações" />
+
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              multiline
+              label="Descrição"
+              {...field}
+              rows={3}
+              sx={{
+                resize: 'none',
+              }}
+            />
+          )}
+        />
+
         <SectionHeader label="Total" />
 
         <Controller

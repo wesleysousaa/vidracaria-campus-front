@@ -146,19 +146,18 @@ function ServicesEditForm() {
     let errors: string[] = [];
     if (product) {
       checkProduct(product, errors);
-
       if (errors.length > 0) {
         errors.forEach((error) => {
           enqueueSnackbar(error, { variant: 'error' });
         });
         return;
       }
-
       setValue('products', [
         ...watch('products'),
         {
           ...product,
           price: calculateTotal(product),
+          type: product.type,
         },
       ]);
       setProduct(undefined);
@@ -350,6 +349,7 @@ function ServicesEditForm() {
                     price: prodSelected.price,
                     width: prodSelected.width,
                     idProduct: prodSelected.idProduct,
+                    type: prodSelected.type,
                     rowId: uuidv4(),
                   });
               }}
@@ -470,6 +470,25 @@ function ServicesEditForm() {
             )
           }
         />
+
+        <SectionHeader label="Observações" />
+
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              multiline
+              label="Descrição"
+              {...field}
+              rows={3}
+              sx={{
+                resize: 'none',
+              }}
+            />
+          )}
+        />
+
         <SectionHeader label="Total" />
         <Controller
           name="discount"
