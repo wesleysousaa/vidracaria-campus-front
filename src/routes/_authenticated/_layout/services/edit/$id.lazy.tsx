@@ -36,6 +36,7 @@ import {
 import { FormatAddress } from '../../../../../features/Services/utils/address.ts';
 import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
+import { checkProduct } from '../../../../../features/Services/utils/checkProduct.ts';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
 import {
@@ -138,6 +139,29 @@ function ServicesEditForm() {
       budgetItemsToEditTable(productsPersisted?.items || []),
     );
   }, [productsPersisted]);
+
+  const handleAddProduct = () => {
+    const errors = [];
+    if (product) {
+      checkProduct(product, errors);
+
+      if (errors.length > 0) {
+        errors.forEach((error) => {
+          enqueueSnackbar(error, { variant: 'error' });
+        });
+        return;
+      }
+
+      setValue('products', [
+        ...watch('products'),
+        {
+          ...product,
+          price: calculateTotal(product),
+        },
+      ]);
+      setProduct(undefined);
+    }
+  };
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
     const amount = newAmount > 0 ? newAmount : 1;
@@ -345,6 +369,7 @@ function ServicesEditForm() {
                     Number(product?.height) === 0 ? 0 : Number(product?.height)
                   }
                   label="Altura (M)"
+                  name="height"
                   type="number"
                   InputLabelProps={{
                     shrink:
@@ -364,6 +389,7 @@ function ServicesEditForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
+                  name="width"
                   value={
                     Number(product?.width) === 0 ? 0 : Number(product?.width)
                   }
@@ -389,6 +415,7 @@ function ServicesEditForm() {
                 <Select
                   id="select-depth-label"
                   labelId="select-depth-label"
+                  name="depth"
                   label={'Espessura'}
                   value={product ? product.depth : ''}
                   onChange={(e) => {
@@ -408,17 +435,7 @@ function ServicesEditForm() {
               </FormControl>
             </>
           )}
-          <IconButton
-            onClick={() => {
-              if (product) {
-                setValue('products', [
-                  ...watch('products'),
-                  { ...product, price: calculateTotal(product) },
-                ]);
-                setProduct(undefined);
-              }
-            }}
-          >
+          <IconButton onClick={handleAddProduct}>
             <AddCircleOutlineRoundedIcon />
           </IconButton>
         </Box>

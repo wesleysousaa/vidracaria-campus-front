@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Chip,
@@ -9,12 +10,12 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 import { createLazyFileRoute } from '@tanstack/react-router';
+import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import PageHeader from '../../../../../components/PageHeader/';
 import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
 import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
@@ -31,6 +32,7 @@ import {
 } from '../../../../../features/Services/types/index.ts';
 import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
 import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
+import { checkProduct } from '../../../../../features/Services/utils/checkProduct.ts';
 import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
 import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
 import {
@@ -39,7 +41,6 @@ import {
   formStyles,
   textFieldStyles,
 } from '../../../../../styles/index.ts';
-import { LoadingButton } from '@mui/lab';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
@@ -81,6 +82,29 @@ function ServicesCreateForm() {
       actualQuantity: amount,
       price: prod.price,
     };
+  };
+
+  const handleAddProduct = () => {
+    const errors = [];
+    if (product) {
+      checkProduct(product, errors);
+
+      if (errors.length > 0) {
+        errors.forEach((error) => {
+          enqueueSnackbar(error, { variant: 'error' });
+        });
+        return;
+      }
+
+      setValue('products', [
+        ...watch('products'),
+        {
+          ...product,
+          price: calculateTotal(product),
+        },
+      ]);
+      setProduct(undefined);
+    }
   };
 
   useEffect(() => {
@@ -245,6 +269,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="heightTxt"
+                  name="height"
                   value={
                     Number(product?.height) === 0 ? 0 : Number(product?.height)
                   }
@@ -268,6 +293,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
+                  name="width"
                   value={
                     Number(product?.width) === 0 ? 0 : Number(product?.width)
                   }
@@ -293,6 +319,7 @@ function ServicesCreateForm() {
                 <Select
                   id="select-depth-label"
                   labelId="select-depth-label"
+                  name="depth"
                   label={'Espessura'}
                   value={product ? product.depth : ''}
                   onChange={(e) => {
@@ -312,20 +339,7 @@ function ServicesCreateForm() {
               </FormControl>
             </>
           )}
-          <IconButton
-            onClick={() => {
-              if (product) {
-                setValue('products', [
-                  ...watch('products'),
-                  {
-                    ...product,
-                    price: calculateTotal(product),
-                  },
-                ]);
-                setProduct(undefined);
-              }
-            }}
-          >
+          <IconButton onClick={handleAddProduct}>
             <AddCircleOutlineRoundedIcon />
           </IconButton>
         </Box>
