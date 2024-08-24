@@ -86,6 +86,7 @@ function ServicesEditForm() {
       setValue('discount', service?.discount);
       setValue('images', service?.images);
       setValue('ownerName', service?.ownerName);
+      setValue('description', service.description);
       setValue('total', service?.total);
       setValue('status', service?.status);
       setValue('id', service?.id);
