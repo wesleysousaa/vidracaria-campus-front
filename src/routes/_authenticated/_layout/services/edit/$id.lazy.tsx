@@ -1,3 +1,32 @@
+import PageHeader from '@/components/PageHeader/index.tsx';
+import SectionHeader from '@/components/SectionHeader/index.tsx';
+import TableProductInfo from '@/components/TableInfoProduct/index.tsx';
+import { DepthsCommon } from '@/features/Dashboard/types/index.ts';
+import { useGetAllProducts } from '@/features/Products/services/index.tsx';
+import ImageInput from '@/features/Services/components/ImageInput/index.tsx';
+import { EditServiceSchema } from '@/features/Services/schemas/index.ts';
+import {
+  useGetImagesByServiceId,
+  useGetProducstByServiceId,
+  useGetServiceById,
+  usePutServiceById,
+} from '@/features/Services/services/index.tsx';
+import {
+  EditServiceValidation,
+  ProductInfo,
+} from '@/features/Services/types/index.ts';
+import { FormatAddress } from '@/features/Services/utils/address.ts';
+import { useBudgetItem } from '@/features/Services/utils/budgetItem.ts';
+import { calcTotal } from '@/features/Services/utils/calcTotal.ts';
+import { checkProduct } from '@/features/Services/utils/checkProduct.ts';
+import { formatCurrency } from '@/features/Services/utils/convertMoney.ts';
+import useGetIcons from '@/hooks/useGetIcons.tsx';
+import {
+  boxStyles,
+  buttonStyles,
+  formStyles,
+  textFieldStyles,
+} from '@/styles/index.ts';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -17,35 +46,6 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import PageHeader from '../../../../../components/PageHeader/index.tsx';
-import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
-import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import { DepthsCommon } from '../../../../../features/Dashboard/types/index.ts';
-import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
-import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
-import { EditServiceSchema } from '../../../../../features/Services/schemas/index.ts';
-import {
-  useGetImagesByServiceId,
-  useGetProducstByServiceId,
-  useGetServiceById,
-  usePutServiceById,
-} from '../../../../../features/Services/services/index.tsx';
-import {
-  EditServiceValidation,
-  ProductInfo,
-} from '../../../../../features/Services/types/index.ts';
-import { FormatAddress } from '../../../../../features/Services/utils/address.ts';
-import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
-import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
-import { checkProduct } from '../../../../../features/Services/utils/checkProduct.ts';
-import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
-import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
-import {
-  boxStyles,
-  buttonStyles,
-  formStyles,
-  textFieldStyles,
-} from '../../../../../styles/index.ts';
 
 dayjs.extend(customParseFormat);
 
@@ -117,12 +117,13 @@ function ServicesEditForm() {
   });
 
   useEffect(() => {
-    if (products && watch('products')) {
+    let discount = watch('discount');
+    if (products && watch('products') && discount) {
       setValue(
         'total',
         calcTotal({
           products: watch('products') || [],
-          discount: watch('discount') ?? 0,
+          discount: discount > 0 ? discount : 0,
         }),
       );
     }
