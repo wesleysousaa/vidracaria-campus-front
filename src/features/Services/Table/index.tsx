@@ -7,7 +7,11 @@ import {
 } from 'material-react-table';
 import { useMemo } from 'react';
 import TableCellActions from '../../../components/TableCellActions';
-import { useDeleteServiceById, useGetAllServices } from '../services';
+import {
+  useDeleteServiceById,
+  useGetAllServices,
+  useGenerateBudgetPdf,
+} from '../services';
 import { ServiceValidationTable } from '../types';
 import { converterStatus } from '../utils/converterStatus';
 
@@ -15,6 +19,8 @@ export default function Table() {
   const navigate = useNavigate();
   const { data, isFetching } = useGetAllServices();
   const { mutate: deleteServices, isPending } = useDeleteServiceById();
+  const { mutate: getPdf, isPending: isLoadingGeneratePdf } =
+    useGenerateBudgetPdf();
 
   const handleClick = (id: string) => {
     navigate({ to: '/services/info/$id', params: { id } });
@@ -70,6 +76,13 @@ export default function Table() {
             type="service"
             dispach={handleDelete}
             handleClick={handleClick}
+            printBudgetClick={() =>
+              row.original.id &&
+              getPdf({
+                clientName: row.original.ownerName as string,
+                id: row.original.id,
+              })
+            }
           />
         ),
       },
@@ -100,7 +113,7 @@ export default function Table() {
       ],
     },
     state: {
-      isLoading: isFetching || isPending,
+      isLoading: isFetching || isPending || isLoadingGeneratePdf,
     },
   });
 

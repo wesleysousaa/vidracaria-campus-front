@@ -14,7 +14,7 @@ export interface ServiceValidation {
   images?: string[];
   files?: File[];
   total?: number;
-  description?: string;
+  observation?: string;
 }
 
 export interface ServiceValidationTable {

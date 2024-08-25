@@ -368,7 +368,7 @@ function ServicesCreateForm() {
         <SectionHeader label="Observações" />
 
         <Controller
-          name="description"
+          name="observation"
           control={control}
           render={({ field }) => (
             <TextField

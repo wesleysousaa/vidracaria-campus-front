@@ -10,6 +10,7 @@ export interface TableCellActionsProps {
   type: 'product' | 'customer' | 'service';
   dispach: (idObject: string) => void;
   handleClick: (id: string) => void;
+  printBudgetClick?: (id: string) => void;
 }
 
 const typeMap = {
@@ -23,6 +24,7 @@ export default function TableCellActions({
   type,
   dispach,
   handleClick,
+  printBudgetClick,
 }: TableCellActionsProps) {
   const { EditIcon, InfoIcon, DeleteIcon } = useGetIcons();
   const [open, setOpen] = useState(false);
@@ -45,7 +47,11 @@ export default function TableCellActions({
 
       {typeMap[type]?.label === 'Serviço' && (
         <Tooltip title={`Imprimir ${typeTranslate}`}>
-          <IconButton aria-label="Imprimir" color="default">
+          <IconButton
+            aria-label="Imprimir"
+            color="default"
+            onClick={() => printBudgetClick && printBudgetClick(idObject)}
+          >
             <PrintIcon />
           </IconButton>
         </Tooltip>

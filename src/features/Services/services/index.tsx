@@ -64,7 +64,7 @@ const usePutServiceById = () => {
         paymentMethod: 'DINHEIRO',
         deliveryForecast: params.data.deliveryForecast,
         discount: params.data.discount,
-        description: params.data.description,
+        observation: params.data.observation,
         downPayment: 0,
         imgs: [
           ...params.imagesPersistedArr,
@@ -140,7 +140,7 @@ const useCreateService = () => {
         status: service.status,
         discount: service.discount,
         images: urls,
-        description: service.description,
+        observation: service.observation,
         paymentMethod: 'DINHEIRO',
         items: service.products.map((product) => {
           return {
@@ -200,6 +200,28 @@ const useGetProducstByServiceId = (id?: string) => {
   });
 };
 
+const useGenerateBudgetPdf = () => {
+  return useMutation({
+    mutationFn: async (data: { id: string; clientName: string }) => {
+      const res = await api.post(
+        `/budget/printToPdf/${data.id}`,
+        {},
+        {
+          ...config,
+          responseType: 'blob',
+        },
+      );
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${data.clientName}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+  });
+};
+
 const useGetImagesByServiceId = (id?: string) => {
   return useQuery<Image[]>({
     queryKey: ['/services-images', id],
@@ -221,4 +243,5 @@ export {
   useGetProducstByServiceId,
   useGetServiceById,
   usePutServiceById,
+  useGenerateBudgetPdf,
 };

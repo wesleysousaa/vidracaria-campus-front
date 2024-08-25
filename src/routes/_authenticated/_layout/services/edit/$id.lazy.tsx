@@ -86,7 +86,7 @@ function ServicesEditForm() {
       setValue('discount', service?.discount);
       setValue('images', service?.images);
       setValue('ownerName', service?.ownerName);
-      setValue('description', service.description);
+      setValue('observation', service.observation);
       setValue('total', service?.total);
       setValue('status', service?.status);
       setValue('id', service?.id);
@@ -475,7 +475,7 @@ function ServicesEditForm() {
         <SectionHeader label="Observações" />
 
         <Controller
-          name="description"
+          name="observation"
           control={control}
           render={({ field }) => (
             <TextField
