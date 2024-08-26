@@ -30,6 +30,7 @@ const useDeleteServiceById = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-services'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
       enqueueSnackbar('Serviço deletado com sucesso!', {
         variant: 'success',
       });
@@ -63,6 +64,7 @@ const usePutServiceById = () => {
         paymentMethod: 'DINHEIRO',
         deliveryForecast: params.data.deliveryForecast,
         discount: params.data.discount,
+        observation: params.data.observation,
         downPayment: 0,
         imgs: [
           ...params.imagesPersistedArr,
@@ -90,6 +92,7 @@ const usePutServiceById = () => {
       queryClient.invalidateQueries({ queryKey: ['/services-products'] });
       queryClient.invalidateQueries({ queryKey: ['/all-services'] });
       queryClient.invalidateQueries({ queryKey: ['/services-images'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
       enqueueSnackbar('Serviço editado com sucesso!', {
         variant: 'success',
       });
@@ -107,6 +110,7 @@ const useDeleteImageById = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/delete-image-by-id'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
       enqueueSnackbar('Serviço deletado com sucesso!', {
         variant: 'success',
       });
@@ -136,6 +140,7 @@ const useCreateService = () => {
         status: service.status,
         discount: service.discount,
         images: urls,
+        observation: service.observation,
         paymentMethod: 'DINHEIRO',
         items: service.products.map((product) => {
           return {
@@ -156,6 +161,8 @@ const useCreateService = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-services'] });
+      queryClient.invalidateQueries({ queryKey: ['/dashboard-counters'] });
+
       navigate({ to: '/services' });
       enqueueSnackbar('Serviço salvo com sucesso!', {
         variant: 'success',
@@ -193,6 +200,28 @@ const useGetProducstByServiceId = (id?: string) => {
   });
 };
 
+const useGenerateBudgetPdf = () => {
+  return useMutation({
+    mutationFn: async (data: { id: string; clientName: string }) => {
+      const res = await api.post(
+        `/budget/printToPdf/${data.id}`,
+        {},
+        {
+          ...config,
+          responseType: 'blob',
+        },
+      );
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${data.clientName}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+  });
+};
+
 const useGetImagesByServiceId = (id?: string) => {
   return useQuery<Image[]>({
     queryKey: ['/services-images', id],
@@ -214,4 +243,5 @@ export {
   useGetProducstByServiceId,
   useGetServiceById,
   usePutServiceById,
+  useGenerateBudgetPdf,
 };

@@ -38,6 +38,7 @@ const useUpdateCustomer = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
+      queryClient.invalidateQueries({ queryKey: ['/customers'] });
       navigate({ to: '/customers' });
       enqueueSnackbar('Cliente atualizado com sucesso!', {
         variant: 'success',
@@ -83,6 +84,7 @@ const useDeleteCustomerById = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/all-customers'] });
+      queryClient.invalidateQueries({ queryKey: ['/customers'] });
     },
   });
 };

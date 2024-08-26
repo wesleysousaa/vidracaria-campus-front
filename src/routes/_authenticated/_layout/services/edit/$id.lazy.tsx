@@ -1,3 +1,32 @@
+import PageHeader from '@/components/PageHeader/index.tsx';
+import SectionHeader from '@/components/SectionHeader/index.tsx';
+import TableProductInfo from '@/components/TableInfoProduct/index.tsx';
+import { DepthsCommon } from '@/features/Dashboard/types/index.ts';
+import { useGetAllProducts } from '@/features/Products/services/index.tsx';
+import ImageInput from '@/features/Services/components/ImageInput/index.tsx';
+import { EditServiceSchema } from '@/features/Services/schemas/index.ts';
+import {
+  useGetImagesByServiceId,
+  useGetProducstByServiceId,
+  useGetServiceById,
+  usePutServiceById,
+} from '@/features/Services/services/index.tsx';
+import {
+  EditServiceValidation,
+  ProductInfo,
+} from '@/features/Services/types/index.ts';
+import { FormatAddress } from '@/features/Services/utils/address.ts';
+import { useBudgetItem } from '@/features/Services/utils/budgetItem.ts';
+import { calcTotal } from '@/features/Services/utils/calcTotal.ts';
+import { checkProduct } from '@/features/Services/utils/checkProduct.ts';
+import { formatCurrency } from '@/features/Services/utils/convertMoney.ts';
+import useGetIcons from '@/hooks/useGetIcons.tsx';
+import {
+  boxStyles,
+  buttonStyles,
+  formStyles,
+  textFieldStyles,
+} from '@/styles/index.ts';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -13,37 +42,10 @@ import {
 import { createLazyFileRoute } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import PageHeader from '../../../../../components/PageHeader/index.tsx';
-import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
-import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import { DepthsCommon } from '../../../../../features/Dashboard/types/index.ts';
-import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
-import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
-import { EditServiceSchema } from '../../../../../features/Services/schemas/index.ts';
-import {
-  useGetImagesByServiceId,
-  useGetProducstByServiceId,
-  useGetServiceById,
-  usePutServiceById,
-} from '../../../../../features/Services/services/index.tsx';
-import {
-  EditServiceValidation,
-  ProductInfo,
-} from '../../../../../features/Services/types/index.ts';
-import { FormatAddress } from '../../../../../features/Services/utils/address.ts';
-import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
-import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
-import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
-import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
-import {
-  boxStyles,
-  buttonStyles,
-  formStyles,
-  textFieldStyles,
-} from '../../../../../styles/index.ts';
 
 dayjs.extend(customParseFormat);
 
@@ -84,6 +86,7 @@ function ServicesEditForm() {
       setValue('discount', service?.discount);
       setValue('images', service?.images);
       setValue('ownerName', service?.ownerName);
+      setValue('observation', service.observation);
       setValue('total', service?.total);
       setValue('status', service?.status);
       setValue('id', service?.id);
@@ -97,7 +100,7 @@ function ServicesEditForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors: _errors },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<EditServiceValidation>({
@@ -115,12 +118,13 @@ function ServicesEditForm() {
   });
 
   useEffect(() => {
-    if (products && watch('products')) {
+    let discount = watch('discount');
+    if (products && watch('products') && discount) {
       setValue(
         'total',
         calcTotal({
           products: watch('products') || [],
-          discount: watch('discount') ?? 0,
+          discount: discount > 0 ? discount : 0,
         }),
       );
     }
@@ -138,6 +142,28 @@ function ServicesEditForm() {
       budgetItemsToEditTable(productsPersisted?.items || []),
     );
   }, [productsPersisted]);
+
+  const handleAddProduct = () => {
+    let errors: string[] = [];
+    if (product) {
+      checkProduct(product, errors);
+      if (errors.length > 0) {
+        errors.forEach((error) => {
+          enqueueSnackbar(error, { variant: 'error' });
+        });
+        return;
+      }
+      setValue('products', [
+        ...watch('products'),
+        {
+          ...product,
+          price: calculateTotal(product),
+          type: product.type,
+        },
+      ]);
+      setProduct(undefined);
+    }
+  };
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
     const amount = newAmount > 0 ? newAmount : 1;
@@ -158,7 +184,12 @@ function ServicesEditForm() {
           control={control}
           render={({ field }) => (
             <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <TextField disabled {...field} />
+              <TextField
+                disabled
+                {...field}
+                error={errors.ownerName !== undefined}
+                helperText={errors.ownerName?.message}
+              />
             </FormControl>
           )}
         />
@@ -172,6 +203,8 @@ function ServicesEditForm() {
               placeholder="Digite o endereço completo"
               value={FormatAddress(service?.address)}
               disabled
+              error={errors.address !== undefined}
+              helperText={errors?.address?.address?.message}
             />
           </FormControl>
 
@@ -317,6 +350,7 @@ function ServicesEditForm() {
                     price: prodSelected.price,
                     width: prodSelected.width,
                     idProduct: prodSelected.idProduct,
+                    type: prodSelected.type,
                     rowId: uuidv4(),
                   });
               }}
@@ -338,6 +372,7 @@ function ServicesEditForm() {
                     Number(product?.height) === 0 ? 0 : Number(product?.height)
                   }
                   label="Altura (M)"
+                  name="height"
                   type="number"
                   InputLabelProps={{
                     shrink:
@@ -357,6 +392,7 @@ function ServicesEditForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
+                  name="width"
                   value={
                     Number(product?.width) === 0 ? 0 : Number(product?.width)
                   }
@@ -382,8 +418,9 @@ function ServicesEditForm() {
                 <Select
                   id="select-depth-label"
                   labelId="select-depth-label"
+                  name="depth"
                   label={'Espessura'}
-                  value={product ? product.depth : DepthsCommon[0]}
+                  value={product ? product.depth : ''}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -401,17 +438,7 @@ function ServicesEditForm() {
               </FormControl>
             </>
           )}
-          <IconButton
-            onClick={() => {
-              if (product) {
-                setValue('products', [
-                  ...watch('products'),
-                  { ...product, price: calculateTotal(product) },
-                ]);
-                setProduct(undefined);
-              }
-            }}
-          >
+          <IconButton onClick={handleAddProduct}>
             <AddCircleOutlineRoundedIcon />
           </IconButton>
         </Box>
@@ -444,6 +471,25 @@ function ServicesEditForm() {
             )
           }
         />
+
+        <SectionHeader label="Observações" />
+
+        <Controller
+          name="observation"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              multiline
+              label="Descrição"
+              {...field}
+              rows={3}
+              sx={{
+                resize: 'none',
+              }}
+            />
+          )}
+        />
+
         <SectionHeader label="Total" />
         <Controller
           name="discount"

@@ -1,49 +1,51 @@
+import PageHeader from '@/components/PageHeader';
+import SectionHeader from '@/components/SectionHeader';
+import TableProductInfo from '@/components/TableInfoProduct';
+import { useGetAllCustomers } from '@/features/Customers/services';
+import { AddressValidation } from '@/features/Customers/types';
+import { DepthsCommon } from '@/features/Dashboard/types';
+import { useGetAllProducts } from '@/features/Products/services';
+import ImageInput from '@/features/Services/components/ImageInput';
+import { CreateServiceSchema } from '@/features/Services/schemas';
+import { useCreateService } from '@/features/Services/services';
+import {
+  CreateServiceValidation,
+  ProductInfo,
+} from '@/features/Services/types';
+import { useBudgetItem } from '@/features/Services/utils/budgetItem';
+import { calcTotal } from '@/features/Services/utils/calcTotal';
+import { checkProduct } from '@/features/Services/utils/checkProduct';
+import { formatCurrency } from '@/features/Services/utils/convertMoney';
+import useGetIcons from '@/hooks/useGetIcons';
+import {
+  boxStyles,
+  buttonStyles,
+  formStyles,
+  textFieldStyles,
+} from '@/styles/index.ts';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Chip,
   FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
 } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 import { createLazyFileRoute } from '@tanstack/react-router';
+import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import PageHeader from '../../../../../components/PageHeader/';
-import SectionHeader from '../../../../../components/SectionHeader/index.tsx';
-import TableProductInfo from '../../../../../components/TableInfoProduct/index.tsx';
-import { useGetAllCustomers } from '../../../../../features/Customers/services/index.tsx';
-import { AddressValidation } from '../../../../../features/Customers/types/index.ts';
-import { DepthsCommon } from '../../../../../features/Dashboard/types/index.ts';
-import { useGetAllProducts } from '../../../../../features/Products/services/index.tsx';
-import ImageInput from '../../../../../features/Services/components/ImageInput/index.tsx';
-import { CreateServiceSchema } from '../../../../../features/Services/schemas/index.ts';
-import { useCreateService } from '../../../../../features/Services/services/index.tsx';
-import {
-  CreateServiceValidation,
-  ProductInfo,
-} from '../../../../../features/Services/types/index.ts';
-import { useBudgetItem } from '../../../../../features/Services/utils/budgetItem.ts';
-import { calcTotal } from '../../../../../features/Services/utils/calcTotal.ts';
-import { formatCurrency } from '../../../../../features/Services/utils/convertMoney.ts';
-import useGetIcons from '../../../../../hooks/useGetIcons.tsx';
-import {
-  boxStyles,
-  buttonStyles,
-  formStyles,
-  textFieldStyles,
-} from '../../../../../styles/index.ts';
-import { LoadingButton } from '@mui/lab';
+import { v4 as uuidv4 } from 'uuid';
 
 function ServicesCreateForm() {
   const { data: customers } = useGetAllCustomers();
   const { data: products } = useGetAllProducts();
   const create = useCreateService();
-
   const { AddCircleOutlineRoundedIcon } = useGetIcons();
   const [customerAddress, setCustomerAddress] = useState<AddressValidation>();
   const [product, setProduct] = useState<ProductInfo>();
@@ -54,22 +56,26 @@ function ServicesCreateForm() {
     create.mutate({ ...data, files: images });
   };
 
-  const { handleSubmit, control, setValue, watch } =
-    useForm<CreateServiceValidation>({
-      resolver: yupResolver(CreateServiceSchema),
-      defaultValues: {
-        client: customers && customers.length > 0 ? customers[0].id : '',
-        total: 0,
-        products: [],
-        status: 'ORCADO',
-        images: [],
-        discount: 0,
-      },
-    });
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<CreateServiceValidation>({
+    resolver: yupResolver(CreateServiceSchema),
+    defaultValues: {
+      client: undefined,
+      total: 0,
+      products: [],
+      status: 'ORCADO',
+      images: [],
+      discount: 0,
+    },
+  });
 
   const updateProdQtd = (prod: ProductInfo, newAmount: number): ProductInfo => {
     const amount = newAmount > 0 ? newAmount : 1;
-
     return {
       ...prod,
       actualQuantity: amount,
@@ -77,26 +83,41 @@ function ServicesCreateForm() {
     };
   };
 
+  const handleAddProduct = () => {
+    let errors: string[] = [];
+    if (product) {
+      checkProduct(product, errors);
+
+      if (errors.length > 0) {
+        errors.forEach((error) => {
+          enqueueSnackbar(error, { variant: 'error' });
+        });
+        return;
+      }
+
+      setValue('products', [
+        ...watch('products'),
+        {
+          ...product,
+          price: calculateTotal(product),
+        },
+      ]);
+      setProduct(undefined);
+    }
+  };
+
   useEffect(() => {
-    if (watch('products'))
+    let discount = watch('discount');
+    if (watch('products')) {
       setValue(
         'total',
         calcTotal({
-          products: watch('products'),
-          discount: watch('discount') ?? 0,
+          products: watch('products') || [],
+          discount: discount ? discount : 0,
         }),
       );
-  }, [watch('products')]);
-
-  useEffect(() => {
-    setValue(
-      'total',
-      calcTotal({
-        products: watch('products'),
-        discount: watch('discount') ?? 0,
-      }),
-    );
-  }, [watch('discount')]);
+    }
+  }, [products, watch('products'), watch('discount')]);
 
   useEffect(() => {
     if (watch('client') && watch('client') !== '')
@@ -114,8 +135,17 @@ function ServicesCreateForm() {
           name="client"
           control={control}
           render={({ field }) => (
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel id="select-client-label">Cliente</InputLabel>
+            <FormControl
+              error={errors.client !== undefined}
+              variant="outlined"
+              sx={{ minWidth: 120 }}
+            >
+              <InputLabel
+                error={errors.client !== undefined}
+                id="select-client-label"
+              >
+                Cliente
+              </InputLabel>
               <Select
                 labelId="select-client-label"
                 id="select-client"
@@ -132,12 +162,13 @@ function ServicesCreateForm() {
                     ),
                 )}
               </Select>
+              <FormHelperText>{errors.client?.message}</FormHelperText>
             </FormControl>
           )}
         />
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <FormControl sx={textFieldStyles}>
+          <FormControl sx={textFieldStyles} error={errors.client !== undefined}>
             <TextField
               type="text"
               id="address"
@@ -229,6 +260,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="heightTxt"
+                  name="height"
                   value={
                     Number(product?.height) === 0 ? 0 : Number(product?.height)
                   }
@@ -252,6 +284,7 @@ function ServicesCreateForm() {
               <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
                 <TextField
                   id="widthTxt"
+                  name="width"
                   value={
                     Number(product?.width) === 0 ? 0 : Number(product?.width)
                   }
@@ -277,8 +310,9 @@ function ServicesCreateForm() {
                 <Select
                   id="select-depth-label"
                   labelId="select-depth-label"
+                  name="depth"
                   label={'Espessura'}
-                  value={product ? product.depth : DepthsCommon[0]}
+                  value={product ? product.depth : ''}
                   onChange={(e) => {
                     product &&
                       setProduct({
@@ -296,31 +330,18 @@ function ServicesCreateForm() {
               </FormControl>
             </>
           )}
-          <IconButton
-            onClick={() => {
-              if (product) {
-                setValue('products', [
-                  ...watch('products'),
-                  {
-                    ...product,
-                    price: calculateTotal(product),
-                  },
-                ]);
-                setProduct(undefined);
-              }
-            }}
-          >
+          <IconButton onClick={handleAddProduct}>
             <AddCircleOutlineRoundedIcon />
           </IconButton>
         </Box>
 
         <TableProductInfo
-          data={watch('products') ? watch('products') : []}
+          data={watch('products') ? watch('products') || [] : []}
           onDecrementDispatch={(id) =>
             setValue(
               'products',
-              watch('products').map((prod) =>
-                prod.id === id
+              (watch('products') || []).map((prod) =>
+                prod.rowId === id
                   ? updateProdQtd(prod, prod.actualQuantity - 1)
                   : prod,
               ),
@@ -329,8 +350,8 @@ function ServicesCreateForm() {
           onIncrementDispatch={(id) =>
             setValue(
               'products',
-              watch('products').map((prod) =>
-                prod.id === id
+              (watch('products') || []).map((prod) =>
+                prod.rowId === id
                   ? updateProdQtd(prod, prod.actualQuantity + 1)
                   : prod,
               ),
@@ -339,11 +360,31 @@ function ServicesCreateForm() {
           onDeleteDispatch={(id) =>
             setValue(
               'products',
-              watch('products').filter((prod) => prod.id !== id),
+              (watch('products') || []).filter((prod) => prod.rowId !== id),
             )
           }
         />
+
+        <SectionHeader label="Observações" />
+
+        <Controller
+          name="observation"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              multiline
+              label="Descrição"
+              {...field}
+              rows={3}
+              sx={{
+                resize: 'none',
+              }}
+            />
+          )}
+        />
+
         <SectionHeader label="Total" />
+
         <Controller
           name="discount"
           control={control}
@@ -354,6 +395,7 @@ function ServicesCreateForm() {
               sx={{ minWidth: 160, mb: 2 }}
               {...field}
               value={field.value || ''}
+              inputProps={{ min: 0 }}
             />
           )}
         />
@@ -387,5 +429,5 @@ function ServicesCreateForm() {
 export const Route = createLazyFileRoute(
   '/_authenticated/_layout/services/add/',
 )({
-  component: () => <ServicesCreateForm />,
+  component: ServicesCreateForm,
 });

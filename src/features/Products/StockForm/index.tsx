@@ -87,7 +87,7 @@ export default function StockForm({ onClose, open }: StockFormProps) {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Produto"
+                      label="Produto Diversos"
                       error={!!errors.idProduct}
                       helperText={errors.idProduct?.message}
                     />

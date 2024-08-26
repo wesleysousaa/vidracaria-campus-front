@@ -4,14 +4,17 @@ import cartIcon from '../../../../assets/images/cart.webp';
 import chartUpIcon from '../../../../assets/images/chart_up.webp';
 import groupIcon from '../../../../assets/images/group.png';
 import moneyIcon from '../../../../assets/images/money_icon.webp';
+import Loader from '../../../../components/Loader';
 import { CardChart, LineChart } from '../../../../features/Dashboard/Charts';
-import { boxCards, mainStyles } from '../../../../features/Dashboard/styles';
 import { useChartsCounters } from '../../../../features/Dashboard/services';
+import { boxCards, mainStyles } from '../../../../features/Dashboard/styles';
 import useMask from '../../../../hooks/useMask';
 
 function Dashboard() {
-  const { data } = useChartsCounters();
+  const { data, isFetching } = useChartsCounters();
   const { realFormater, arrDateToDate, addPercent } = useMask();
+
+  if (isFetching) return <Loader open />;
 
   return (
     <Box sx={mainStyles} component={'main'}>
