@@ -12,4 +12,9 @@ export type InvoicingDate = {
   month: string;
 };
 
+export type FinancialReport = {
+  startDate: string;
+  endDate: string;
+};
+
 export const DepthsCommon = [2, 3, 4, 5, 6, 8, 10, 12];
