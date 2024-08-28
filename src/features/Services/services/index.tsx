@@ -61,11 +61,11 @@ const usePutServiceById = () => {
       const dataConverted = {
         id: params.data.id,
         status: params.data.status,
-        paymentMethod: 'DINHEIRO',
+        paymentMethod: params.data.paymentMethod,
         deliveryForecast: params.data.deliveryForecast,
         discount: params.data.discount,
         observation: params.data.observation,
-        downPayment: 0,
+        downPayment: params.data.downPayment,
         imgs: [
           ...params.imagesPersistedArr,
           ...urls.map((image: string) => ({ url: image, id: '' })),
@@ -238,10 +238,10 @@ export {
   useCreateService,
   useDeleteImageById,
   useDeleteServiceById,
+  useGenerateBudgetPdf,
   useGetAllServices,
   useGetImagesByServiceId,
   useGetProducstByServiceId,
   useGetServiceById,
   usePutServiceById,
-  useGenerateBudgetPdf,
 };

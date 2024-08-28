@@ -55,7 +55,7 @@ function ServicesEditForm() {
 
   const { data: products } = useGetAllProducts();
   const { data: service } = useGetServiceById(id);
-  const putService = usePutServiceById();
+  const { mutate: putService, isPending } = usePutServiceById();
   const { data: productsPersisted } = useGetProducstByServiceId(id);
   const { data: imagesPersisted } = useGetImagesByServiceId(id);
   const { calculateTotal, budgetItemsToEditTable } = useBudgetItem();
@@ -64,7 +64,7 @@ function ServicesEditForm() {
   const [persistedImagesState, setPersitedImagesState] = useState<any[]>([]);
 
   const onSubmit: SubmitHandler<EditServiceValidation> = (data) => {
-    putService.mutate({
+    putService({
       data: {
         ...data,
         files: images,
@@ -585,7 +585,7 @@ function ServicesEditForm() {
           type="submit"
           variant="contained"
           sx={buttonStyles}
-          loading={putService.isPending}
+          loading={isPending}
         >
           Salvar
         </LoadingButton>
