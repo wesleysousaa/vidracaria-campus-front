@@ -7,6 +7,8 @@ export type Status =
   | 'CONTRATADO_A_PRAZO'
   | 'FINALIZADO';
 
+export type PaymentMethod = 'DINHEIRO' | 'CREDITO' | 'DEBITO' | 'PIX';
+
 export interface ServiceValidation {
   status: Status;
   products: ProductInfo[];
@@ -32,6 +34,8 @@ export interface CreateServiceValidation extends ServiceValidation {
 export interface EditServiceValidation extends ServiceValidation {
   deliveryForecast?: string | null;
   ownerName: string;
+  downPayment?: number;
+  paymentMethod: PaymentMethod;
   id: string;
   address?: AddressValidation;
 }

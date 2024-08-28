@@ -83,13 +83,15 @@ function ServicesEditForm() {
         'DD-MM-YYYY',
       ).format('YYYY-MM-DD');
       setValue('deliveryForecast', formattedDate);
-      setValue('discount', service?.discount);
-      setValue('images', service?.images);
-      setValue('ownerName', service?.ownerName);
+      setValue('discount', service.discount);
+      setValue('images', service.images);
+      setValue('ownerName', service.ownerName);
       setValue('observation', service.observation);
-      setValue('total', service?.total);
-      setValue('status', service?.status);
-      setValue('id', service?.id);
+      setValue('downPayment', service.downPayment);
+      setValue('paymentMethod', service.paymentMethod);
+      setValue('total', service.total);
+      setValue('status', service.status);
+      setValue('id', service.id);
       setValue(
         'products',
         budgetItemsToEditTable(productsPersisted?.items || []),
@@ -110,6 +112,8 @@ function ServicesEditForm() {
       address: service?.address,
       ownerName: service?.ownerName,
       status: 'ORCADO',
+      downPayment: 0,
+      paymentMethod: 'DINHEIRO',
       images: service?.images,
       discount: 0,
       files: [],
@@ -291,14 +295,14 @@ function ServicesEditForm() {
             />
           </FormControl>
           <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
-            <InputLabel id="select-product-label">Status</InputLabel>
+            <InputLabel id="select-status-label">Status</InputLabel>
             <Controller
               name="status"
               control={control}
               render={({ field }) => (
                 <Select
-                  labelId="select-product-label"
-                  id="select-product"
+                  labelId="select-status-label"
+                  id="select-status"
                   label="Status"
                   {...field}
                   value={watch('status')}
@@ -322,6 +326,61 @@ function ServicesEditForm() {
                     Finalizado
                   </MenuItem>
                 </Select>
+              )}
+            />
+          </FormControl>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+            mt: '1rem',
+          }}
+        >
+          <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
+            <InputLabel id="select-payment-label">
+              Método de Pagamento
+            </InputLabel>
+            <Controller
+              name="paymentMethod"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  labelId="select-payment-label"
+                  id="select-payment"
+                  label="Método de Pagamento"
+                  {...field}
+                  value={watch('paymentMethod')}
+                >
+                  <MenuItem value={'DINHEIRO'} key={'DINHEIRO'}>
+                    Dinheiro
+                  </MenuItem>
+                  <MenuItem value={'CREDITO'} key={'CREDITO'}>
+                    Crédito
+                  </MenuItem>
+                  <MenuItem value={'DEBITO'} key={'DEBITO'}>
+                    Débito
+                  </MenuItem>
+                  <MenuItem value={'PIX'} key={'PIX'}>
+                    Pix
+                  </MenuItem>
+                </Select>
+              )}
+            />
+          </FormControl>
+          <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
+            <Controller
+              name="downPayment"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  type="number"
+                  label="Entrada em R$"
+                  {...field}
+                  value={field.value || ''}
+                />
               )}
             />
           </FormControl>
@@ -482,6 +541,9 @@ function ServicesEditForm() {
               multiline
               label="Descrição"
               {...field}
+              InputLabelProps={{
+                shrink: !!field.value,
+              }}
               rows={3}
               sx={{
                 resize: 'none',

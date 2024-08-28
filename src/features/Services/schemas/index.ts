@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { Status } from '../types';
+import { PaymentMethod, Status } from '../types';
 
 export const EditServiceSchema = Yup.object().shape({
   id: Yup.string().required(),
@@ -7,6 +7,8 @@ export const EditServiceSchema = Yup.object().shape({
   status: Yup.mixed<Status>().required('Campo obrigatório'),
   ownerName: Yup.string().required('Campo obrigatório'),
   discount: Yup.number().min(0, 'O desconto deve ser no mínimo 0'),
+  downPayment: Yup.number().optional(),
+  paymentMethod: Yup.mixed<PaymentMethod>().required('Campo obrigatório'),
   products: Yup.array()
     .required('Campo obrigatório')
     .of(
