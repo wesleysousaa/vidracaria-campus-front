@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Autocomplete,
   Box,
@@ -8,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import CloseButton from '../../../components/CloseButton';
 import Loader from '../../../components/Loader';
@@ -28,7 +29,7 @@ export default function StockForm({ onClose, open }: StockFormProps) {
   const [selectedProduct, setSelectedProduct] =
     useState<ProductWithNameAndId | null>(null);
   const { data: product } = useGetAllProductsWithNameAndId();
-  const { mutate: receiveProduct } = useReceiveProduct();
+  const { mutate: receiveProduct, isPending, isSuccess } = useReceiveProduct();
 
   const {
     handleSubmit,
@@ -45,8 +46,13 @@ export default function StockForm({ onClose, open }: StockFormProps) {
 
   const onSubmit: SubmitHandler<TransactionStock> = (data) => {
     receiveProduct(data);
-    onClose();
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      onClose();
+    }
+  }, [isSuccess]);
 
   if (!product) return <Loader open />;
 
@@ -124,9 +130,14 @@ export default function StockForm({ onClose, open }: StockFormProps) {
             <Button variant="text" onClick={onClose} color="success">
               Voltar
             </Button>
-            <Button variant="contained" color="primary" type="submit">
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              type="submit"
+              loading={isPending}
+            >
               Confirmar
-            </Button>
+            </LoadingButton>
           </Box>
         </Box>
       </form>
