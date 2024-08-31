@@ -81,28 +81,31 @@ function Dashboard() {
         marginTop={5}
         display="flex"
         flexDirection="column"
-        bgcolor="#fff"
-        width={'35vw'}
-        padding={2}
-        gap={5}
+        flex={1}
+        gap={1}
+        maxWidth="500px"
         borderRadius={'.5rem'}
-        boxShadow="0px 4px 15px 0px rgba(0,0,0,0.1)"
       >
-        <Typography variant="h4" fontWeight={'bold'}>
-          Relatório de Faturamento
+        <Typography variant="caption" fontWeight={'bold'}>
+          Emitir relatório de faturamento
         </Typography>
         <form
           onSubmit={handleSubmit(onSubmit)}
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            background: 'white',
+            flexDirection: 'row',
             borderRadius: '.5rem',
+            flexWrap: 'wrap',
             gap: '1em',
-            width: '35vw',
           }}
         >
-          <Box sx={{ display: 'flex', gap: '1em' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '1em',
+              flexWrap: 'wrap',
+            }}
+          >
             <FormControl variant="outlined" sx={{ flex: 1 }}>
               <Controller
                 name="startDate"
@@ -120,6 +123,9 @@ function Dashboard() {
                         ? dayjs(field.value, 'YYYY-MM-DD').format('YYYY-MM-DD')
                         : dayjs().format('YYYY-MM-DD')
                     }
+                    sx={{
+                      '& input': { height: '0px' },
+                    }}
                     onChange={(e) => {
                       const formattedDate = dayjs(
                         e.target.value,
@@ -148,6 +154,9 @@ function Dashboard() {
                         ? dayjs(field.value, 'YYYY-MM-DD').format('YYYY-MM-DD')
                         : dayjs().format('YYYY-MM-DD')
                     }
+                    sx={{
+                      '& input': { height: '0px' },
+                    }}
                     onChange={(e) => {
                       const formattedDate = dayjs(
                         e.target.value,
@@ -165,14 +174,14 @@ function Dashboard() {
             id="btn-save"
             type="submit"
             variant="contained"
-            sx={buttonStyles}
+            sx={{ ...buttonStyles, height: '33px', flex: '1' }}
             loading={false}
           >
             Emitir
           </LoadingButton>
         </form>
       </Box>
-      <Box marginTop={5} display="flex">
+      <Box display="flex" marginTop={1}>
         {data && (
           <LineChart
             data={data?.monthlyBillingDTOS.map((date) => {

@@ -25,7 +25,7 @@ export default function ImageInput({ field, images, setImages }: FieldProps) {
       <input
         type="file"
         id="images"
-        style={{ display: 'none' }}
+        style={{ display: 'none', flex: '1' }}
         {...field}
         onChange={addImage}
       />

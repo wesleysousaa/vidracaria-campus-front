@@ -18,8 +18,8 @@ function GetLocationBreadcrumb() {
       separator={<NavigateNextIcon fontSize="small" />}
       sx={{
         fontSize: '1rem',
-        marginBottom: '5rem',
-        marginTop: '1rem',
+        marginBottom: '2rem',
+        marginTop: '3rem',
       }}
     >
       {locationArr.map((location, key) =>

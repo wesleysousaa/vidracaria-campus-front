@@ -19,6 +19,7 @@ export const buttonStyles: CSSProperties = {
 export const textFieldStyles: CSSProperties = {
   margin: '1em 0 1em 0',
   flex: 1,
+  minWidth: '200px',
 };
 
 export const headerBoxStyles: CSSProperties = {
@@ -40,6 +41,7 @@ export const headerFormStyles: CSSProperties = {
   display: 'flex',
   gap: '30%',
   marginBottom: '1rem',
+  flexWrap: 'wrap',
 };
 
 export const formStyles: CSSProperties = {

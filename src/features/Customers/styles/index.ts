@@ -6,6 +6,7 @@ export const boxStylesForm: CSSProperties = {
   justifyContent: 'space-between',
   gap: '1em',
   marginBottom: '1em',
+  flexWrap: 'wrap',
 };
 
 export const customerBoxInfoStyles: CSSProperties = {

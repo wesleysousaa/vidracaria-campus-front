@@ -1,6 +1,6 @@
 import { Box, Button, Drawer, IconButton } from '@mui/material/';
-import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useNavigate, useRouter } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 import queryClient from '../../config/queryClient';
 import useGetIcons from '../../hooks/useGetIcons';
 import LogoItem from './LogoItem';
@@ -62,7 +62,9 @@ function MenuDesktop() {
 function MenuMobile() {
   const { MenuOutlinedIcon } = useGetIcons();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
+  useEffect(() => setOpen(false), [router.latestLocation]);
   return (
     <>
       <Drawer open={open} onClose={() => setOpen(!open)}>
@@ -75,6 +77,7 @@ function MenuMobile() {
           justifyContent: 'space-between',
           width: '100%',
           height: '80px',
+          zIndex: '999',
           borderBottom: '1px solid #ccc',
           backgroundColor: 'var(--background)',
         }}

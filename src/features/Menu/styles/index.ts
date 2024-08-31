@@ -48,6 +48,7 @@ export const navStyles: CSSProperties = {
   position: 'fixed',
   boxShadow: '0px 4px 15px 0px rgba(0,0,0,0.1)',
   width: '200px',
+  zIndex: '999',
 };
 
 export const headerStyles: CSSProperties = {
@@ -55,10 +56,13 @@ export const headerStyles: CSSProperties = {
   width: '200px',
   overflow: 'hidden',
   minHeight: '100vh',
+  background: '#fff',
+  zIndex: '999',
 };
 
 export const navListStyles: CSSPropertiesMui = {
   width: '100%',
+  zIndex: '999',
 };
 
 export const colapsableButtonMenu: CSSPropertiesMui = {

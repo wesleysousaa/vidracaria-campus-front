@@ -187,7 +187,7 @@ function ServicesEditForm() {
           name="ownerName"
           control={control}
           render={({ field }) => (
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+            <FormControl variant="outlined">
               <TextField
                 disabled
                 {...field}
@@ -198,7 +198,7 @@ function ServicesEditForm() {
           )}
         />
 
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <FormControl sx={textFieldStyles}>
             <TextField
               type="text"
@@ -216,8 +216,8 @@ function ServicesEditForm() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              width: '20vw',
               marginBottom: '1rem',
+              flex: '1',
             }}
           >
             <Controller
@@ -267,7 +267,14 @@ function ServicesEditForm() {
             </Box>
           </Box>
         </Box>
-        <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
           <FormControl variant="outlined" sx={{ flex: 1, pt: 1 }}>
             <Controller
               name="deliveryForecast"
@@ -387,8 +394,8 @@ function ServicesEditForm() {
         </Box>
 
         <SectionHeader label="Produtos" />
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <FormControl variant="outlined" sx={{ flex: 1 }}>
+        <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <FormControl variant="outlined" sx={{ flex: 1, minWidth: '200px' }}>
             <InputLabel id="select-product-label">Produto</InputLabel>
             <Select
               labelId="select-product-label"
@@ -424,7 +431,10 @@ function ServicesEditForm() {
           </FormControl>
           {product?.category !== 'DIVERSOS' && (
             <>
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+              <FormControl
+                variant="outlined"
+                sx={{ flex: 1, minWidth: '200px' }}
+              >
                 <TextField
                   id="heightTxt"
                   value={
@@ -448,7 +458,10 @@ function ServicesEditForm() {
                   }}
                 />
               </FormControl>
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+              <FormControl
+                variant="outlined"
+                sx={{ flex: 1, minWidth: '200px' }}
+              >
                 <TextField
                   id="widthTxt"
                   name="width"

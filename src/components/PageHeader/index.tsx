@@ -14,7 +14,7 @@ export default function PageHeader({ backTo, title }: PageHeaderProps) {
       <GetLocationBreadcrumb />
       <Box style={headerFormStyles}>
         <ReturnButton link={backTo} />
-        <Typography variant="h4" align="center">
+        <Typography variant="h5" align="center">
           {title}
         </Typography>
       </Box>

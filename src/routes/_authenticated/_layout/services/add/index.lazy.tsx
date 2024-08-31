@@ -167,7 +167,13 @@ function ServicesCreateForm() {
           )}
         />
 
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1rem',
+          }}
+        >
           <FormControl sx={textFieldStyles} error={errors.client !== undefined}>
             <TextField
               type="text"
@@ -182,8 +188,8 @@ function ServicesCreateForm() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              width: '20vw',
               marginBottom: '1rem',
+              flex: 1,
             }}
           >
             <Controller
@@ -221,7 +227,7 @@ function ServicesCreateForm() {
         </Box>
         <SectionHeader label="Produtos" />
 
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <FormControl variant="outlined" sx={{ flex: 1, minWidth: 160 }}>
             <InputLabel id="select-product-label">Produto</InputLabel>
             <Select
@@ -257,7 +263,7 @@ function ServicesCreateForm() {
           </FormControl>
           {product?.category !== 'DIVERSOS' && (
             <>
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+              <FormControl variant="outlined">
                 <TextField
                   id="heightTxt"
                   name="height"
@@ -281,7 +287,7 @@ function ServicesCreateForm() {
                   }}
                 />
               </FormControl>
-              <FormControl variant="outlined" sx={{ maxWidth: 160 }}>
+              <FormControl variant="outlined">
                 <TextField
                   id="widthTxt"
                   name="width"

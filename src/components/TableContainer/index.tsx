@@ -16,7 +16,7 @@ export default function TableContainer({
 }: TableHeaderProps) {
   return (
     <Box sx={mainStyles} component={'main'}>
-      <Box sx={headerTablePageStyles}>
+      <Box sx={{ ...headerTablePageStyles, flexWrap: 'wrap' }}>
         <Typography variant="h4" fontWeight={'bold'}>
           {title}
         </Typography>

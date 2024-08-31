@@ -80,7 +80,7 @@ function ProductsCreateForm() {
           )}
         />
 
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <Controller
             name="category"
             control={control}
