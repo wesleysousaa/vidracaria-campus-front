@@ -121,7 +121,7 @@ function ServicesEditForm() {
       id: service?.id,
     },
   });
-  const disableFields = watch('status') === 'FINALIZADO';
+  const disableFields = service.status === 'FINALIZADO';
 
   useEffect(() => {
     let discount = watch('discount');
