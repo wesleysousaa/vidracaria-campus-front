@@ -24,7 +24,7 @@ dayjs.extend(customParseFormat);
 function Dashboard() {
   const { data, isFetching } = useChartsCounters();
   const { realFormater, arrDateToDate, addPercent } = useMask();
-  const { mutate: generate, isPeding } = useGenerateDashPdf();
+  const { mutate: generate } = useGenerateDashPdf();
   const onSubmit: SubmitHandler<FinancialReport> = (data) => {
     generate(data);
   };
